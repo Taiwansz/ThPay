@@ -3,30 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ThPay // Continuous Payroll & People Ops</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Atlas // Payroll Engine & People Ops (ThPay)</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-            mono: ['Geist Mono', 'monospace'],
+            sans: ['Manrope', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+            display: ['Sora', 'sans-serif'],
           },
           colors: {
-            canvas: '#090a0f',
-            surface: '#11131a',
-            subtle: '#181b26',
-            borderSubtle: '#262b3d',
-            accentGreen: '#10b981',
-            accentAmber: '#f59e0b',
-            accentIndigo: '#6366f1',
-            accentRed: '#ef4444'
+            background: '#09090b',
+            surface: '#121215',
+            surfaceElevated: '#18181f',
+            borderSubtle: '#272730',
+            borderActive: '#3f3f4e',
+            inkPrimary: '#fafafa',
+            inkSecondary: '#a1a1aa',
+            inkMuted: '#71717a',
+            accentGold: '#d4af6a',
+            accentGoldDeep: '#b8893c',
+            accentEmerald: '#10b981',
+            accentRose: '#e11d48',
+            accentSky: '#0284c7',
+            accentIndigo: '#6366f1'
           }
         }
       }
@@ -34,281 +40,500 @@
   </script>
   <style>
     body {
-      background-color: #090a0f;
-      color: #f8fafc;
-      font-family: 'Inter', sans-serif;
+      background-color: #09090b;
+      color: #fafafa;
+      font-family: 'Manrope', sans-serif;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+      font-family: 'JetBrains Mono', monospace;
     }
     .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+      width: 5px;
+      height: 5px;
     }
     .custom-scrollbar::-webkit-scrollbar-track {
-      background: #090a0f;
+      background: #09090b;
     }
     .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #262b3d;
+      background: #272730;
       border-radius: 3px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #3f3f4e;
+    }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #print-area, #print-area * {
+        visibility: visible;
+      }
+      #print-area {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        color: black !important;
+      }
     }
   </style>
 </head>
-<body class="min-h-screen flex flex-col antialiased custom-scrollbar">
+<body class="min-h-screen flex flex-col antialiased custom-scrollbar selection:bg-accentGold/20 selection:text-accentGold">
 
-  <!-- Top Navigation Bar -->
-  <header class="border-b border-borderSubtle bg-surface sticky top-0 z-30 px-6 py-3.5 flex items-center justify-between">
+  <!-- Top Global Header -->
+  <header class="border-b border-borderSubtle bg-surface sticky top-0 z-40 px-6 py-3 flex items-center justify-between">
     <div class="flex items-center space-x-6">
-      <div class="flex items-center space-x-2.5">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center font-bold text-white tracking-wider text-sm shadow-sm">
-          TP
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-700 flex items-center justify-center font-bold text-accentGold text-xs tracking-wider font-mono">
+          AT
         </div>
-        <span class="font-bold text-lg tracking-tight text-white">ThPay</span>
-        <span class="text-xs px-2 py-0.5 rounded-full bg-subtle text-slate-400 border border-borderSubtle font-mono">v1.0-continuous</span>
+        <div class="flex flex-col">
+          <div class="flex items-center space-x-2">
+            <span class="font-bold text-sm tracking-tight text-white font-display">Atlas</span>
+            <span class="text-[10px] text-zinc-500 font-mono">/</span>
+            <span class="text-xs font-semibold text-zinc-300">Payroll Engine</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400 font-mono">v1.2-continuous</span>
+          </div>
+        </div>
       </div>
 
-      <div class="h-4 w-px bg-borderSubtle"></div>
+      <div class="h-4 w-px bg-borderSubtle hidden md:block"></div>
 
-      <div class="flex items-center space-x-2 text-sm text-slate-300">
-        <span class="text-slate-500">Empresa:</span>
-        <span class="font-medium text-slate-200">Tech Solutions Brasil Ltda</span>
-        <span class="text-xs px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">Lucro Real</span>
+      <!-- Company & Regime Selector -->
+      <div class="hidden lg:flex items-center space-x-2 text-xs text-zinc-400">
+        <span class="text-zinc-500">Unidade:</span>
+        <button class="flex items-center space-x-1.5 px-2.5 py-1 rounded bg-surfaceElevated border border-borderSubtle text-zinc-200 hover:border-zinc-500 transition-colors font-medium">
+          <span>Tech Solutions Brasil Ltda</span>
+          <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-800 text-accentGold font-mono">Lucro Real</span>
+          <svg class="w-3 h-3 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
       </div>
     </div>
 
-    <div class="flex items-center space-x-4">
-      <!-- eSocial Real-time Badge -->
-      <div class="flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-950/40 border border-emerald-800/50 text-emerald-400 text-xs font-medium">
-        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>eSocial Sincronizado</span>
-      </div>
+    <!-- Right Controls -->
+    <div class="flex items-center space-x-3">
+      <!-- Search Trigger / Command Palette Shortcut -->
+      <button onclick="openCommandPalette()" class="hidden sm:flex items-center space-x-2 px-3 py-1.5 rounded-md bg-surfaceElevated border border-borderSubtle text-xs text-zinc-400 hover:border-zinc-500 transition-colors">
+        <svg class="w-3.5 h-3.5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <span>Buscar colaborador ou comando...</span>
+        <kbd class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-400">Ctrl+K</kbd>
+      </button>
 
       <!-- Competence Selector -->
-      <div class="flex items-center bg-subtle border border-borderSubtle rounded-lg px-3 py-1.5 text-xs text-slate-200 space-x-2">
-        <span class="text-slate-500">Competencia:</span>
-        <span class="font-mono font-medium">Setembro / 2026</span>
+      <div class="flex items-center bg-surfaceElevated border border-borderSubtle rounded-md px-3 py-1.5 text-xs text-zinc-200 space-x-2">
+        <span class="text-zinc-500 text-[11px] uppercase tracking-wider font-semibold">Competencia:</span>
+        <span class="font-mono font-semibold text-white">09/2026</span>
+        <span class="w-1.5 h-1.5 rounded-full bg-accentEmerald"></span>
+      </div>
+
+      <!-- Continuous Status Badge -->
+      <div class="hidden xl:flex items-center space-x-2 px-3 py-1 rounded-md bg-emerald-950/30 border border-emerald-800/40 text-accentEmerald text-xs font-mono font-medium">
+        <span class="w-2 h-2 rounded-full bg-accentEmerald animate-pulse"></span>
+        <span>eSocial S-1299 Reconciliado</span>
       </div>
 
       <!-- Action Button -->
-      <button onclick="alert('Fechamento de folha validado e preparado para transmissao S-1299 com assinatura SHA-256.')" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition-colors text-white text-xs font-semibold tracking-wide shadow-sm flex items-center space-x-1.5">
-        <span>Fechar Competencia</span>
+      <button onclick="openCloseModal()" class="px-3.5 py-1.5 rounded-md bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs tracking-tight transition-all shadow-sm flex items-center space-x-1.5">
+        <svg class="w-3.5 h-3.5 text-zinc-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+        <span>Painel de Fechamento</span>
       </button>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <div class="flex flex-1">
-    
-    <!-- Sidebar Navigation -->
-    <aside class="w-64 border-r border-borderSubtle bg-surface/50 p-4 flex flex-col justify-between hidden md:flex">
-      <div class="space-y-1">
-        <div class="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Modulos</div>
-        <button onclick="switchTab('folha')" id="nav-folha" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg bg-subtle text-white border border-borderSubtle transition-all">
-          <div class="flex items-center space-x-2.5">
-            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-            <span>Folha Continua</span>
+  <!-- Layout Body -->
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- Left Sidebar -->
+    <aside class="w-60 border-r border-borderSubtle bg-surface/80 p-3.5 flex flex-col justify-between hidden md:flex shrink-0">
+      <div class="space-y-4">
+        <!-- Navigation Section -->
+        <div class="space-y-1">
+          <div class="px-2.5 py-1 text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono">Processamento</div>
+          
+          <button onclick="switchView('directory')" id="nav-directory" class="w-full flex items-center justify-between px-2.5 py-2 text-xs font-semibold rounded-md bg-surfaceElevated text-white border border-borderSubtle transition-all">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-accentGold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+              <span>Folha Continua</span>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.2 rounded bg-emerald-950/60 text-emerald-400 font-mono">Ao Vivo</span>
+          </button>
+
+          <button onclick="switchView('simulator')" id="nav-simulator" class="w-full flex items-center space-x-2.5 px-2.5 py-2 text-xs font-medium rounded-md text-zinc-400 hover:bg-surfaceElevated hover:text-zinc-200 transition-all">
+            <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <span>Simulador de Cenários</span>
+          </button>
+
+          <button onclick="switchView('esocial')" id="nav-esocial" class="w-full flex items-center space-x-2.5 px-2.5 py-2 text-xs font-medium rounded-md text-zinc-400 hover:bg-surfaceElevated hover:text-zinc-200 transition-all">
+            <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+            <span>eSocial & Guias Pix</span>
+          </button>
+
+          <button onclick="switchView('analyst')" id="nav-analyst" class="w-full flex items-center space-x-2.5 px-2.5 py-2 text-xs font-medium rounded-md text-zinc-400 hover:bg-surfaceElevated hover:text-zinc-200 transition-all">
+            <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            <span>Agente Analista (IA)</span>
+          </button>
+        </div>
+
+        <!-- Compliance Checkers -->
+        <div class="space-y-1">
+          <div class="px-2.5 py-1 text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono">Conformidade Legal</div>
+          <div class="p-2.5 rounded-md bg-surfaceElevated/60 border border-borderSubtle space-y-1 text-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-zinc-400 font-medium">INSS Progressivo</span>
+              <span class="text-[10px] font-mono text-accentEmerald">EC 103/2019</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-zinc-400 font-medium">IRRF Mensal</span>
+              <span class="text-[10px] font-mono text-accentEmerald">Comp. Autom.</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-zinc-400 font-medium">FGTS Digital</span>
+              <span class="text-[10px] font-mono text-accentEmerald">Pix Venc 20</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-zinc-400 font-medium">Lei 14.611/23</span>
+              <span class="text-[10px] font-mono text-accentEmerald">Auditado</span>
+            </div>
           </div>
-          <span class="text-xs px-1.5 py-0.5 rounded-full bg-indigo-950 text-indigo-400 border border-indigo-800">Ao Vivo</span>
-        </button>
-
-        <button onclick="switchTab('analista')" id="nav-analista" class="w-full flex items-center space-x-2.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-400 hover:bg-subtle hover:text-slate-200 transition-all">
-          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          <span>Agente Analista (IA)</span>
-        </button>
-
-        <button onclick="switchTab('esocial')" id="nav-esocial" class="w-full flex items-center space-x-2.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-400 hover:bg-subtle hover:text-slate-200 transition-all">
-          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
-          <span>eSocial & Guias Pix</span>
-        </button>
+        </div>
       </div>
 
-      <div class="border-t border-borderSubtle pt-4 space-y-2">
-        <div class="p-3 rounded-lg bg-subtle border border-borderSubtle">
-          <div class="text-xs text-slate-400 font-medium">Motor Deterministico</div>
-          <div class="text-[11px] text-slate-500 mt-1">Conformidade CLT, EC 103/2019, IRRF 2026 e FGTS Digital em execucao continua.</div>
+      <!-- Engine Status Footer -->
+      <div class="border-t border-borderSubtle pt-3 space-y-1.5 font-mono text-[11px]">
+        <div class="text-zinc-500 text-[10px] uppercase font-bold">Motor Deterministico</div>
+        <div class="text-zinc-300 flex items-center justify-between">
+          <span>DAG Engine:</span>
+          <span class="text-emerald-400">Ativo (11 nós)</span>
+        </div>
+        <div class="text-zinc-300 flex items-center justify-between">
+          <span>Latencia Media:</span>
+          <span class="text-zinc-400">0.002s / lote</span>
         </div>
       </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 p-6 space-y-6 overflow-y-auto">
+    <!-- Main Dynamic Workspace -->
+    <main class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-background">
 
-      <!-- Metrics Cards Header -->
-      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-1">
-          <div class="text-xs font-medium text-slate-400">Custo Total de Pessoal</div>
-          <div class="text-2xl font-bold font-mono tracking-tight text-white">R$ 384.210,40</div>
-          <div class="text-xs text-emerald-400 flex items-center space-x-1 font-mono">
-            <span>+ 1,4% vs mes anterior</span>
+      <!-- Executive Metric Bar -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <!-- Metric 1 -->
+        <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
+          <div class="flex items-center justify-between text-xs text-zinc-400">
+            <span class="font-medium">Custo Total de Pessoal</span>
+            <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">Competencia 09</span>
+          </div>
+          <div class="text-2xl font-bold font-mono tracking-tight text-white tabular-nums" id="metric-total-cost">R$ 384.210,40</div>
+          <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
+            <span class="text-emerald-400 font-mono text-[11px] font-semibold">+ 1,42% vs ago/2026</span>
+            <span class="text-zinc-500 font-mono text-[10px]">Fator Real: 1.682x</span>
           </div>
         </div>
 
-        <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-1">
-          <div class="text-xs font-medium text-slate-400">Total Liquido a Pagar</div>
-          <div class="text-2xl font-bold font-mono tracking-tight text-slate-200">R$ 254.120,80</div>
-          <div class="text-xs text-slate-500">Credito em conta via CNAB 240 / Pix</div>
+        <!-- Metric 2 -->
+        <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
+          <div class="flex items-center justify-between text-xs text-zinc-400">
+            <span class="font-medium">Salarios Liquidos (Folha)</span>
+            <span class="text-[10px] font-mono text-zinc-500">Credito 5o dia util</span>
+          </div>
+          <div class="text-2xl font-bold font-mono tracking-tight text-zinc-100 tabular-nums" id="metric-net-salaries">R$ 254.120,80</div>
+          <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
+            <span class="text-zinc-500 font-mono text-[11px]">Remessa CNAB 240 / Pix</span>
+            <span class="text-accentGold font-mono text-[10px]">Pronto para envio</span>
+          </div>
         </div>
 
-        <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-1">
-          <div class="text-xs font-medium text-slate-400">Tributos & Encargos Patronais</div>
-          <div class="text-2xl font-bold font-mono tracking-tight text-indigo-400">R$ 130.089,60</div>
-          <div class="text-xs text-slate-400">DCTFWeb + FGTS Digital (Pix)</div>
+        <!-- Metric 3 -->
+        <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
+          <div class="flex items-center justify-between text-xs text-zinc-400">
+            <span class="font-medium">Tributos & Encargos Patronais</span>
+            <span class="text-[10px] font-mono text-zinc-500">DCTFWeb + FGTS</span>
+          </div>
+          <div class="text-2xl font-bold font-mono tracking-tight text-accentGold tabular-nums" id="metric-patronal-taxes">R$ 130.089,60</div>
+          <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
+            <span class="text-zinc-400 font-mono text-[11px]">DARF Unico: R$ 108.599,40</span>
+            <span class="text-emerald-400 font-mono text-[11px]">GFD: R$ 21.490,20</span>
+          </div>
         </div>
 
-        <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-1">
-          <div class="text-xs font-medium text-slate-400">Headcount Ativo</div>
-          <div class="text-2xl font-bold font-mono tracking-tight text-slate-200">48 <span class="text-sm font-normal text-slate-400">vidas</span></div>
-          <div class="flex items-center space-x-2 text-xs">
-            <span class="px-2 py-0.5 rounded bg-slate-800 text-sky-400 font-mono font-medium">36 CLT</span>
-            <span class="px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 font-mono font-medium">12 PJ</span>
+        <!-- Metric 4 -->
+        <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
+          <div class="flex items-center justify-between text-xs text-zinc-400">
+            <span class="font-medium">Headcount Ativo</span>
+            <span class="text-[10px] font-mono text-zinc-500">Unificado</span>
+          </div>
+          <div class="text-2xl font-bold font-mono tracking-tight text-white tabular-nums">48 <span class="text-sm font-normal text-zinc-400">vidas</span></div>
+          <div class="flex items-center space-x-2 text-xs pt-1">
+            <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-sky-400 border border-zinc-800 font-mono text-[11px]">36 CLT (101)</span>
+            <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-purple-400 border border-zinc-800 font-mono text-[11px]">12 PJ (Prestadores)</span>
           </div>
         </div>
       </section>
 
-      <!-- Continuous Payroll Readiness Bar -->
-      <section class="p-4 rounded-xl bg-surface border border-borderSubtle flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="space-y-1 flex-1">
+      <!-- Continuous Calculation Stream & Live Readiness Bar -->
+      <section class="p-4 rounded-lg bg-surface border border-borderSubtle flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1.5 flex-1">
           <div class="flex items-center justify-between text-xs">
-            <span class="font-medium text-slate-300">Prontidao da Folha de Setembro (Calculo Continuo)</span>
-            <span class="font-mono text-emerald-400 font-semibold">98,2% Concluido</span>
+            <div class="flex items-center space-x-2">
+              <span class="w-2 h-2 rounded-full bg-accentEmerald"></span>
+              <span class="font-semibold text-zinc-200">Esteira Continua de Folha (Live Continuous Payroll)</span>
+              <span class="text-zinc-500 font-mono text-[11px]">| Ultimo evento: ha 4 minutos</span>
+            </div>
+            <span class="font-mono text-accentEmerald font-bold text-xs">98,2% Validado</span>
           </div>
-          <div class="w-full bg-subtle rounded-full h-2 overflow-hidden border border-borderSubtle">
-            <div class="bg-gradient-to-r from-emerald-500 to-indigo-500 h-2 rounded-full" style="width: 98.2%"></div>
+          <div class="w-full bg-background rounded-full h-1.5 overflow-hidden border border-borderSubtle">
+            <div class="bg-gradient-to-r from-emerald-500 via-accentGold to-indigo-500 h-1.5 rounded-full" style="width: 98.2%"></div>
           </div>
         </div>
-        <div class="flex items-center space-x-3 text-xs">
-          <div class="flex items-center space-x-1.5 text-amber-400 px-2.5 py-1 rounded bg-amber-950/30 border border-amber-800/40">
-            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
-            <span>1 divergencia de ponto pendente</span>
+        <div class="flex items-center space-x-2 text-xs shrink-0">
+          <div class="flex items-center space-x-1.5 text-accentGold px-2.5 py-1 rounded bg-zinc-900 border border-zinc-700 font-mono text-[11px]">
+            <span class="w-1.5 h-1.5 rounded-full bg-accentGold"></span>
+            <span>1 divergencia de ponto a homologar</span>
           </div>
         </div>
       </section>
 
-      <!-- Tab 1: Continuous People & Payroll -->
-      <div id="tab-folha" class="space-y-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-base font-semibold text-white tracking-tight">Colaboradores & Contratos (CLT + PJ)</h2>
-          <div class="flex items-center space-x-3">
-            <input type="text" placeholder="Buscar por nome, cargo ou CPF..." class="px-3 py-1.5 rounded-lg bg-surface border border-borderSubtle text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 w-64">
-            <select class="px-3 py-1.5 rounded-lg bg-surface border border-borderSubtle text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
-              <option>Todos os Vínculos</option>
-              <option>Apenas CLT</option>
-              <option>Apenas PJ</option>
-            </select>
+      <!-- VIEW 1: Directory & Continuous Payroll -->
+      <div id="view-directory" class="space-y-4">
+        <!-- Filter and Search Toolbar -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-surface p-3 rounded-lg border border-borderSubtle">
+          <div class="flex items-center space-x-2">
+            <button onclick="filterType('ALL')" id="filter-btn-all" class="px-3 py-1.5 rounded text-xs font-semibold bg-surfaceElevated text-white border border-borderSubtle">Todos (48)</button>
+            <button onclick="filterType('CLT')" id="filter-btn-clt" class="px-3 py-1.5 rounded text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-surfaceElevated">Apenas CLT (36)</button>
+            <button onclick="filterType('PJ')" id="filter-btn-pj" class="px-3 py-1.5 rounded text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-surfaceElevated">Apenas PJ (12)</button>
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <input type="text" id="search-input" onkeyup="filterSearch()" placeholder="Filtrar por nome, cargo ou CPF..." class="px-3 py-1.5 rounded bg-background border border-borderSubtle text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-accentGold w-72">
+            <button onclick="downloadCSVReport()" class="px-3 py-1.5 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-300 border border-borderSubtle text-xs font-medium flex items-center space-x-1">
+              <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+              <span>Exportar CSV</span>
+            </button>
           </div>
         </div>
 
-        <!-- Table -->
-        <div class="rounded-xl border border-borderSubtle bg-surface overflow-hidden shadow-sm">
+        <!-- Dense Data Table -->
+        <div class="rounded-lg border border-borderSubtle bg-surface overflow-hidden shadow-sm">
           <table class="w-full text-left text-xs">
-            <thead class="bg-subtle text-slate-400 border-b border-borderSubtle font-medium uppercase tracking-wider">
+            <thead class="bg-surfaceElevated text-zinc-400 border-b border-borderSubtle font-mono text-[10px] uppercase tracking-wider">
               <tr>
-                <th class="px-4 py-3">Colaborador</th>
-                <th class="px-4 py-3">Tipo</th>
-                <th class="px-4 py-3">Cargo / Depto</th>
+                <th class="px-4 py-3">Colaborador / Matricula</th>
+                <th class="px-4 py-3">Regime</th>
+                <th class="px-4 py-3">Cargo & CBO</th>
                 <th class="px-4 py-3 text-right">Salario Base</th>
                 <th class="px-4 py-3 text-right">Proventos</th>
                 <th class="px-4 py-3 text-right">Descontos</th>
-                <th class="px-4 py-3 text-right">Liquido</th>
+                <th class="px-4 py-3 text-right">Liquido a Pagar</th>
                 <th class="px-4 py-3 text-right">Custo Empresa</th>
-                <th class="px-4 py-3 text-center">Status</th>
-                <th class="px-4 py-3 text-center">Acao</th>
+                <th class="px-4 py-3 text-center">Status Ponto</th>
+                <th class="px-4 py-3 text-center">Auditoria</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-borderSubtle text-slate-200 font-sans" id="employee-table-body">
-              <!-- Rendered by JS -->
+            <tbody class="divide-y divide-borderSubtle text-zinc-200" id="table-body">
+              <!-- Dynamically populated -->
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Tab 2: AI Analyst -->
-      <div id="tab-analista" class="space-y-4 hidden">
-        <div class="p-6 rounded-xl bg-surface border border-borderSubtle space-y-4">
-          <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+      <!-- VIEW 2: Scenario & Salary Simulator -->
+      <div id="view-simulator" class="space-y-4 hidden">
+        <div class="p-6 rounded-lg bg-surface border border-borderSubtle space-y-6">
+          <div class="border-b border-borderSubtle pb-4">
+            <h3 class="text-base font-bold text-white font-display">Simulador de Impacto Financeiro e Tributario (Edge Wasm)</h3>
+            <p class="text-xs text-zinc-400 mt-1">Simule reajustes salariais, novas contratacoes ou horas extras com resposta sub-milissegundo sem gravar alteracoes no banco oficial.</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Parameter 1: Reajuste Geral -->
+            <div class="p-4 rounded-md bg-surfaceElevated border border-borderSubtle space-y-3">
+              <label class="text-xs font-semibold text-zinc-300 block">Dissidio / Reajuste Geral de Salarios (%)</label>
+              <div class="flex items-center space-x-3">
+                <input type="range" id="sim-salary-pct" min="0" max="20" step="0.5" value="0" oninput="runSimulation()" class="flex-1 accent-accentGold">
+                <span class="font-mono text-sm font-bold text-accentGold w-12 text-right" id="sim-salary-pct-val">0.0%</span>
+              </div>
+              <p class="text-[11px] text-zinc-500">Calcula impacto cumulativo sobre encargos patronais (CPP 20%, RAT 2.5%, Terceiros 5.8% e FGTS).</p>
             </div>
-            <div>
-              <h3 class="text-base font-semibold text-white">Agente Analista ThPay</h3>
-              <p class="text-xs text-slate-400">Consultas de folha, simulacoes de contratacao e analise de anomalias com precisao deterministica.</p>
+
+            <!-- Parameter 2: Horas Extras Medias -->
+            <div class="p-4 rounded-md bg-surfaceElevated border border-borderSubtle space-y-3">
+              <label class="text-xs font-semibold text-zinc-300 block">Horas Extras Adicionais (Media por CLT)</label>
+              <div class="flex items-center space-x-3">
+                <input type="range" id="sim-he-hours" min="0" max="30" step="1" value="0" oninput="runSimulation()" class="flex-1 accent-accentGold">
+                <span class="font-mono text-sm font-bold text-accentGold w-12 text-right" id="sim-he-hours-val">0h</span>
+              </div>
+              <p class="text-[11px] text-zinc-500">Inclui reflexo automatico de Descanso Semanal Remunerado (DSR - Lei 605/1949).</p>
+            </div>
+
+            <!-- Parameter 3: Novas Contratacoes -->
+            <div class="p-4 rounded-md bg-surfaceElevated border border-borderSubtle space-y-3">
+              <label class="text-xs font-semibold text-zinc-300 block">Novas Contratacoes de Engenharia (CLT)</label>
+              <div class="flex items-center space-x-3">
+                <input type="range" id="sim-new-hires" min="0" max="10" step="1" value="0" oninput="runSimulation()" class="flex-1 accent-accentGold">
+                <span class="font-mono text-sm font-bold text-accentGold w-12 text-right" id="sim-new-hires-val">0</span>
+              </div>
+              <p class="text-[11px] text-zinc-500">Base salarial de R$ 11.500,00 por posicao senior com provisao de ferias e 13o.</p>
             </div>
           </div>
 
-          <div class="space-y-3" id="chat-messages">
-            <div class="p-4 rounded-lg bg-subtle border border-borderSubtle text-xs space-y-2">
-              <div class="font-semibold text-indigo-400">Agente Analista // Sistema</div>
-              <div class="text-slate-300">Ola, Matheus. Estou conectado ao motor deterministico da folha de Setembro/2026. Voce pode me fazer perguntas sobre variacao de custos, simulacoes de contratacao ou pedir para auditar horas extras.</div>
-            </div>
-          </div>
+          <!-- Simulation Output Box -->
+          <div class="p-5 rounded-md bg-zinc-950 border border-borderSubtle space-y-4 font-mono">
+            <div class="text-xs text-zinc-400 font-semibold uppercase tracking-wider">Projecao de Resultado em Tempo Real:</div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+              <div class="space-y-1 p-3 rounded bg-zinc-900/60 border border-zinc-800">
+                <div class="text-zinc-500">Novo Custo Mensal Projetado:</div>
+                <div class="text-lg font-bold text-white tabular-nums" id="sim-res-total">R$ 384.210,40</div>
+                <div class="text-[11px] text-zinc-400">Variacao: <span class="text-accentGold font-semibold" id="sim-res-diff">+ R$ 0,00</span></div>
+              </div>
 
-          <div class="pt-2">
-            <div class="flex items-center space-x-2">
-              <input type="text" id="analyst-input" placeholder="Pergunte: 'Qual o custo de contratar 3 seniores?' ou 'Auditar horas extras'..." class="flex-1 px-4 py-2.5 rounded-lg bg-subtle border border-borderSubtle text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
-              <button onclick="sendAnalystQuery()" class="px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">Consultar</button>
-            </div>
-            <div class="flex items-center space-x-2 mt-2">
-              <span class="text-[11px] text-slate-500">Exemplos rapidos:</span>
-              <button onclick="quickQuery('Qual o impacto de contratar 2 Engenheiros Senior CLT?')" class="text-[11px] px-2 py-0.5 rounded bg-subtle border border-borderSubtle text-slate-400 hover:text-slate-200">Impacto 2 Seniores CLT</button>
-              <button onclick="quickQuery('Auditar colaboradores com mais de 10 horas extras')" class="text-[11px] px-2 py-0.5 rounded bg-subtle border border-borderSubtle text-slate-400 hover:text-slate-200">Auditar Horas Extras</button>
-              <button onclick="quickQuery('Qual a previsao da Guia GFD do FGTS Digital via Pix?')" class="text-[11px] px-2 py-0.5 rounded bg-subtle border border-borderSubtle text-slate-400 hover:text-slate-200">Guia FGTS Digital</button>
+              <div class="space-y-1 p-3 rounded bg-zinc-900/60 border border-zinc-800">
+                <div class="text-zinc-500">Novo DARF Previdenciario DCTFWeb:</div>
+                <div class="text-lg font-bold text-zinc-200 tabular-nums" id="sim-res-darf">R$ 108.599,40</div>
+                <div class="text-[11px] text-zinc-400">CPP 20% + RAT + Terceiros</div>
+              </div>
+
+              <div class="space-y-1 p-3 rounded bg-zinc-900/60 border border-zinc-800">
+                <div class="text-zinc-500">Nova Guia FGTS Digital (Pix):</div>
+                <div class="text-lg font-bold text-emerald-400 tabular-nums" id="sim-res-fgts">R$ 21.490,20</div>
+                <div class="text-[11px] text-zinc-400">Vencimento dia 20</div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Tab 3: eSocial & Guias -->
-      <div id="tab-esocial" class="space-y-4 hidden">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <!-- eSocial Stream -->
-          <div class="p-5 rounded-xl bg-surface border border-borderSubtle space-y-4">
-            <h3 class="text-sm font-semibold text-white flex items-center justify-between">
-              <span>Esteira de Eventos eSocial</span>
-              <span class="text-xs font-mono text-emerald-400">Totalizadores Reconciliados</span>
-            </h3>
-            <div class="space-y-2 text-xs">
-              <div class="p-3 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
+      <!-- VIEW 3: eSocial & Guias Fiscais -->
+      <div id="view-esocial" class="space-y-6 hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- eSocial Pipeline -->
+          <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-4">
+            <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+              <h3 class="text-sm font-bold text-white font-display">Esteira de Transmissao eSocial</h3>
+              <span class="text-xs font-mono px-2 py-0.5 rounded bg-emerald-950/60 text-emerald-400 border border-emerald-800">Ambiente Producao</span>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+              <div class="p-3 rounded bg-surfaceElevated border border-borderSubtle flex items-center justify-between">
                 <div>
-                  <div class="font-medium text-slate-200">S-1000 a S-1020 // Tabelas do Empregador</div>
-                  <div class="text-slate-500 text-[11px]">Enquadramento, RAT Ajustado 2,5% e Rubricas</div>
+                  <div class="font-semibold text-zinc-200">S-1000 / S-1020 // Cadastro do Empregador e Lotacoes</div>
+                  <div class="text-[11px] text-zinc-500 font-mono">Recibo: 1.2.202609.0001849204 | RAT 2.5000%</div>
                 </div>
-                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[11px]">Recepcionado</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[10px]">Validado</span>
               </div>
-              <div class="p-3 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
+
+              <div class="p-3 rounded bg-surfaceElevated border border-borderSubtle flex items-center justify-between">
                 <div>
-                  <div class="font-medium text-slate-200">S-1200 // Remuneracao do Trabalhador</div>
-                  <div class="text-slate-500 text-[11px]">36 colaboradores CLT processados continuamente</div>
+                  <div class="font-semibold text-zinc-200">S-1200 // Remuneracao RGPS (36 colaboradores)</div>
+                  <div class="text-[11px] text-zinc-500 font-mono">XMLs assinados com certificado A1 (ICP-Brasil RSA-SHA256)</div>
                 </div>
-                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[11px]">Sincronizado</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[10px]">Sincronizado</span>
               </div>
-              <div class="p-3 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
+
+              <div class="p-3 rounded bg-surfaceElevated border border-borderSubtle flex items-center justify-between">
                 <div>
-                  <div class="font-medium text-slate-200">S-1210 // Pagamentos (Regime de Caixa / IRRF)</div>
-                  <div class="text-slate-500 text-[11px]">Substituto da DIRF em total conformidade</div>
+                  <div class="font-semibold text-zinc-200">S-1210 // Pagamentos de Rendimentos (IRRF / Substitutivo DIRF)</div>
+                  <div class="text-[11px] text-zinc-500 font-mono">Regime de Caixa rigorosamente conciliado com extrato</div>
                 </div>
-                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[11px]">Validado</span>
+                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[10px]">Validado</span>
+              </div>
+
+              <div class="p-3 rounded bg-surfaceElevated border border-borderSubtle flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-zinc-200">S-1299 // Fechamento dos Eventos Periodicos</div>
+                  <div class="text-[11px] text-zinc-500 font-mono">Pronto para envio imediato com Lock Criptografico</div>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 font-mono text-[10px]">Aguardando Lote</span>
               </div>
             </div>
           </div>
 
-          <!-- Guias Fiscais -->
-          <div class="p-5 rounded-xl bg-surface border border-borderSubtle space-y-4">
-            <h3 class="text-sm font-semibold text-white">Emissao Direta de Guias (Pix / DCTFWeb)</h3>
+          <!-- Guias de Recolhimento -->
+          <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-4">
+            <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+              <h3 class="text-sm font-bold text-white font-display">Guias de Recolhimento da Competencia</h3>
+              <span class="text-xs font-mono text-zinc-500">09/2026</span>
+            </div>
+
             <div class="space-y-3">
-              <div class="p-4 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
-                <div>
-                  <div class="font-semibold text-white text-xs">FGTS Digital (GFD via Pix)</div>
-                  <div class="text-[11px] text-slate-400 mt-0.5">Vencimento: 20/10/2026 | Competencia: 09/2026</div>
-                  <div class="text-sm font-mono text-emerald-400 font-bold mt-1">R$ 21.490,20</div>
+              <!-- FGTS Digital -->
+              <div class="p-4 rounded bg-surfaceElevated border border-borderSubtle space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-zinc-200 text-xs">GFD - Guia do FGTS Digital (Exclusiva via Pix)</div>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-emerald-400 border border-zinc-800">Pix Dinamico</span>
                 </div>
-                <button onclick="alert('Guia GFD gerada com sucesso. QR Code Pix dinamico copiado para a area de transferencia.')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium">Emitir Guia Pix</button>
+                <div class="text-sm font-bold font-mono text-white">R$ 21.490,20</div>
+                <div class="text-[11px] text-zinc-500 flex items-center justify-between">
+                  <span>Vencimento: 20/10/2026 (Lei 14.438/2022)</span>
+                  <button onclick="showPixModal()" class="text-accentGold hover:underline font-semibold font-mono">Ver QR Code Pix</button>
+                </div>
               </div>
 
-              <div class="p-4 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
-                <div>
-                  <div class="font-semibold text-white text-xs">DARF Previdenciario Unico (DCTFWeb)</div>
-                  <div class="text-[11px] text-slate-400 mt-0.5">INSS Patronal + Segurado + IRRF Folha</div>
-                  <div class="text-sm font-mono text-indigo-400 font-bold mt-1">R$ 108.599,40</div>
+              <!-- DCTFWeb -->
+              <div class="p-4 rounded bg-surfaceElevated border border-borderSubtle space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-zinc-200 text-xs">DARF Previdenciario Unico (DCTFWeb - Codigo 1138)</div>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-accentGold border border-zinc-800">Receita Federal</span>
                 </div>
-                <button onclick="alert('DARF Numerado gerado e sincronizado com a Receita Federal.')" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium">Transmitir DCTFWeb</button>
+                <div class="text-sm font-bold font-mono text-white">R$ 108.599,40</div>
+                <div class="text-[11px] text-zinc-500 flex items-center justify-between">
+                  <span>Vencimento: 20/10/2026 | CPP + RAT + Terceiros + IRRF</span>
+                  <button onclick="alert('Linha digitavel do DARF: 85820000010-8 85994011381-1 00012345678-9 00019020261-2')" class="text-accentGold hover:underline font-semibold font-mono">Linha Digitavel</button>
+                </div>
               </div>
+
+              <!-- CNAB 240 Remessa -->
+              <div class="p-4 rounded bg-surfaceElevated border border-borderSubtle space-y-2">
+                <div class="flex items-center justify-between">
+                  <div class="font-semibold text-zinc-200 text-xs">Arquivo de Remessa Bancaria FEBRABAN CNAB 240</div>
+                  <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800">Segmentos A e B</span>
+                </div>
+                <div class="text-xs text-zinc-400">Total liquido de R$ 254.120,80 distribuidos em 48 contas correntes e chaves Pix.</div>
+                <button onclick="downloadCNAB()" class="w-full py-1.5 rounded bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-semibold font-mono transition-colors">
+                  Download Arquivo REMESSA_202609.REM
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 4: AI Analyst (Agentic DP Copilot) -->
+      <div id="view-analyst" class="space-y-4 hidden">
+        <div class="p-6 rounded-lg bg-surface border border-borderSubtle space-y-4">
+          <div class="border-b border-borderSubtle pb-4 flex items-center space-x-3">
+            <div class="w-8 h-8 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-accentGold font-bold text-xs font-mono">
+              IA
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-white font-display">Agente Analista Atlas ThPay</h3>
+              <p class="text-xs text-zinc-400">Consultas ad-hoc sobre custos, simulacoes trabalhistas e auditoria preventiva conectadas ao motor DAG.</p>
+            </div>
+          </div>
+
+          <!-- Chat History -->
+          <div class="space-y-3 max-h-96 overflow-y-auto custom-scrollbar p-1" id="chat-stream">
+            <div class="p-3.5 rounded bg-surfaceElevated border border-borderSubtle text-xs space-y-1.5">
+              <div class="font-bold text-accentGold font-mono text-[11px]">Agente Analista // Sistema</div>
+              <div class="text-zinc-300 leading-relaxed">
+                Pronto para analise. Os dados da folha de Setembro/2026 foram processados deterministicamente. Voce pode me solicitar calculos de passivo trabalhista, projecoes de contratacao ou analise da Lei de Equidade Salarial (Lei 14.611/2023).
+              </div>
+            </div>
+          </div>
+
+          <!-- Input form -->
+          <div class="space-y-2 pt-2">
+            <div class="flex items-center space-x-2">
+              <input type="text" id="chat-input" placeholder="Digite uma consulta ou selecione um cenario abaixo..." class="flex-1 px-3.5 py-2.5 rounded bg-background border border-borderSubtle text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-accentGold font-sans" onkeydown="if(event.key==='Enter') submitChatQuery()">
+              <button onclick="submitChatQuery()" class="px-4 py-2.5 rounded bg-zinc-100 hover:bg-white text-zinc-950 font-bold text-xs transition-colors">Enviar</button>
+            </div>
+            <div class="flex flex-wrap gap-2 text-[11px] pt-1">
+              <span class="text-zinc-500 font-mono text-[10px] self-center">Consultas frequentes:</span>
+              <button onclick="triggerPresetQuery('Auditar colaboradores que excederam 10 horas extras neste mes')" class="px-2.5 py-1 rounded bg-surfaceElevated border border-borderSubtle text-zinc-300 hover:border-zinc-500">Auditar Horas Extras</button>
+              <button onclick="triggerPresetQuery('Qual o custo total de promover 2 Engenheiros Pleno para Senior?')" class="px-2.5 py-1 rounded bg-surfaceElevated border border-borderSubtle text-zinc-300 hover:border-zinc-500">Promocao 2 Engenheiros</button>
+              <button onclick="triggerPresetQuery('Demonstrar relatorio de paridade salarial por genero (Lei 14.611)')" class="px-2.5 py-1 rounded bg-surfaceElevated border border-borderSubtle text-zinc-300 hover:border-zinc-500">Relatorio Lei 14.611</button>
             </div>
           </div>
         </div>
@@ -317,165 +542,376 @@
     </main>
   </div>
 
-  <!-- Live Payslip Inspector Drawer (Sliding from Right) -->
-  <div id="payslip-drawer" class="fixed inset-y-0 right-0 w-full max-w-xl bg-surface border-l border-borderSubtle shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-    <div class="px-6 py-4 border-b border-borderSubtle flex items-center justify-between bg-subtle/50">
-      <div class="flex items-center space-x-3">
-        <div class="w-8 h-8 rounded-full bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-xs" id="drawer-avatar">
+  <!-- DRAWER: Live Interactive Payslip Inspector (Sliding from Right) -->
+  <div id="drawer-overlay" onclick="closeDrawer()" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-200"></div>
+
+  <div id="payslip-drawer" class="fixed inset-y-0 right-0 w-full max-w-2xl bg-surface border-l border-borderSubtle shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <!-- Drawer Header -->
+    <div class="px-6 py-4 border-b border-borderSubtle flex items-center justify-between bg-surfaceElevated/50">
+      <div class="flex items-center space-x-3.5">
+        <div class="w-9 h-9 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center font-bold text-xs font-mono text-zinc-200" id="drawer-initials">
           CS
         </div>
         <div>
-          <h3 class="text-sm font-bold text-white tracking-tight" id="drawer-name">Carlos Eduardo da Silva</h3>
-          <p class="text-xs text-slate-400" id="drawer-meta">Engenheiro de Software Senior // CLT (101)</p>
+          <div class="flex items-center space-x-2">
+            <h3 class="text-sm font-bold text-white tracking-tight font-display" id="drawer-full-name">Carlos Eduardo da Silva</h3>
+            <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-900 border border-zinc-700 font-mono text-sky-400" id="drawer-badge-type">CLT (101)</span>
+          </div>
+          <p class="text-xs text-zinc-400 mt-0.5" id="drawer-subtitle">Engenheiro de Software Senior // CBO 2124-05 // Matrícula: MAT-0042</p>
         </div>
       </div>
-      <button onclick="closeDrawer()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-subtle transition-colors">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-      </button>
+      <div class="flex items-center space-x-2">
+        <button onclick="printOfficialPayslip()" class="px-2.5 py-1.5 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-300 border border-borderSubtle text-xs font-medium flex items-center space-x-1" title="Imprimir holerite">
+          <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span>Imprimir Holerite</span>
+        </button>
+        <button onclick="closeDrawer()" class="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-surfaceElevated transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
 
-    <div class="p-6 overflow-y-auto flex-1 space-y-6 custom-scrollbar text-xs">
-      <!-- Net Total Big Card -->
-      <div class="p-4 rounded-xl bg-gradient-to-br from-indigo-950/40 to-surface border border-indigo-800/40 flex items-center justify-between">
-        <div>
-          <div class="text-slate-400 font-medium text-[11px]">Salario Liquido a Receber</div>
-          <div class="text-2xl font-bold font-mono text-emerald-400 mt-0.5" id="drawer-net">R$ 4.814,71</div>
-        </div>
-        <div class="text-right font-mono text-[11px] space-y-0.5">
-          <div class="text-slate-400">Bruto: <span class="text-white font-medium" id="drawer-gross">R$ 6.916,94</span></div>
-          <div class="text-slate-400">Descontos: <span class="text-rose-400 font-medium" id="drawer-discounts">R$ 2.102,23</span></div>
-        </div>
-      </div>
+    <!-- Drawer Navigation Tabs -->
+    <div class="flex border-b border-borderSubtle px-6 bg-surface text-xs">
+      <button onclick="switchDrawerTab('holerite')" id="dtab-btn-holerite" class="py-2.5 px-3 font-semibold border-b-2 border-accentGold text-white transition-colors">Demonstrativo (Holerite)</button>
+      <button onclick="switchDrawerTab('truecost')" id="dtab-btn-truecost" class="py-2.5 px-3 font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-colors">Custo Empresa (1.68x)</button>
+      <button onclick="switchDrawerTab('esocialxml')" id="dtab-btn-esocialxml" class="py-2.5 px-3 font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-colors">Eventos eSocial (S-1200)</button>
+    </div>
 
-      <!-- Itemized Table -->
-      <div class="space-y-2">
-        <div class="font-semibold text-slate-300 uppercase tracking-wider text-[10px]">Lancamentos da Competencia (09/2026)</div>
-        <div class="border border-borderSubtle rounded-lg overflow-hidden">
-          <table class="w-full text-left">
-            <thead class="bg-subtle text-slate-400 text-[10px] uppercase border-b border-borderSubtle">
-              <tr>
-                <th class="px-3 py-2">Cod</th>
-                <th class="px-3 py-2">Rubrica</th>
-                <th class="px-3 py-2 text-center">Ref</th>
-                <th class="px-3 py-2 text-right">Provento</th>
-                <th class="px-3 py-2 text-right">Desconto</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-borderSubtle font-mono text-[11px]" id="drawer-items">
-              <!-- Dynamically populated -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Tax X-Ray (Visual Progressive INSS and IRRF Comparison) -->
-      <div class="p-4 rounded-xl bg-subtle border border-borderSubtle space-y-3">
-        <div class="font-semibold text-indigo-300 text-xs flex items-center justify-between">
-          <span>Raio-X dos Tributos (Determinismo Exato)</span>
-          <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-950 text-indigo-400 font-mono">EC 103/2019 + RFB</span>
-        </div>
-
-        <div class="space-y-2 text-[11px]">
+    <!-- Drawer Content Area -->
+    <div class="p-6 overflow-y-auto flex-1 space-y-6 custom-scrollbar text-xs" id="print-area">
+      
+      <!-- TAB A: HOLERITE -->
+      <div id="dtab-holerite" class="space-y-5">
+        <!-- Summary Box -->
+        <div class="p-4 rounded-md bg-surfaceElevated border border-borderSubtle flex items-center justify-between">
           <div>
-            <div class="flex justify-between text-slate-400 mb-1">
+            <div class="text-zinc-400 font-medium text-[11px]">Salario Liquido a Receber</div>
+            <div class="text-2xl font-bold font-mono text-accentEmerald mt-0.5 tabular-nums" id="drawer-net-val">R$ 4.814,71</div>
+          </div>
+          <div class="text-right font-mono text-[11px] space-y-0.5">
+            <div class="text-zinc-400">Total Proventos: <span class="text-white font-semibold" id="drawer-gross-val">R$ 6.916,94</span></div>
+            <div class="text-zinc-400">Total Descontos: <span class="text-rose-400 font-semibold" id="drawer-disc-val">R$ 2.102,23</span></div>
+          </div>
+        </div>
+
+        <!-- Itemized Rubric Table -->
+        <div class="space-y-2">
+          <div class="text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono">Lancamentos da Competencia (09/2026)</div>
+          <div class="border border-borderSubtle rounded-md overflow-hidden bg-background">
+            <table class="w-full text-left">
+              <thead class="bg-surfaceElevated text-zinc-400 text-[10px] font-mono uppercase border-b border-borderSubtle">
+                <tr>
+                  <th class="px-3 py-2">Cod</th>
+                  <th class="px-3 py-2">Descricao da Rubrica</th>
+                  <th class="px-3 py-2 text-center">Ref</th>
+                  <th class="px-3 py-2 text-right">Provento</th>
+                  <th class="px-3 py-2 text-right">Desconto</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-borderSubtle font-mono text-[11px]" id="drawer-items-table">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Tax Breakdown (INSS & IRRF X-Ray) -->
+        <div class="p-4 rounded-md bg-surfaceElevated border border-borderSubtle space-y-3">
+          <div class="font-bold text-zinc-200 text-xs flex items-center justify-between">
+            <span>Raio-X dos Tributos (Determinismo Estrito)</span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded bg-zinc-900 border border-zinc-800 text-accentGold font-mono">EC 103/2019 + RFB</span>
+          </div>
+
+          <!-- INSS Slices -->
+          <div class="space-y-1.5 text-[11px]">
+            <div class="flex justify-between text-zinc-400">
               <span>INSS Fatiado por Faixas Marginais</span>
-              <span class="font-mono text-white" id="drawer-inss-total">R$ 787,19 (Base: R$ 6.916,94)</span>
+              <span class="font-mono text-white" id="drawer-inss-label">R$ 787,19 (Base: R$ 6.916,94)</span>
             </div>
-            <div class="w-full bg-canvas rounded-full h-2 flex overflow-hidden">
+            <div class="w-full bg-background rounded h-2 flex overflow-hidden border border-borderSubtle">
               <div class="bg-sky-500 h-2" style="width: 20%" title="Faixa 1 (7,5%): R$ 105,90"></div>
               <div class="bg-indigo-500 h-2" style="width: 25%" title="Faixa 2 (9,0%): R$ 112,92"></div>
               <div class="bg-purple-500 h-2" style="width: 30%" title="Faixa 3 (12,0%): R$ 160,00"></div>
               <div class="bg-rose-500 h-2" style="width: 25%" title="Faixa 4 (14,0%): R$ 408,37"></div>
             </div>
+            <div class="flex justify-between text-[10px] font-mono text-zinc-500 pt-0.5">
+              <span>Faixa 1: R$ 105,90</span>
+              <span>Faixa 2: R$ 112,92</span>
+              <span>Faixa 3: R$ 160,00</span>
+              <span>Faixa 4: R$ 408,37</span>
+            </div>
           </div>
 
-          <div class="pt-2 border-t border-borderSubtle">
-            <div class="flex justify-between text-slate-400">
+          <!-- IRRF Deductions comparison -->
+          <div class="pt-2.5 border-t border-borderSubtle text-[11px] space-y-1">
+            <div class="flex justify-between text-zinc-400">
               <span>Comparativo IRRF</span>
-              <span class="text-emerald-400 font-mono font-medium">Deducoes Legais Aplicadas</span>
+              <span class="text-accentEmerald font-mono font-semibold" id="drawer-irrf-chosen">Deducoes Legais Aplicadas</span>
             </div>
-            <div class="text-slate-500 text-[10px] mt-0.5">
-              Deducoes Legais (R$ 976,78) superaram o Desconto Simplificado (R$ 564,80). Motor aplicou a opcao mais benefica ao colaborador.
+            <p class="text-zinc-500 text-[10px] leading-relaxed" id="drawer-irrf-explain">
+              Deducoes Legais de R$ 976,78 (INSS R$ 787,19 + 1 dependente R$ 189,59) superaram o Desconto Simplificado legal de R$ 564,80. O motor deterministico selecionou compulsoriamente o menor imposto.
+            </p>
+          </div>
+        </div>
+
+        <!-- Version Lock Hash -->
+        <div class="p-3 rounded bg-zinc-950 border border-borderSubtle font-mono text-[10px] text-zinc-500 break-all space-y-0.5">
+          <div class="text-zinc-400 font-bold">Assinatura Criptografica SHA-256 (Version Lock):</div>
+          <div class="text-accentGold select-all" id="drawer-hash-val">1d04c9ce6ba5791986b2307b617783f050192aa5470e3789c71658b2911c041b</div>
+        </div>
+      </div>
+
+      <!-- TAB B: TRUE COST -->
+      <div id="dtab-truecost" class="space-y-4 hidden">
+        <div class="p-4 rounded-md bg-surfaceElevated border border-borderSubtle space-y-3">
+          <div class="text-xs font-bold text-white">Composicao Exata do Custo Empresa (Fator 1.682x)</div>
+          <p class="text-[11px] text-zinc-400">Detalhamento dos encargos e provisoes contabeis devidas pela organizacao para este colaborador.</p>
+          
+          <div class="space-y-2 font-mono text-xs pt-2">
+            <div class="flex justify-between py-1 border-b border-borderSubtle text-zinc-300">
+              <span>Remuneracao Bruta Total:</span>
+              <span class="font-bold text-white" id="tc-gross">R$ 6.916,94</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-borderSubtle text-zinc-400">
+              <span>Contribuicao Patronal Previdenciaria (CPP 20%):</span>
+              <span id="tc-cpp">R$ 1.383,39</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-borderSubtle text-zinc-400">
+              <span>GILRAT / SAT Ajustado (RAT 2% x FAP 1.25 = 2.5%):</span>
+              <span id="tc-rat">R$ 172,92</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-borderSubtle text-zinc-400">
+              <span>Terceiros / Outras Entidades (FPAS 515 - 5.8%):</span>
+              <span id="tc-terceiros">R$ 401,18</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-borderSubtle text-zinc-400">
+              <span>FGTS Mensal Empresa (8%):</span>
+              <span id="tc-fgts">R$ 553,36</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-borderSubtle text-zinc-400">
+              <span>Provisao Mensal de Ferias + 1/3 Constitucional (11.11%):</span>
+              <span id="tc-ferias">R$ 768,47</span>
+            </div>
+            <div class="flex justify-between py-1 border-b border-borderSubtle text-zinc-400">
+              <span>Provisao Mensal de 13o Salario (8.33%):</span>
+              <span id="tc-13o">R$ 576,18</span>
+            </div>
+            <div class="flex justify-between py-2 text-sm font-bold text-accentGold border-t border-zinc-700">
+              <span>Custo Total Empresa (Competencia 09/2026):</span>
+              <span id="tc-total">R$ 10.772,44</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Real Cost of Employee -->
-      <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-2">
-        <div class="font-semibold text-slate-300 text-xs">Custo Total da Empresa (True Cost)</div>
-        <div class="flex items-center justify-between font-mono text-sm">
-          <span class="text-slate-400">Custo Total:</span>
-          <span class="font-bold text-indigo-400" id="drawer-true-cost">R$ 9.812,40</span>
-        </div>
-        <div class="text-[10px] text-slate-500 leading-relaxed">
-          Composicao: Salario + 20% Patronal + 2,5% RAT/FAP + 5,8% Terceiros + 8% FGTS + Provisao 1/12 Ferias (+1/3) e 13o Salario.
+      <!-- TAB C: ESOCIAL XML -->
+      <div id="dtab-esocialxml" class="space-y-4 hidden">
+        <div class="p-3 rounded bg-zinc-950 border border-borderSubtle font-mono text-[10px] text-zinc-400 space-y-2">
+          <div class="flex justify-between text-zinc-500 font-bold border-b border-borderSubtle pb-1">
+            <span>Payload XML eSocial S-1200 (Canônico)</span>
+            <span class="text-emerald-400">Assinado com Certificado ICP-Brasil</span>
+          </div>
+          <pre class="overflow-x-auto p-2 bg-background rounded text-zinc-300 custom-scrollbar" id="xml-snippet">
+&lt;eSocial xmlns="http://www.esocial.gov.br/schema/evt/evtRemun/v_S_01_02_00"&gt;
+  &lt;evtRemun id="ID1123456780001902026091518000000001"&gt;
+    &lt;ideEvento&gt;
+      &lt;indRetif&gt;1&lt;/indRetif&gt;
+      &lt;perApur&gt;2026-09&lt;/perApur&gt;
+      &lt;tpAmb&gt;1&lt;/tpAmb&gt;
+      &lt;procEmi&gt;1&lt;/procEmi&gt;
+    &lt;/ideEvento&gt;
+    &lt;ideEmpregador&gt;
+      &lt;tpInsc&gt;1&lt;/tpInsc&gt;
+      &lt;nrInsc&gt;12345678000190&lt;/nrInsc&gt;
+    &lt;/ideEmpregador&gt;
+    &lt;ideTrabalhador&gt;
+      &lt;cpfTrab&gt;12345678900&lt;/cpfTrab&gt;
+    &lt;/ideTrabalhador&gt;
+    &lt;dmDev&gt;
+      &lt;ideDmDev&gt;MAT-0042-092026&lt;/ideDmDev&gt;
+      &lt;infoPerApur&gt;
+        &lt;ideEstabLot&gt;
+          &lt;tpInsc&gt;1&lt;/tpInsc&gt;
+          &lt;nrInsc&gt;12345678000190&lt;/nrInsc&gt;
+          &lt;codLotacao&gt;LOT-001&lt;/codLotacao&gt;
+          &lt;remunPerApur&gt;
+            &lt;matricula&gt;MAT-0042&lt;/matricula&gt;
+            &lt;itensRemun&gt;
+              &lt;codRubr&gt;1000&lt;/codRubr&gt;
+              &lt;ideTabRubr&gt;TAB-01&lt;/ideTabRubr&gt;
+              &lt;vrRubr&gt;6200.00&lt;/vrRubr&gt;
+            &lt;/itensRemun&gt;
+            &lt;itensRemun&gt;
+              &lt;codRubr&gt;1010&lt;/codRubr&gt;
+              &lt;ideTabRubr&gt;TAB-01&lt;/ideTabRubr&gt;
+              &lt;vrRubr&gt;507.27&lt;/vrRubr&gt;
+            &lt;/itensRemun&gt;
+          &lt;/remunPerApur&gt;
+        &lt;/ideEstabLot&gt;
+      &lt;/infoPerApur&gt;
+    &lt;/dmDev&gt;
+  &lt;/evtRemun&gt;
+&lt;/eSocial&gt;
+          </pre>
         </div>
       </div>
 
-      <!-- SHA-256 Lock -->
-      <div class="p-3 rounded-lg bg-canvas border border-borderSubtle font-mono text-[10px] text-slate-500 break-all space-y-1">
-        <div class="text-slate-400 font-semibold">Version Lock Criptografico (SHA-256):</div>
-        <div class="text-slate-300" id="drawer-hash">1d04c9ce6ba5791986b2307b617783f050192aa5470e3789c71658b2911c041b</div>
+    </div>
+  </div>
+
+  <!-- COMMAND PALETTE MODAL (Ctrl + K) -->
+  <div id="cmd-palette" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-start justify-center pt-24 hidden">
+    <div class="w-full max-w-xl bg-surface border border-borderSubtle rounded-lg shadow-2xl overflow-hidden text-xs">
+      <div class="p-3 border-b border-borderSubtle flex items-center space-x-2 bg-surfaceElevated">
+        <svg class="w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+        <input type="text" id="palette-input" placeholder="Digite para buscar colaboradores, relatorios ou comandos..." class="w-full bg-transparent border-none text-white focus:outline-none placeholder-zinc-500 font-sans" onkeyup="filterPalette()">
+        <kbd class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-400">ESC</kbd>
+      </div>
+      <div class="max-h-80 overflow-y-auto p-2 space-y-1 custom-scrollbar" id="palette-results">
+        <div class="px-3 py-1.5 text-[10px] font-bold text-zinc-500 font-mono uppercase">Acoes Rapidas</div>
+        <button onclick="switchView('simulator'); closeCommandPalette();" class="w-full text-left px-3 py-2 rounded hover:bg-surfaceElevated text-zinc-200 flex items-center justify-between">
+          <span>Abrir Simulador de Cenarios e Dissidio</span>
+          <span class="text-zinc-500 font-mono text-[10px]">Wasm Edge</span>
+        </button>
+        <button onclick="switchView('esocial'); closeCommandPalette();" class="w-full text-left px-3 py-2 rounded hover:bg-surfaceElevated text-zinc-200 flex items-center justify-between">
+          <span>Emitir Guia GFD do FGTS Digital via Pix</span>
+          <span class="text-emerald-400 font-mono text-[10px]">Venc 20/10</span>
+        </button>
+        <button onclick="downloadCSVReport(); closeCommandPalette();" class="w-full text-left px-3 py-2 rounded hover:bg-surfaceElevated text-zinc-200 flex items-center justify-between">
+          <span>Exportar Relatorio Geral de Folha (CSV)</span>
+          <span class="text-zinc-500 font-mono text-[10px]">Download</span>
+        </button>
+        <div class="px-3 py-1.5 text-[10px] font-bold text-zinc-500 font-mono uppercase pt-2">Colaboradores em Destaque</div>
+        <button onclick="openDrawerById('MAT-0042'); closeCommandPalette();" class="w-full text-left px-3 py-2 rounded hover:bg-surfaceElevated text-zinc-200 flex items-center justify-between">
+          <span>Carlos Eduardo da Silva (MAT-0042)</span>
+          <span class="text-sky-400 font-mono text-[10px]">CLT R$ 6.200</span>
+        </button>
+        <button onclick="openDrawerById('MAT-0089'); closeCommandPalette();" class="w-full text-left px-3 py-2 rounded hover:bg-surfaceElevated text-zinc-200 flex items-center justify-between">
+          <span>Mariana Souza Alcantara (MAT-0089)</span>
+          <span class="text-sky-400 font-mono text-[10px]">CLT R$ 7.500</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PIX QR CODE MODAL -->
+  <div id="pix-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div class="w-full max-w-sm bg-surface border border-borderSubtle rounded-lg shadow-2xl p-6 text-xs space-y-4">
+      <div class="flex items-center justify-between border-b border-borderSubtle pb-2">
+        <h3 class="font-bold text-white font-display">FGTS Digital // Guia GFD Pix</h3>
+        <button onclick="closePixModal()" class="text-zinc-400 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="flex flex-col items-center space-y-3 py-2">
+        <!-- Crisp SVG QR Code simulation -->
+        <div class="w-44 h-44 bg-white p-2.5 rounded-md flex items-center justify-center shadow-inner">
+          <svg class="w-full h-full text-zinc-950" viewBox="0 0 100 100" fill="currentColor">
+            <rect x="5" y="5" width="25" height="25" fill="none" stroke="black" stroke-width="6"/>
+            <rect x="12" y="12" width="11" height="11" fill="black"/>
+            <rect x="70" y="5" width="25" height="25" fill="none" stroke="black" stroke-width="6"/>
+            <rect x="77" y="12" width="11" height="11" fill="black"/>
+            <rect x="5" y="70" width="25" height="25" fill="none" stroke="black" stroke-width="6"/>
+            <rect x="12" y="77" width="11" height="11" fill="black"/>
+            <!-- Data dots -->
+            <rect x="36" y="10" width="8" height="8"/>
+            <rect x="48" y="10" width="8" height="8"/>
+            <rect x="36" y="22" width="8" height="8"/>
+            <rect x="48" y="34" width="8" height="8"/>
+            <rect x="10" y="45" width="8" height="8"/>
+            <rect x="25" y="45" width="8" height="8"/>
+            <rect x="40" y="45" width="20" height="8"/>
+            <rect x="70" y="45" width="10" height="8"/>
+            <rect x="85" y="45" width="8" height="8"/>
+            <rect x="40" y="60" width="8" height="18"/>
+            <rect x="55" y="60" width="15" height="8"/>
+            <rect x="75" y="60" width="18" height="8"/>
+            <rect x="55" y="75" width="8" height="15"/>
+            <rect x="70" y="75" width="12" height="15"/>
+          </svg>
+        </div>
+        <div class="text-center font-mono space-y-0.5">
+          <div class="text-lg font-bold text-emerald-400">R$ 21.490,20</div>
+          <div class="text-[11px] text-zinc-500">Vencimento: 20/10/2026</div>
+        </div>
+      </div>
+      <div class="space-y-1.5">
+        <label class="text-[10px] font-mono text-zinc-400 uppercase font-semibold">Chave Pix Copia e Cola:</label>
+        <div class="flex items-center space-x-1.5">
+          <input type="text" readonly value="00020101021226840014br.gov.bcb.pix2562fgtsdigital.caixa.gov.br/api/v1/gfd/202609151234567890520400005303986540821490.205802BR5925MINISTERIO DO TRABALHO6008BRASILIA62070503***6304D1B8" class="flex-1 px-2.5 py-1.5 rounded bg-background border border-borderSubtle text-[10px] font-mono text-zinc-300 select-all focus:outline-none">
+          <button onclick="alert('Chave Pix copiada com sucesso!')" class="px-3 py-1.5 rounded bg-zinc-100 text-zinc-950 font-bold text-xs">Copiar</button>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    const employees = [
+    // Authentic Brazilian Payroll Dataset
+    const dataset = [
       {
         id: "MAT-0042",
+        cpf: "123.456.789-00",
         name: "Carlos Eduardo da Silva",
-        avatar: "CS",
+        initials: "CS",
         role: "Engenheiro de Software Senior",
+        cbo: "2124-05",
         dept: "Engenharia",
         type: "CLT",
         baseSalary: 6200.00,
         earnings: 6916.94,
         discounts: 2102.23,
         net: 4814.71,
-        companyCost: 9812.40,
-        status: "Calculado",
+        companyCost: 10772.44,
+        status: "Ponto Aprovado",
+        statusColor: "emerald",
         hash: "1d04c9ce6ba5791986b2307b617783f050192aa5470e3789c71658b2911c041b",
+        dependents: 1,
         items: [
-          { code: "1000", name: "Salario Base / Normal", ref: "30.00", prov: 6200.00, desc: 0 },
-          { code: "1010", name: "Horas Extras 50%", ref: "12.00", prov: 507.27, desc: 0 },
-          { code: "1020", name: "DSR sobre Horas Extras", ref: "-", prov: 101.45, desc: 0 },
-          { code: "1030", name: "Adicional Noturno 20%", ref: "14.00", prov: 90.18, desc: 0 },
-          { code: "1035", name: "DSR sobre Adicional Noturno", ref: "-", prov: 18.04, desc: 0 },
-          { code: "5000", name: "INSS Empregado Mensal", ref: "-", prov: 0, desc: 787.19 },
-          { code: "5010", name: "IRRF Empregado Mensal", ref: "-", prov: 0, desc: 737.54 },
-          { code: "5030", name: "Vale-Transporte (Desc. 6%)", ref: "-", prov: 0, desc: 372.00 },
-          { code: "5040", name: "Vale-Refeicao (PAT)", ref: "-", prov: 0, desc: 120.00 },
-          { code: "5050", name: "Plano de Saude / Odonto", ref: "-", prov: 0, desc: 85.50 }
+          { code: "1000", name: "Salario Base / Vencimento", ref: "30.00 d", prov: 6200.00, desc: 0 },
+          { code: "1010", name: "Horas Extras 50% (Súm. 264)", ref: "12.00 h", prov: 507.27, desc: 0 },
+          { code: "1020", name: "DSR s/ Horas Extras (Lei 605)", ref: "5.00 d", prov: 101.45, desc: 0 },
+          { code: "1030", name: "Adicional Noturno 20% (Ficta 8/7)", ref: "14.00 h", prov: 90.18, desc: 0 },
+          { code: "1035", name: "DSR s/ Adicional Noturno", ref: "5.00 d", prov: 18.04, desc: 0 },
+          { code: "5000", name: "INSS Segurado (EC 103/2019)", ref: "Marginal", prov: 0, desc: 787.19 },
+          { code: "5010", name: "IRRF s/ Folha (Deducao Legal)", ref: "22.50%", prov: 0, desc: 737.54 },
+          { code: "5030", name: "Vale-Transporte (Limite 6% CLT)", ref: "6.00%", prov: 0, desc: 372.00 },
+          { code: "5040", name: "Vale-Alimentacao (PAT)", ref: "Contrato", prov: 0, desc: 120.00 },
+          { code: "5050", name: "Copart. Plano de Saude Bradesco", ref: "Titular", prov: 0, desc: 85.50 }
         ]
       },
       {
         id: "MAT-0089",
+        cpf: "234.567.890-11",
         name: "Mariana Souza Alcantara",
-        avatar: "MA",
-        role: "Product Designer Lead",
-        dept: "Design",
+        initials: "MA",
+        role: "Product Design Lead",
+        cbo: "2142-05",
+        dept: "Produto",
         type: "CLT",
         baseSalary: 7500.00,
         earnings: 7500.00,
         discounts: 1845.20,
         net: 5654.80,
-        companyCost: 10650.00,
-        status: "Calculado",
+        companyCost: 11625.00,
+        status: "Ponto Aprovado",
+        statusColor: "emerald",
         hash: "8f7b2c019a4e617d9283f450192ab450192aa5470e3789c71658b2911c041f02",
+        dependents: 0,
         items: [
-          { code: "1000", name: "Salario Base / Normal", ref: "30.00", prov: 7500.00, desc: 0 },
-          { code: "5000", name: "INSS Empregado Mensal", ref: "-", prov: 0, desc: 885.45 },
-          { code: "5010", name: "IRRF Empregado Mensal", ref: "-", prov: 0, desc: 859.75 },
-          { code: "5050", name: "Plano de Saude", ref: "-", prov: 0, desc: 100.00 }
+          { code: "1000", name: "Salario Base / Vencimento", ref: "30.00 d", prov: 7500.00, desc: 0 },
+          { code: "5000", name: "INSS Segurado (EC 103/2019)", ref: "Marginal", prov: 0, desc: 885.45 },
+          { code: "5010", name: "IRRF s/ Folha (Simplificado)", ref: "22.50%", prov: 0, desc: 859.75 },
+          { code: "5050", name: "Copart. Plano de Saude", ref: "Titular", prov: 0, desc: 100.00 }
         ]
       },
       {
         id: "MAT-0104",
+        cpf: "345.678.901-22",
         name: "Lucas Mendes Ferreira",
-        avatar: "LM",
-        role: "DevOps Architect",
+        initials: "LM",
+        role: "DevOps & Cloud Architect",
+        cbo: "2124-20",
         dept: "Infraestrutura",
         type: "PJ",
         baseSalary: 14000.00,
@@ -483,74 +919,146 @@
         discounts: 0.00,
         net: 14000.00,
         companyCost: 14000.00,
-        status: "NF Validada",
+        status: "NF-e Homologada",
+        statusColor: "indigo",
         hash: "4a2c9f8019b5e3789012c450192ab450192aa5470e3789c71658b2911c041e11",
+        dependents: 0,
         items: [
-          { code: "8000", name: "Honorarios PJ / Prestacao de Servicos", ref: "1.00", prov: 14000.00, desc: 0 }
+          { code: "8000", name: "Prestacao de Servicos PJ (NF-e 4920)", ref: "Mensal", prov: 14000.00, desc: 0 }
         ]
       },
       {
         id: "MAT-0112",
+        cpf: "456.789.012-33",
         name: "Beatriz Nogueira Ramos",
-        avatar: "BN",
-        role: "Analista de DP Pleno",
-        dept: "Gente & Gestao",
+        initials: "BN",
+        role: "Gerente de Gente & Gestao",
+        cbo: "1421-05",
+        dept: "RH & DP",
         type: "CLT",
-        baseSalary: 4200.00,
-        earnings: 4450.00,
-        discounts: 820.30,
-        net: 3629.70,
-        companyCost: 6180.20,
-        status: "Calculado",
+        baseSalary: 9200.00,
+        earnings: 9200.00,
+        discounts: 2312.40,
+        net: 6887.60,
+        companyCost: 14260.00,
+        status: "Ponto Aprovado",
+        statusColor: "emerald",
         hash: "7d1e8c920b4f51890234a450192ab450192aa5470e3789c71658b2911c041a99",
+        dependents: 2,
         items: [
-          { code: "1000", name: "Salario Base / Normal", ref: "30.00", prov: 4200.00, desc: 0 },
-          { code: "1010", name: "Horas Extras 50%", ref: "6.00", prov: 200.00, desc: 0 },
-          { code: "1020", name: "DSR sobre Horas Extras", ref: "-", prov: 50.00, desc: 0 },
-          { code: "5000", name: "INSS Empregado Mensal", ref: "-", prov: 0, desc: 430.30 },
-          { code: "5010", name: "IRRF Empregado Mensal", ref: "-", prov: 0, desc: 190.00 },
-          { code: "5040", name: "Vale-Refeicao", ref: "-", prov: 0, desc: 200.00 }
+          { code: "1000", name: "Salario Base / Vencimento", ref: "30.00 d", prov: 9200.00, desc: 0 },
+          { code: "5000", name: "INSS Segurado (Teto Maximo RGPS)", ref: "Teto", prov: 0, desc: 908.86 },
+          { code: "5010", name: "IRRF s/ Folha (Deducao 2 Dep)", ref: "27.50%", prov: 0, desc: 1203.54 },
+          { code: "5050", name: "Plano de Saude Titular + Dep", ref: "2 vidas", prov: 0, desc: 200.00 }
+        ]
+      },
+      {
+        id: "MAT-0130",
+        cpf: "567.890.123-44",
+        name: "Thiago Henrique de Oliveira",
+        initials: "TO",
+        role: "Analista Contabil Pleno",
+        cbo: "2522-10",
+        dept: "Financeiro",
+        type: "CLT",
+        baseSalary: 4800.00,
+        earnings: 5120.00,
+        discounts: 980.50,
+        net: 4139.50,
+        companyCost: 7440.00,
+        status: "Atestado 3d (Abonado)",
+        statusColor: "amber",
+        hash: "9b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b3c",
+        dependents: 0,
+        items: [
+          { code: "1000", name: "Salario Base / Vencimento", ref: "30.00 d", prov: 4800.00, desc: 0 },
+          { code: "1010", name: "Horas Extras 50%", ref: "8.00 h", prov: 261.82, desc: 0 },
+          { code: "1020", name: "DSR s/ Horas Extras", ref: "5.00 d", prov: 58.18, desc: 0 },
+          { code: "5000", name: "INSS Segurado (EC 103/2019)", ref: "Marginal", prov: 0, desc: 520.50 },
+          { code: "5010", name: "IRRF s/ Folha (Simplificado)", ref: "15.00%", prov: 0, desc: 210.00 },
+          { code: "5040", name: "Vale-Refeicao (PAT)", ref: "Contrato", prov: 0, desc: 250.00 }
+        ]
+      },
+      {
+        id: "MAT-0145",
+        cpf: "678.901.234-55",
+        name: "Dra. Patricia Medeiros",
+        initials: "PM",
+        role: "Assessora Juridica Trabalhista",
+        cbo: "2410-05",
+        dept: "Compliance",
+        type: "PJ",
+        baseSalary: 12500.00,
+        earnings: 12500.00,
+        discounts: 0.00,
+        net: 12500.00,
+        companyCost: 12500.00,
+        status: "NF-e Homologada",
+        statusColor: "indigo",
+        hash: "1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d7e8f9a0b1c2d3e4f5a6b7c8d9e0f1a2b",
+        dependents: 0,
+        items: [
+          { code: "8000", name: "Honorarios Juridicos Mensais", ref: "Mensal", prov: 12500.00, desc: 0 }
         ]
       }
     ];
 
+    let currentFilter = 'ALL';
+    let currentEmployeeIndex = 0;
+
     function renderTable() {
-      const tbody = document.getElementById('employee-table-body');
+      const tbody = document.getElementById('table-body');
       tbody.innerHTML = '';
 
-      employees.forEach((emp, index) => {
+      const query = document.getElementById('search-input')?.value.toLowerCase() || '';
+
+      dataset.forEach((emp, index) => {
+        if (currentFilter === 'CLT' && emp.type !== 'CLT') return;
+        if (currentFilter === 'PJ' && emp.type !== 'PJ') return;
+
+        if (query && !emp.name.toLowerCase().includes(query) && !emp.role.toLowerCase().includes(query) && !emp.id.toLowerCase().includes(query)) {
+          return;
+        }
+
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-subtle/60 transition-colors';
+        tr.className = 'hover:bg-surfaceElevated/70 transition-colors border-b border-borderSubtle';
 
-        const typeBadge = emp.type === 'CLT' 
-          ? '<span class="px-2 py-0.5 rounded bg-slate-800 text-sky-400 font-mono font-medium text-[10px]">CLT (101)</span>'
-          : '<span class="px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 font-mono font-medium text-[10px]">PJ (Prestador)</span>';
+        const typeBadge = emp.type === 'CLT'
+          ? '<span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-sky-400 font-mono text-[10px] font-semibold">CLT (101)</span>'
+          : '<span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-purple-400 font-mono text-[10px] font-semibold">PJ (Prestador)</span>';
 
-        const statusBadge = emp.status === 'Calculado'
-          ? '<span class="text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-800/40 font-mono text-[10px]">Calculado</span>'
-          : '<span class="text-indigo-300 bg-indigo-950/40 px-2 py-0.5 rounded-full border border-indigo-800/40 font-mono text-[10px]">NF Validada</span>';
+        let statusClass = "text-emerald-400 bg-emerald-950/40 border-emerald-800/40";
+        if (emp.statusColor === "amber") statusClass = "text-accentGold bg-amber-950/40 border-amber-800/40";
+        if (emp.statusColor === "indigo") statusClass = "text-indigo-400 bg-indigo-950/40 border-indigo-800/40";
 
         tr.innerHTML = `
-          <td class="px-4 py-3 flex items-center space-x-3">
-            <div class="w-7 h-7 rounded-full bg-slate-800 text-slate-300 font-semibold flex items-center justify-center text-xs border border-borderSubtle">
-              ${emp.avatar}
-            </div>
-            <div>
-              <div class="font-medium text-white">${emp.name}</div>
-              <div class="text-[11px] text-slate-500 font-mono">${emp.id}</div>
+          <td class="px-4 py-3">
+            <div class="flex items-center space-x-3">
+              <div class="w-7 h-7 rounded bg-zinc-800 border border-zinc-700 text-zinc-300 font-mono text-xs flex items-center justify-center font-bold">
+                ${emp.initials}
+              </div>
+              <div>
+                <div class="font-bold text-white tracking-tight">${emp.name}</div>
+                <div class="text-[10px] text-zinc-500 font-mono">${emp.id} | ${emp.cpf}</div>
+              </div>
             </div>
           </td>
           <td class="px-4 py-3">${typeBadge}</td>
-          <td class="px-4 py-3 text-slate-300">${emp.role} <span class="text-slate-500 text-[11px]">(${emp.dept})</span></td>
-          <td class="px-4 py-3 text-right font-mono">R$ ${emp.baseSalary.toFixed(2)}</td>
-          <td class="px-4 py-3 text-right font-mono text-emerald-400">R$ ${emp.earnings.toFixed(2)}</td>
-          <td class="px-4 py-3 text-right font-mono text-rose-400">R$ ${emp.discounts.toFixed(2)}</td>
-          <td class="px-4 py-3 text-right font-mono font-semibold text-white">R$ ${emp.net.toFixed(2)}</td>
-          <td class="px-4 py-3 text-right font-mono text-indigo-300">R$ ${emp.companyCost.toFixed(2)}</td>
-          <td class="px-4 py-3 text-center">${statusBadge}</td>
+          <td class="px-4 py-3 text-zinc-300">
+            <div>${emp.role}</div>
+            <div class="text-[10px] text-zinc-500 font-mono">CBO ${emp.cbo} // ${emp.dept}</div>
+          </td>
+          <td class="px-4 py-3 text-right font-mono tabular-nums text-zinc-300">R$ ${emp.baseSalary.toFixed(2)}</td>
+          <td class="px-4 py-3 text-right font-mono tabular-nums text-accentEmerald">R$ ${emp.earnings.toFixed(2)}</td>
+          <td class="px-4 py-3 text-right font-mono tabular-nums text-rose-400">R$ ${emp.discounts.toFixed(2)}</td>
+          <td class="px-4 py-3 text-right font-mono tabular-nums font-bold text-white">R$ ${emp.net.toFixed(2)}</td>
+          <td class="px-4 py-3 text-right font-mono tabular-nums text-accentGold">R$ ${emp.companyCost.toFixed(2)}</td>
           <td class="px-4 py-3 text-center">
-            <button onclick="openDrawer(${index})" class="px-2.5 py-1 rounded bg-subtle hover:bg-slate-700 text-slate-200 border border-borderSubtle transition-colors text-[11px] font-medium">
-              Ver Holerite
+            <span class="px-2 py-0.5 rounded-full border text-[10px] font-mono ${statusClass}">${emp.status}</span>
+          </td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="openDrawer(${index})" class="px-2.5 py-1 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-300 border border-borderSubtle text-[11px] font-semibold transition-colors">
+              Raio-X
             </button>
           </td>
         `;
@@ -558,98 +1066,275 @@
       });
     }
 
-    function openDrawer(index) {
-      const emp = employees[index];
-      document.getElementById('drawer-avatar').innerText = emp.avatar;
-      document.getElementById('drawer-name').innerText = emp.name;
-      document.getElementById('drawer-meta').innerText = `${emp.role} // ${emp.type} (${emp.id})`;
-      document.getElementById('drawer-net').innerText = `R$ ${emp.net.toFixed(2)}`;
-      document.getElementById('drawer-gross').innerText = `R$ ${emp.earnings.toFixed(2)}`;
-      document.getElementById('drawer-discounts').innerText = `R$ ${emp.discounts.toFixed(2)}`;
-      document.getElementById('drawer-true-cost').innerText = `R$ ${emp.companyCost.toFixed(2)}`;
-      document.getElementById('drawer-hash').innerText = emp.hash;
+    function filterType(type) {
+      currentFilter = type;
+      ['all', 'clt', 'pj'].forEach(t => {
+        const btn = document.getElementById(`filter-btn-${t}`);
+        if (t.toUpperCase() === type) {
+          btn.className = "px-3 py-1.5 rounded text-xs font-semibold bg-surfaceElevated text-white border border-borderSubtle";
+        } else {
+          btn.className = "px-3 py-1.5 rounded text-xs font-medium text-zinc-400 hover:text-zinc-200 hover:bg-surfaceElevated";
+        }
+      });
+      renderTable();
+    }
 
-      const itemsTable = document.getElementById('drawer-items');
-      itemsTable.innerHTML = '';
-      emp.items.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="px-3 py-1.5 text-slate-500">${item.code}</td>
-          <td class="px-3 py-1.5 text-slate-200 font-sans">${item.name}</td>
-          <td class="px-3 py-1.5 text-center text-slate-400">${item.ref}</td>
-          <td class="px-3 py-1.5 text-right text-emerald-400">${item.prov > 0 ? 'R$ ' + item.prov.toFixed(2) : '-'}</td>
-          <td class="px-3 py-1.5 text-right text-rose-400">${item.desc > 0 ? 'R$ ' + item.desc.toFixed(2) : '-'}</td>
-        `;
-        itemsTable.appendChild(row);
+    function filterSearch() {
+      renderTable();
+    }
+
+    function switchView(viewId) {
+      ['directory', 'simulator', 'esocial', 'analyst'].forEach(v => {
+        document.getElementById(`view-${v}`).classList.add('hidden');
+        const navBtn = document.getElementById(`nav-${v}`);
+        if (navBtn) {
+          navBtn.className = "w-full flex items-center space-x-2.5 px-2.5 py-2 text-xs font-medium rounded-md text-zinc-400 hover:bg-surfaceElevated hover:text-zinc-200 transition-all";
+        }
       });
 
+      document.getElementById(`view-${viewId}`).classList.remove('hidden');
+      const activeBtn = document.getElementById(`nav-${viewId}`);
+      if (activeBtn) {
+        activeBtn.className = "w-full flex items-center justify-between px-2.5 py-2 text-xs font-semibold rounded-md bg-surfaceElevated text-white border border-borderSubtle transition-all";
+      }
+    }
+
+    function openDrawer(index) {
+      currentEmployeeIndex = index;
+      const emp = dataset[index];
+
+      document.getElementById('drawer-initials').innerText = emp.initials;
+      document.getElementById('drawer-full-name').innerText = emp.name;
+      document.getElementById('drawer-badge-type').innerText = `${emp.type} (${emp.type === 'CLT' ? '101' : 'PJ'})`;
+      document.getElementById('drawer-subtitle').innerText = `${emp.role} // CBO ${emp.cbo} // Matrícula: ${emp.id}`;
+
+      document.getElementById('drawer-net-val').innerText = `R$ ${emp.net.toFixed(2)}`;
+      document.getElementById('drawer-gross-val').innerText = `R$ ${emp.earnings.toFixed(2)}`;
+      document.getElementById('drawer-disc-val').innerText = `R$ ${emp.discounts.toFixed(2)}`;
+      document.getElementById('drawer-hash-val').innerText = emp.hash;
+
+      // Table items
+      const itemsBody = document.getElementById('drawer-items-table');
+      itemsBody.innerHTML = '';
+      emp.items.forEach(it => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="px-3 py-1.5 text-zinc-500">${it.code}</td>
+          <td class="px-3 py-1.5 text-zinc-200 font-sans">${it.name}</td>
+          <td class="px-3 py-1.5 text-center text-zinc-400">${it.ref}</td>
+          <td class="px-3 py-1.5 text-right text-accentEmerald">${it.prov > 0 ? 'R$ ' + it.prov.toFixed(2) : '-'}</td>
+          <td class="px-3 py-1.5 text-right text-rose-400">${it.desc > 0 ? 'R$ ' + it.desc.toFixed(2) : '-'}</td>
+        `;
+        itemsBody.appendChild(tr);
+      });
+
+      // True Cost calculations
+      document.getElementById('tc-gross').innerText = `R$ ${emp.earnings.toFixed(2)}`;
+      if (emp.type === 'CLT') {
+        const cpp = emp.earnings * 0.20;
+        const rat = emp.earnings * 0.025;
+        const terceiros = emp.earnings * 0.058;
+        const fgts = emp.earnings * 0.08;
+        const ferias = emp.earnings * (1/12) * (4/3);
+        const decimo = emp.earnings * (1/12);
+        const totalCost = emp.earnings + cpp + rat + terceiros + fgts + ferias + decimo;
+
+        document.getElementById('tc-cpp').innerText = `R$ ${cpp.toFixed(2)}`;
+        document.getElementById('tc-rat').innerText = `R$ ${rat.toFixed(2)}`;
+        document.getElementById('tc-terceiros').innerText = `R$ ${terceiros.toFixed(2)}`;
+        document.getElementById('tc-fgts').innerText = `R$ ${fgts.toFixed(2)}`;
+        document.getElementById('tc-ferias').innerText = `R$ ${ferias.toFixed(2)}`;
+        document.getElementById('tc-13o').innerText = `R$ ${decimo.toFixed(2)}`;
+        document.getElementById('tc-total').innerText = `R$ ${totalCost.toFixed(2)}`;
+      } else {
+        document.getElementById('tc-cpp').innerText = "R$ 0,00 (Isento)";
+        document.getElementById('tc-rat').innerText = "R$ 0,00 (Isento)";
+        document.getElementById('tc-terceiros').innerText = "R$ 0,00 (Isento)";
+        document.getElementById('tc-fgts').innerText = "R$ 0,00 (Isento)";
+        document.getElementById('tc-ferias').innerText = "R$ 0,00 (Sem encargo)";
+        document.getElementById('tc-13o').innerText = "R$ 0,00 (Sem encargo)";
+        document.getElementById('tc-total').innerText = `R$ ${emp.earnings.toFixed(2)}`;
+      }
+
+      switchDrawerTab('holerite');
+
+      document.getElementById('drawer-overlay').classList.remove('opacity-0', 'pointer-events-none');
       document.getElementById('payslip-drawer').classList.remove('translate-x-full');
     }
 
+    function openDrawerById(empId) {
+      const idx = dataset.findIndex(e => e.id === empId);
+      if (idx !== -1) openDrawer(idx);
+    }
+
     function closeDrawer() {
+      document.getElementById('drawer-overlay').classList.add('opacity-0', 'pointer-events-none');
       document.getElementById('payslip-drawer').classList.add('translate-x-full');
     }
 
-    function switchTab(tabId) {
-      ['folha', 'analista', 'esocial'].forEach(id => {
-        document.getElementById(`tab-${id}`).classList.add('hidden');
-        document.getElementById(`nav-${id}`).className = 'w-full flex items-center space-x-2.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-400 hover:bg-subtle hover:text-slate-200 transition-all';
+    function switchDrawerTab(tabKey) {
+      ['holerite', 'truecost', 'esocialxml'].forEach(k => {
+        document.getElementById(`dtab-${k}`).classList.add('hidden');
+        document.getElementById(`dtab-btn-${k}`).className = "py-2.5 px-3 font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-colors";
       });
 
-      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
-      document.getElementById(`nav-${tabId}`).className = 'w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg bg-subtle text-white border border-borderSubtle transition-all';
+      document.getElementById(`dtab-${tabKey}`).classList.remove('hidden');
+      document.getElementById(`dtab-btn-${tabKey}`).className = "py-2.5 px-3 font-semibold border-b-2 border-accentGold text-white transition-colors";
     }
 
-    function quickQuery(text) {
-      document.getElementById('analyst-input').value = text;
-      sendAnalystQuery();
+    // Simulation Engine (Wasm-style micro-calculation)
+    function runSimulation() {
+      const salaryPct = parseFloat(document.getElementById('sim-salary-pct').value) || 0;
+      const heHours = parseFloat(document.getElementById('sim-he-hours').value) || 0;
+      const newHires = parseInt(document.getElementById('sim-new-hires').value) || 0;
+
+      document.getElementById('sim-salary-pct-val').innerText = `${salaryPct.toFixed(1)}%`;
+      document.getElementById('sim-he-hours-val').innerText = `${heHours}h`;
+      document.getElementById('sim-new-hires-val').innerText = newHires;
+
+      const baseTotal = 384210.40;
+      const baseDarf = 108599.40;
+      const baseFgts = 21490.20;
+
+      // Real math simulation
+      const salaryFactor = 1 + (salaryPct / 100);
+      const heCost = heHours * 36 * (6200 / 220) * 1.5 * 1.2; // 36 CLTs with DSR reflex
+      const newHiresCost = newHires * 11500 * 1.682; // Complete true cost multiplier
+
+      const simulatedTotal = (baseTotal * salaryFactor) + heCost + newHiresCost;
+      const diff = simulatedTotal - baseTotal;
+
+      const simulatedDarf = baseDarf * salaryFactor + (heCost * 0.283) + (newHires * 11500 * 0.283);
+      const simulatedFgts = baseFgts * salaryFactor + (heCost * 0.08) + (newHires * 11500 * 0.08);
+
+      document.getElementById('sim-res-total').innerText = `R$ ${simulatedTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('sim-res-diff').innerText = `+ R$ ${diff.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('sim-res-darf').innerText = `R$ ${simulatedDarf.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('sim-res-fgts').innerText = `R$ ${simulatedFgts.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
     }
 
-    function sendAnalystQuery() {
-      const input = document.getElementById('analyst-input');
-      const query = input.value.trim();
-      if (!query) return;
+    // AI Analyst Interaction
+    function submitChatQuery() {
+      const input = document.getElementById('chat-input');
+      const text = input.value.trim();
+      if (!text) return;
 
-      const chat = document.getElementById('chat-messages');
+      const stream = document.getElementById('chat-stream');
 
-      // User Message
-      const userMsg = document.createElement('div');
-      userMsg.className = 'p-3 rounded-lg bg-indigo-950/40 border border-indigo-800/40 text-xs space-y-1 text-right';
-      userMsg.innerHTML = `<div class="font-semibold text-indigo-300">Voce</div><div class="text-slate-200">${query}</div>`;
-      chat.appendChild(userMsg);
+      // User line
+      const uBox = document.createElement('div');
+      uBox.className = "p-3 rounded bg-surfaceElevated border border-borderSubtle text-xs text-right space-y-1";
+      uBox.innerHTML = `<div class="font-mono text-[10px] text-zinc-500 font-bold uppercase">Operador DP</div><div class="text-zinc-200">${text}</div>`;
+      stream.appendChild(uBox);
 
       input.value = '';
 
-      // Simulated Deterministic Response from AI Analyst
+      // AI Response
       setTimeout(() => {
-        const agentMsg = document.createElement('div');
-        agentMsg.className = 'p-4 rounded-lg bg-subtle border border-borderSubtle text-xs space-y-2';
+        let answer = "";
+        const q = text.toLowerCase();
 
-        let reply = "";
-        if (query.toLowerCase().includes("senior") || query.toLowerCase().includes("contratar")) {
-          reply = `<strong>Simulacao de Contratacao (2x Engenheiro Senior CLT):</strong><br>
-          - Salario Base Nominal: 2x R$ 12.000,00 = R$ 24.000,00<br>
-          - Encargos Patronais (CPP 20% + RAT/FAP 2,5% + Terceiros 5,8%): R$ 6.792,00<br>
-          - FGTS Mensal (8%): R$ 1.920,00<br>
-          - Provisoes Mensais (Ferias + 1/3 + 13o + encargos): R$ 7.546,67<br>
-          <strong>Custo Mensal Total Adicional: R$ 40.258,67</strong> (Fator multiplicador empresa: 1,677x).`;
-        } else if (query.toLowerCase().includes("hora extra") || query.toLowerCase().includes("auditar")) {
-          reply = `<strong>Auditoria de Ponto e Conformidade:</strong><br>
-          - 1 colaborador excedeu 10 horas extras: <strong>Carlos Eduardo da Silva</strong> (12h extras a 50% + 14h noturnas).<br>
-          - Impacto financeiro no DSR: R$ 119,49.<br>
-          - Alerta CLT Art. 59: Nao houve violacao do limite de 2h extras diarias em nenhum dos registros.`;
+        if (q.includes("14.611") || q.includes("paridade") || q.includes("genero")) {
+          answer = `<strong>Auditoria de Equidade Salarial (Lei 14.611/2023):</strong><br>
+          - Departamento de Engenharia: Mediana salarial Homens: R$ 6.200,00 | Mulheres: R$ 6.450,00 (Razao: 1.04x favoravel ao genero feminino).<br>
+          - Liderancas / CBO 1421 e 2142: Remuneracao equivalente sem desvio estatistico.<br>
+          - Status de Compliance: <strong>Conforme</strong> (Sem apontamento de discriminacao ou desvio de funcao).`;
+        } else if (q.includes("promover") || q.includes("promocao") || q.includes("senior")) {
+          answer = `<strong>Estudo de Impacto Financeiro (Promocao de 2 Engenheiros Pleno para Senior):</strong><br>
+          - Aumento Salarial Nominal: de R$ 6.200,00 para R$ 9.500,00 (+ R$ 3.300,00 x 2 = + R$ 6.600,00 bruto).<br>
+          - Encargos Patronais Previdenciarios Adicionais (28,3%): + R$ 1.867,80/mes.<br>
+          - FGTS Adicional (8%): + R$ 528,00/mes.<br>
+          - Provisoes Adicionais (Ferias + 13o com encargos): + R$ 2.075,33/mes.<br>
+          <strong>Impacto Total no Orcamento: + R$ 11.071,13 mensais.</strong>`;
+        } else if (q.includes("hora extra") || q.includes("auditar")) {
+          answer = `<strong>Auditoria de Jornada e Ponto (Artigo 59 da CLT):</strong><br>
+          - 1 colaborador registrou horas extras expressivas: <strong>Carlos Eduardo da Silva</strong> (12h extras a 50% + 14h noturnas).<br>
+          - O limite legal de 2 horas suplementares por jornada diaria foi rigorosamente respeitado em todos os dias apurados.<br>
+          - Impacto total em reflexos de DSR: R$ 119,49.`;
         } else {
-          reply = `<strong>Apuracao do FGTS Digital via Pix (Competencia 09/2026):</strong><br>
-          - Base Total Tributavel FGTS CLT: R$ 268.627,50<br>
-          - Total a Recolher (8%): R$ 21.490,20<br>
-          - Data Limite de Pagamento: 20/10/2026.<br>
-          - Guia GFD pronta para emissao via Pix dinamico.`;
+          answer = `<strong>Totalizacao da Folha de Setembro/2026:</strong><br>
+          - Salarios Brutos: R$ 268.627,50 (CLT) + R$ 26.500,00 (PJ).<br>
+          - Total Retido de INSS Segurado: R$ 28.450,12.<br>
+          - Total Retido de IRRF Fonte: R$ 26.120,45.<br>
+          - DCTFWeb e FGTS Digital estao 100% conciliados com os eventos S-5001 e S-5003 do eSocial.`;
         }
 
-        agentMsg.innerHTML = `<div class="font-semibold text-emerald-400">Agente Analista // Resposta Exata</div><div class="text-slate-300 leading-relaxed">${reply}</div>`;
-        chat.appendChild(agentMsg);
-      }, 500);
+        const aBox = document.createElement('div');
+        aBox.className = "p-3.5 rounded bg-surfaceElevated border border-borderSubtle text-xs space-y-1.5";
+        aBox.innerHTML = `<div class="font-bold text-accentGold font-mono text-[11px]">Agente Analista // Resposta Exata</div><div class="text-zinc-300 leading-relaxed">${answer}</div>`;
+        stream.appendChild(aBox);
+        stream.scrollTop = stream.scrollHeight;
+      }, 400);
     }
+
+    function triggerPresetQuery(text) {
+      document.getElementById('chat-input').value = text;
+      submitChatQuery();
+    }
+
+    function openCommandPalette() {
+      document.getElementById('cmd-palette').classList.remove('hidden');
+      document.getElementById('palette-input').focus();
+    }
+
+    function closeCommandPalette() {
+      document.getElementById('cmd-palette').classList.add('hidden');
+    }
+
+    function showPixModal() {
+      document.getElementById('pix-modal').classList.remove('hidden');
+    }
+
+    function closePixModal() {
+      document.getElementById('pix-modal').classList.add('hidden');
+    }
+
+    function openCloseModal() {
+      alert("Relatorio de Pré-Fechamento validado com sucesso.\n- 48 colaboradores apurados\n- 0 divergencias cadastrais\n- Pronto para transmissao do evento S-1299 ao eSocial com Lock SHA-256.");
+    }
+
+    function printOfficialPayslip() {
+      window.print();
+    }
+
+    function downloadCSVReport() {
+      let csv = "ID;NOME;CPF;TIPO;CARGO;DEPARTAMENTO;SALARIO_BASE;PROVENTOS;DESCONTOS;LIQUIDO;CUSTO_EMPRESA\n";
+      dataset.forEach(e => {
+        csv += `${e.id};"${e.name}";${e.cpf};${e.type};"${e.role}";"${e.dept}";${e.baseSalary};${e.earnings};${e.discounts};${e.net};${e.companyCost}\n`;
+      });
+      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "FOLHA_PAGAMENTO_SETEMBRO_2026.csv";
+      a.click();
+    }
+
+    function downloadCNAB() {
+      const cnabContent = "01REMESSA01FOLHA PAGAMENTO 000000000012345678000190TECH SOLUTIONS BRASIL   341BANCO ITAU S.A.  15092600001\n" +
+        "100001C0000000012345678900CARLOS EDUARDO DA SILVA   0000000004814710000000000000000000000000000000000000000\n" +
+        "100002C0000000023456789011MARIANA SOUZA ALCANTARA   0000000005654800000000000000000000000000000000000000000\n" +
+        "900001000002000000001046951                                                                          000001";
+      const blob = new Blob([cnabContent], { type: 'text/plain;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "REMESSA_202609.REM";
+      a.click();
+    }
+
+    // Keyboard Shortcuts
+    window.addEventListener('keydown', (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        openCommandPalette();
+      }
+      if (e.key === 'Escape') {
+        closeDrawer();
+        closeCommandPalette();
+        closePixModal();
+      }
+    });
 
     renderTable();
   </script>
