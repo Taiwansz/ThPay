@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThPay // Continuous Payroll & People Ops</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Geist Mono', 'monospace'],
+          },
+          colors: {
+            canvas: '#090a0f',
+            surface: '#11131a',
+            subtle: '#181b26',
+            borderSubtle: '#262b3d',
+            accentGreen: '#10b981',
+            accentAmber: '#f59e0b',
+            accentIndigo: '#6366f1',
+            accentRed: '#ef4444'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #090a0f;
+      color: #f8fafc;
+      font-family: 'Inter', sans-serif;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #090a0f;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #262b3d;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased custom-scrollbar">
+
+  <!-- Top Navigation Bar -->
+  <header class="border-b border-borderSubtle bg-surface sticky top-0 z-30 px-6 py-3.5 flex items-center justify-between">
+    <div class="flex items-center space-x-6">
+      <div class="flex items-center space-x-2.5">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-indigo-700 flex items-center justify-center font-bold text-white tracking-wider text-sm shadow-sm">
+          TP
+        </div>
+        <span class="font-bold text-lg tracking-tight text-white">ThPay</span>
+        <span class="text-xs px-2 py-0.5 rounded-full bg-subtle text-slate-400 border border-borderSubtle font-mono">v1.0-continuous</span>
+      </div>
+
+      <div class="h-4 w-px bg-borderSubtle"></div>
+
+      <div class="flex items-center space-x-2 text-sm text-slate-300">
+        <span class="text-slate-500">Empresa:</span>
+        <span class="font-medium text-slate-200">Tech Solutions Brasil Ltda</span>
+        <span class="text-xs px-1.5 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">Lucro Real</span>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <!-- eSocial Real-time Badge -->
+      <div class="flex items-center space-x-2 px-3 py-1 rounded-full bg-emerald-950/40 border border-emerald-800/50 text-emerald-400 text-xs font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>eSocial Sincronizado</span>
+      </div>
+
+      <!-- Competence Selector -->
+      <div class="flex items-center bg-subtle border border-borderSubtle rounded-lg px-3 py-1.5 text-xs text-slate-200 space-x-2">
+        <span class="text-slate-500">Competencia:</span>
+        <span class="font-mono font-medium">Setembro / 2026</span>
+      </div>
+
+      <!-- Action Button -->
+      <button onclick="alert('Fechamento de folha validado e preparado para transmissao S-1299 com assinatura SHA-256.')" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition-colors text-white text-xs font-semibold tracking-wide shadow-sm flex items-center space-x-1.5">
+        <span>Fechar Competencia</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <div class="flex flex-1">
+    
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 border-r border-borderSubtle bg-surface/50 p-4 flex flex-col justify-between hidden md:flex">
+      <div class="space-y-1">
+        <div class="px-3 py-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">Modulos</div>
+        <button onclick="switchTab('folha')" id="nav-folha" class="w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg bg-subtle text-white border border-borderSubtle transition-all">
+          <div class="flex items-center space-x-2.5">
+            <svg class="w-4 h-4 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span>Folha Continua</span>
+          </div>
+          <span class="text-xs px-1.5 py-0.5 rounded-full bg-indigo-950 text-indigo-400 border border-indigo-800">Ao Vivo</span>
+        </button>
+
+        <button onclick="switchTab('analista')" id="nav-analista" class="w-full flex items-center space-x-2.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-400 hover:bg-subtle hover:text-slate-200 transition-all">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          <span>Agente Analista (IA)</span>
+        </button>
+
+        <button onclick="switchTab('esocial')" id="nav-esocial" class="w-full flex items-center space-x-2.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-400 hover:bg-subtle hover:text-slate-200 transition-all">
+          <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <span>eSocial & Guias Pix</span>
+        </button>
+      </div>
+
+      <div class="border-t border-borderSubtle pt-4 space-y-2">
+        <div class="p-3 rounded-lg bg-subtle border border-borderSubtle">
+          <div class="text-xs text-slate-400 font-medium">Motor Deterministico</div>
+          <div class="text-[11px] text-slate-500 mt-1">Conformidade CLT, EC 103/2019, IRRF 2026 e FGTS Digital em execucao continua.</div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 space-y-6 overflow-y-auto">
+
+      <!-- Metrics Cards Header -->
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-1">
+          <div class="text-xs font-medium text-slate-400">Custo Total de Pessoal</div>
+          <div class="text-2xl font-bold font-mono tracking-tight text-white">R$ 384.210,40</div>
+          <div class="text-xs text-emerald-400 flex items-center space-x-1 font-mono">
+            <span>+ 1,4% vs mes anterior</span>
+          </div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-1">
+          <div class="text-xs font-medium text-slate-400">Total Liquido a Pagar</div>
+          <div class="text-2xl font-bold font-mono tracking-tight text-slate-200">R$ 254.120,80</div>
+          <div class="text-xs text-slate-500">Credito em conta via CNAB 240 / Pix</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-1">
+          <div class="text-xs font-medium text-slate-400">Tributos & Encargos Patronais</div>
+          <div class="text-2xl font-bold font-mono tracking-tight text-indigo-400">R$ 130.089,60</div>
+          <div class="text-xs text-slate-400">DCTFWeb + FGTS Digital (Pix)</div>
+        </div>
+
+        <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-1">
+          <div class="text-xs font-medium text-slate-400">Headcount Ativo</div>
+          <div class="text-2xl font-bold font-mono tracking-tight text-slate-200">48 <span class="text-sm font-normal text-slate-400">vidas</span></div>
+          <div class="flex items-center space-x-2 text-xs">
+            <span class="px-2 py-0.5 rounded bg-slate-800 text-sky-400 font-mono font-medium">36 CLT</span>
+            <span class="px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 font-mono font-medium">12 PJ</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Continuous Payroll Readiness Bar -->
+      <section class="p-4 rounded-xl bg-surface border border-borderSubtle flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div class="space-y-1 flex-1">
+          <div class="flex items-center justify-between text-xs">
+            <span class="font-medium text-slate-300">Prontidao da Folha de Setembro (Calculo Continuo)</span>
+            <span class="font-mono text-emerald-400 font-semibold">98,2% Concluido</span>
+          </div>
+          <div class="w-full bg-subtle rounded-full h-2 overflow-hidden border border-borderSubtle">
+            <div class="bg-gradient-to-r from-emerald-500 to-indigo-500 h-2 rounded-full" style="width: 98.2%"></div>
+          </div>
+        </div>
+        <div class="flex items-center space-x-3 text-xs">
+          <div class="flex items-center space-x-1.5 text-amber-400 px-2.5 py-1 rounded bg-amber-950/30 border border-amber-800/40">
+            <span class="w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+            <span>1 divergencia de ponto pendente</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Tab 1: Continuous People & Payroll -->
+      <div id="tab-folha" class="space-y-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-base font-semibold text-white tracking-tight">Colaboradores & Contratos (CLT + PJ)</h2>
+          <div class="flex items-center space-x-3">
+            <input type="text" placeholder="Buscar por nome, cargo ou CPF..." class="px-3 py-1.5 rounded-lg bg-surface border border-borderSubtle text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 w-64">
+            <select class="px-3 py-1.5 rounded-lg bg-surface border border-borderSubtle text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+              <option>Todos os Vínculos</option>
+              <option>Apenas CLT</option>
+              <option>Apenas PJ</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="rounded-xl border border-borderSubtle bg-surface overflow-hidden shadow-sm">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-subtle text-slate-400 border-b border-borderSubtle font-medium uppercase tracking-wider">
+              <tr>
+                <th class="px-4 py-3">Colaborador</th>
+                <th class="px-4 py-3">Tipo</th>
+                <th class="px-4 py-3">Cargo / Depto</th>
+                <th class="px-4 py-3 text-right">Salario Base</th>
+                <th class="px-4 py-3 text-right">Proventos</th>
+                <th class="px-4 py-3 text-right">Descontos</th>
+                <th class="px-4 py-3 text-right">Liquido</th>
+                <th class="px-4 py-3 text-right">Custo Empresa</th>
+                <th class="px-4 py-3 text-center">Status</th>
+                <th class="px-4 py-3 text-center">Acao</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-borderSubtle text-slate-200 font-sans" id="employee-table-body">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab 2: AI Analyst -->
+      <div id="tab-analista" class="space-y-4 hidden">
+        <div class="p-6 rounded-xl bg-surface border border-borderSubtle space-y-4">
+          <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-lg bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
+            <div>
+              <h3 class="text-base font-semibold text-white">Agente Analista ThPay</h3>
+              <p class="text-xs text-slate-400">Consultas de folha, simulacoes de contratacao e analise de anomalias com precisao deterministica.</p>
+            </div>
+          </div>
+
+          <div class="space-y-3" id="chat-messages">
+            <div class="p-4 rounded-lg bg-subtle border border-borderSubtle text-xs space-y-2">
+              <div class="font-semibold text-indigo-400">Agente Analista // Sistema</div>
+              <div class="text-slate-300">Ola, Matheus. Estou conectado ao motor deterministico da folha de Setembro/2026. Voce pode me fazer perguntas sobre variacao de custos, simulacoes de contratacao ou pedir para auditar horas extras.</div>
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <div class="flex items-center space-x-2">
+              <input type="text" id="analyst-input" placeholder="Pergunte: 'Qual o custo de contratar 3 seniores?' ou 'Auditar horas extras'..." class="flex-1 px-4 py-2.5 rounded-lg bg-subtle border border-borderSubtle text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+              <button onclick="sendAnalystQuery()" class="px-4 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold">Consultar</button>
+            </div>
+            <div class="flex items-center space-x-2 mt-2">
+              <span class="text-[11px] text-slate-500">Exemplos rapidos:</span>
+              <button onclick="quickQuery('Qual o impacto de contratar 2 Engenheiros Senior CLT?')" class="text-[11px] px-2 py-0.5 rounded bg-subtle border border-borderSubtle text-slate-400 hover:text-slate-200">Impacto 2 Seniores CLT</button>
+              <button onclick="quickQuery('Auditar colaboradores com mais de 10 horas extras')" class="text-[11px] px-2 py-0.5 rounded bg-subtle border border-borderSubtle text-slate-400 hover:text-slate-200">Auditar Horas Extras</button>
+              <button onclick="quickQuery('Qual a previsao da Guia GFD do FGTS Digital via Pix?')" class="text-[11px] px-2 py-0.5 rounded bg-subtle border border-borderSubtle text-slate-400 hover:text-slate-200">Guia FGTS Digital</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 3: eSocial & Guias -->
+      <div id="tab-esocial" class="space-y-4 hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- eSocial Stream -->
+          <div class="p-5 rounded-xl bg-surface border border-borderSubtle space-y-4">
+            <h3 class="text-sm font-semibold text-white flex items-center justify-between">
+              <span>Esteira de Eventos eSocial</span>
+              <span class="text-xs font-mono text-emerald-400">Totalizadores Reconciliados</span>
+            </h3>
+            <div class="space-y-2 text-xs">
+              <div class="p-3 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
+                <div>
+                  <div class="font-medium text-slate-200">S-1000 a S-1020 // Tabelas do Empregador</div>
+                  <div class="text-slate-500 text-[11px]">Enquadramento, RAT Ajustado 2,5% e Rubricas</div>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[11px]">Recepcionado</span>
+              </div>
+              <div class="p-3 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
+                <div>
+                  <div class="font-medium text-slate-200">S-1200 // Remuneracao do Trabalhador</div>
+                  <div class="text-slate-500 text-[11px]">36 colaboradores CLT processados continuamente</div>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[11px]">Sincronizado</span>
+              </div>
+              <div class="p-3 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
+                <div>
+                  <div class="font-medium text-slate-200">S-1210 // Pagamentos (Regime de Caixa / IRRF)</div>
+                  <div class="text-slate-500 text-[11px]">Substituto da DIRF em total conformidade</div>
+                </div>
+                <span class="px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 font-mono text-[11px]">Validado</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Guias Fiscais -->
+          <div class="p-5 rounded-xl bg-surface border border-borderSubtle space-y-4">
+            <h3 class="text-sm font-semibold text-white">Emissao Direta de Guias (Pix / DCTFWeb)</h3>
+            <div class="space-y-3">
+              <div class="p-4 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-white text-xs">FGTS Digital (GFD via Pix)</div>
+                  <div class="text-[11px] text-slate-400 mt-0.5">Vencimento: 20/10/2026 | Competencia: 09/2026</div>
+                  <div class="text-sm font-mono text-emerald-400 font-bold mt-1">R$ 21.490,20</div>
+                </div>
+                <button onclick="alert('Guia GFD gerada com sucesso. QR Code Pix dinamico copiado para a area de transferencia.')" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium">Emitir Guia Pix</button>
+              </div>
+
+              <div class="p-4 rounded-lg bg-subtle border border-borderSubtle flex items-center justify-between">
+                <div>
+                  <div class="font-semibold text-white text-xs">DARF Previdenciario Unico (DCTFWeb)</div>
+                  <div class="text-[11px] text-slate-400 mt-0.5">INSS Patronal + Segurado + IRRF Folha</div>
+                  <div class="text-sm font-mono text-indigo-400 font-bold mt-1">R$ 108.599,40</div>
+                </div>
+                <button onclick="alert('DARF Numerado gerado e sincronizado com a Receita Federal.')" class="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-medium">Transmitir DCTFWeb</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Live Payslip Inspector Drawer (Sliding from Right) -->
+  <div id="payslip-drawer" class="fixed inset-y-0 right-0 w-full max-w-xl bg-surface border-l border-borderSubtle shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+    <div class="px-6 py-4 border-b border-borderSubtle flex items-center justify-between bg-subtle/50">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-full bg-indigo-600/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center font-bold text-xs" id="drawer-avatar">
+          CS
+        </div>
+        <div>
+          <h3 class="text-sm font-bold text-white tracking-tight" id="drawer-name">Carlos Eduardo da Silva</h3>
+          <p class="text-xs text-slate-400" id="drawer-meta">Engenheiro de Software Senior // CLT (101)</p>
+        </div>
+      </div>
+      <button onclick="closeDrawer()" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-subtle transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="p-6 overflow-y-auto flex-1 space-y-6 custom-scrollbar text-xs">
+      <!-- Net Total Big Card -->
+      <div class="p-4 rounded-xl bg-gradient-to-br from-indigo-950/40 to-surface border border-indigo-800/40 flex items-center justify-between">
+        <div>
+          <div class="text-slate-400 font-medium text-[11px]">Salario Liquido a Receber</div>
+          <div class="text-2xl font-bold font-mono text-emerald-400 mt-0.5" id="drawer-net">R$ 4.814,71</div>
+        </div>
+        <div class="text-right font-mono text-[11px] space-y-0.5">
+          <div class="text-slate-400">Bruto: <span class="text-white font-medium" id="drawer-gross">R$ 6.916,94</span></div>
+          <div class="text-slate-400">Descontos: <span class="text-rose-400 font-medium" id="drawer-discounts">R$ 2.102,23</span></div>
+        </div>
+      </div>
+
+      <!-- Itemized Table -->
+      <div class="space-y-2">
+        <div class="font-semibold text-slate-300 uppercase tracking-wider text-[10px]">Lancamentos da Competencia (09/2026)</div>
+        <div class="border border-borderSubtle rounded-lg overflow-hidden">
+          <table class="w-full text-left">
+            <thead class="bg-subtle text-slate-400 text-[10px] uppercase border-b border-borderSubtle">
+              <tr>
+                <th class="px-3 py-2">Cod</th>
+                <th class="px-3 py-2">Rubrica</th>
+                <th class="px-3 py-2 text-center">Ref</th>
+                <th class="px-3 py-2 text-right">Provento</th>
+                <th class="px-3 py-2 text-right">Desconto</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-borderSubtle font-mono text-[11px]" id="drawer-items">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tax X-Ray (Visual Progressive INSS and IRRF Comparison) -->
+      <div class="p-4 rounded-xl bg-subtle border border-borderSubtle space-y-3">
+        <div class="font-semibold text-indigo-300 text-xs flex items-center justify-between">
+          <span>Raio-X dos Tributos (Determinismo Exato)</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-950 text-indigo-400 font-mono">EC 103/2019 + RFB</span>
+        </div>
+
+        <div class="space-y-2 text-[11px]">
+          <div>
+            <div class="flex justify-between text-slate-400 mb-1">
+              <span>INSS Fatiado por Faixas Marginais</span>
+              <span class="font-mono text-white" id="drawer-inss-total">R$ 787,19 (Base: R$ 6.916,94)</span>
+            </div>
+            <div class="w-full bg-canvas rounded-full h-2 flex overflow-hidden">
+              <div class="bg-sky-500 h-2" style="width: 20%" title="Faixa 1 (7,5%): R$ 105,90"></div>
+              <div class="bg-indigo-500 h-2" style="width: 25%" title="Faixa 2 (9,0%): R$ 112,92"></div>
+              <div class="bg-purple-500 h-2" style="width: 30%" title="Faixa 3 (12,0%): R$ 160,00"></div>
+              <div class="bg-rose-500 h-2" style="width: 25%" title="Faixa 4 (14,0%): R$ 408,37"></div>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-borderSubtle">
+            <div class="flex justify-between text-slate-400">
+              <span>Comparativo IRRF</span>
+              <span class="text-emerald-400 font-mono font-medium">Deducoes Legais Aplicadas</span>
+            </div>
+            <div class="text-slate-500 text-[10px] mt-0.5">
+              Deducoes Legais (R$ 976,78) superaram o Desconto Simplificado (R$ 564,80). Motor aplicou a opcao mais benefica ao colaborador.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Real Cost of Employee -->
+      <div class="p-4 rounded-xl bg-surface border border-borderSubtle space-y-2">
+        <div class="font-semibold text-slate-300 text-xs">Custo Total da Empresa (True Cost)</div>
+        <div class="flex items-center justify-between font-mono text-sm">
+          <span class="text-slate-400">Custo Total:</span>
+          <span class="font-bold text-indigo-400" id="drawer-true-cost">R$ 9.812,40</span>
+        </div>
+        <div class="text-[10px] text-slate-500 leading-relaxed">
+          Composicao: Salario + 20% Patronal + 2,5% RAT/FAP + 5,8% Terceiros + 8% FGTS + Provisao 1/12 Ferias (+1/3) e 13o Salario.
+        </div>
+      </div>
+
+      <!-- SHA-256 Lock -->
+      <div class="p-3 rounded-lg bg-canvas border border-borderSubtle font-mono text-[10px] text-slate-500 break-all space-y-1">
+        <div class="text-slate-400 font-semibold">Version Lock Criptografico (SHA-256):</div>
+        <div class="text-slate-300" id="drawer-hash">1d04c9ce6ba5791986b2307b617783f050192aa5470e3789c71658b2911c041b</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const employees = [
+      {
+        id: "MAT-0042",
+        name: "Carlos Eduardo da Silva",
+        avatar: "CS",
+        role: "Engenheiro de Software Senior",
+        dept: "Engenharia",
+        type: "CLT",
+        baseSalary: 6200.00,
+        earnings: 6916.94,
+        discounts: 2102.23,
+        net: 4814.71,
+        companyCost: 9812.40,
+        status: "Calculado",
+        hash: "1d04c9ce6ba5791986b2307b617783f050192aa5470e3789c71658b2911c041b",
+        items: [
+          { code: "1000", name: "Salario Base / Normal", ref: "30.00", prov: 6200.00, desc: 0 },
+          { code: "1010", name: "Horas Extras 50%", ref: "12.00", prov: 507.27, desc: 0 },
+          { code: "1020", name: "DSR sobre Horas Extras", ref: "-", prov: 101.45, desc: 0 },
+          { code: "1030", name: "Adicional Noturno 20%", ref: "14.00", prov: 90.18, desc: 0 },
+          { code: "1035", name: "DSR sobre Adicional Noturno", ref: "-", prov: 18.04, desc: 0 },
+          { code: "5000", name: "INSS Empregado Mensal", ref: "-", prov: 0, desc: 787.19 },
+          { code: "5010", name: "IRRF Empregado Mensal", ref: "-", prov: 0, desc: 737.54 },
+          { code: "5030", name: "Vale-Transporte (Desc. 6%)", ref: "-", prov: 0, desc: 372.00 },
+          { code: "5040", name: "Vale-Refeicao (PAT)", ref: "-", prov: 0, desc: 120.00 },
+          { code: "5050", name: "Plano de Saude / Odonto", ref: "-", prov: 0, desc: 85.50 }
+        ]
+      },
+      {
+        id: "MAT-0089",
+        name: "Mariana Souza Alcantara",
+        avatar: "MA",
+        role: "Product Designer Lead",
+        dept: "Design",
+        type: "CLT",
+        baseSalary: 7500.00,
+        earnings: 7500.00,
+        discounts: 1845.20,
+        net: 5654.80,
+        companyCost: 10650.00,
+        status: "Calculado",
+        hash: "8f7b2c019a4e617d9283f450192ab450192aa5470e3789c71658b2911c041f02",
+        items: [
+          { code: "1000", name: "Salario Base / Normal", ref: "30.00", prov: 7500.00, desc: 0 },
+          { code: "5000", name: "INSS Empregado Mensal", ref: "-", prov: 0, desc: 885.45 },
+          { code: "5010", name: "IRRF Empregado Mensal", ref: "-", prov: 0, desc: 859.75 },
+          { code: "5050", name: "Plano de Saude", ref: "-", prov: 0, desc: 100.00 }
+        ]
+      },
+      {
+        id: "MAT-0104",
+        name: "Lucas Mendes Ferreira",
+        avatar: "LM",
+        role: "DevOps Architect",
+        dept: "Infraestrutura",
+        type: "PJ",
+        baseSalary: 14000.00,
+        earnings: 14000.00,
+        discounts: 0.00,
+        net: 14000.00,
+        companyCost: 14000.00,
+        status: "NF Validada",
+        hash: "4a2c9f8019b5e3789012c450192ab450192aa5470e3789c71658b2911c041e11",
+        items: [
+          { code: "8000", name: "Honorarios PJ / Prestacao de Servicos", ref: "1.00", prov: 14000.00, desc: 0 }
+        ]
+      },
+      {
+        id: "MAT-0112",
+        name: "Beatriz Nogueira Ramos",
+        avatar: "BN",
+        role: "Analista de DP Pleno",
+        dept: "Gente & Gestao",
+        type: "CLT",
+        baseSalary: 4200.00,
+        earnings: 4450.00,
+        discounts: 820.30,
+        net: 3629.70,
+        companyCost: 6180.20,
+        status: "Calculado",
+        hash: "7d1e8c920b4f51890234a450192ab450192aa5470e3789c71658b2911c041a99",
+        items: [
+          { code: "1000", name: "Salario Base / Normal", ref: "30.00", prov: 4200.00, desc: 0 },
+          { code: "1010", name: "Horas Extras 50%", ref: "6.00", prov: 200.00, desc: 0 },
+          { code: "1020", name: "DSR sobre Horas Extras", ref: "-", prov: 50.00, desc: 0 },
+          { code: "5000", name: "INSS Empregado Mensal", ref: "-", prov: 0, desc: 430.30 },
+          { code: "5010", name: "IRRF Empregado Mensal", ref: "-", prov: 0, desc: 190.00 },
+          { code: "5040", name: "Vale-Refeicao", ref: "-", prov: 0, desc: 200.00 }
+        ]
+      }
+    ];
+
+    function renderTable() {
+      const tbody = document.getElementById('employee-table-body');
+      tbody.innerHTML = '';
+
+      employees.forEach((emp, index) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-subtle/60 transition-colors';
+
+        const typeBadge = emp.type === 'CLT' 
+          ? '<span class="px-2 py-0.5 rounded bg-slate-800 text-sky-400 font-mono font-medium text-[10px]">CLT (101)</span>'
+          : '<span class="px-2 py-0.5 rounded bg-indigo-950 text-indigo-300 font-mono font-medium text-[10px]">PJ (Prestador)</span>';
+
+        const statusBadge = emp.status === 'Calculado'
+          ? '<span class="text-emerald-400 bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-800/40 font-mono text-[10px]">Calculado</span>'
+          : '<span class="text-indigo-300 bg-indigo-950/40 px-2 py-0.5 rounded-full border border-indigo-800/40 font-mono text-[10px]">NF Validada</span>';
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 flex items-center space-x-3">
+            <div class="w-7 h-7 rounded-full bg-slate-800 text-slate-300 font-semibold flex items-center justify-center text-xs border border-borderSubtle">
+              ${emp.avatar}
+            </div>
+            <div>
+              <div class="font-medium text-white">${emp.name}</div>
+              <div class="text-[11px] text-slate-500 font-mono">${emp.id}</div>
+            </div>
+          </td>
+          <td class="px-4 py-3">${typeBadge}</td>
+          <td class="px-4 py-3 text-slate-300">${emp.role} <span class="text-slate-500 text-[11px]">(${emp.dept})</span></td>
+          <td class="px-4 py-3 text-right font-mono">R$ ${emp.baseSalary.toFixed(2)}</td>
+          <td class="px-4 py-3 text-right font-mono text-emerald-400">R$ ${emp.earnings.toFixed(2)}</td>
+          <td class="px-4 py-3 text-right font-mono text-rose-400">R$ ${emp.discounts.toFixed(2)}</td>
+          <td class="px-4 py-3 text-right font-mono font-semibold text-white">R$ ${emp.net.toFixed(2)}</td>
+          <td class="px-4 py-3 text-right font-mono text-indigo-300">R$ ${emp.companyCost.toFixed(2)}</td>
+          <td class="px-4 py-3 text-center">${statusBadge}</td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="openDrawer(${index})" class="px-2.5 py-1 rounded bg-subtle hover:bg-slate-700 text-slate-200 border border-borderSubtle transition-colors text-[11px] font-medium">
+              Ver Holerite
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openDrawer(index) {
+      const emp = employees[index];
+      document.getElementById('drawer-avatar').innerText = emp.avatar;
+      document.getElementById('drawer-name').innerText = emp.name;
+      document.getElementById('drawer-meta').innerText = `${emp.role} // ${emp.type} (${emp.id})`;
+      document.getElementById('drawer-net').innerText = `R$ ${emp.net.toFixed(2)}`;
+      document.getElementById('drawer-gross').innerText = `R$ ${emp.earnings.toFixed(2)}`;
+      document.getElementById('drawer-discounts').innerText = `R$ ${emp.discounts.toFixed(2)}`;
+      document.getElementById('drawer-true-cost').innerText = `R$ ${emp.companyCost.toFixed(2)}`;
+      document.getElementById('drawer-hash').innerText = emp.hash;
+
+      const itemsTable = document.getElementById('drawer-items');
+      itemsTable.innerHTML = '';
+      emp.items.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="px-3 py-1.5 text-slate-500">${item.code}</td>
+          <td class="px-3 py-1.5 text-slate-200 font-sans">${item.name}</td>
+          <td class="px-3 py-1.5 text-center text-slate-400">${item.ref}</td>
+          <td class="px-3 py-1.5 text-right text-emerald-400">${item.prov > 0 ? 'R$ ' + item.prov.toFixed(2) : '-'}</td>
+          <td class="px-3 py-1.5 text-right text-rose-400">${item.desc > 0 ? 'R$ ' + item.desc.toFixed(2) : '-'}</td>
+        `;
+        itemsTable.appendChild(row);
+      });
+
+      document.getElementById('payslip-drawer').classList.remove('translate-x-full');
+    }
+
+    function closeDrawer() {
+      document.getElementById('payslip-drawer').classList.add('translate-x-full');
+    }
+
+    function switchTab(tabId) {
+      ['folha', 'analista', 'esocial'].forEach(id => {
+        document.getElementById(`tab-${id}`).classList.add('hidden');
+        document.getElementById(`nav-${id}`).className = 'w-full flex items-center space-x-2.5 px-3 py-2 text-sm font-medium rounded-lg text-slate-400 hover:bg-subtle hover:text-slate-200 transition-all';
+      });
+
+      document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+      document.getElementById(`nav-${tabId}`).className = 'w-full flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg bg-subtle text-white border border-borderSubtle transition-all';
+    }
+
+    function quickQuery(text) {
+      document.getElementById('analyst-input').value = text;
+      sendAnalystQuery();
+    }
+
+    function sendAnalystQuery() {
+      const input = document.getElementById('analyst-input');
+      const query = input.value.trim();
+      if (!query) return;
+
+      const chat = document.getElementById('chat-messages');
+
+      // User Message
+      const userMsg = document.createElement('div');
+      userMsg.className = 'p-3 rounded-lg bg-indigo-950/40 border border-indigo-800/40 text-xs space-y-1 text-right';
+      userMsg.innerHTML = `<div class="font-semibold text-indigo-300">Voce</div><div class="text-slate-200">${query}</div>`;
+      chat.appendChild(userMsg);
+
+      input.value = '';
+
+      // Simulated Deterministic Response from AI Analyst
+      setTimeout(() => {
+        const agentMsg = document.createElement('div');
+        agentMsg.className = 'p-4 rounded-lg bg-subtle border border-borderSubtle text-xs space-y-2';
+
+        let reply = "";
+        if (query.toLowerCase().includes("senior") || query.toLowerCase().includes("contratar")) {
+          reply = `<strong>Simulacao de Contratacao (2x Engenheiro Senior CLT):</strong><br>
+          - Salario Base Nominal: 2x R$ 12.000,00 = R$ 24.000,00<br>
+          - Encargos Patronais (CPP 20% + RAT/FAP 2,5% + Terceiros 5,8%): R$ 6.792,00<br>
+          - FGTS Mensal (8%): R$ 1.920,00<br>
+          - Provisoes Mensais (Ferias + 1/3 + 13o + encargos): R$ 7.546,67<br>
+          <strong>Custo Mensal Total Adicional: R$ 40.258,67</strong> (Fator multiplicador empresa: 1,677x).`;
+        } else if (query.toLowerCase().includes("hora extra") || query.toLowerCase().includes("auditar")) {
+          reply = `<strong>Auditoria de Ponto e Conformidade:</strong><br>
+          - 1 colaborador excedeu 10 horas extras: <strong>Carlos Eduardo da Silva</strong> (12h extras a 50% + 14h noturnas).<br>
+          - Impacto financeiro no DSR: R$ 119,49.<br>
+          - Alerta CLT Art. 59: Nao houve violacao do limite de 2h extras diarias em nenhum dos registros.`;
+        } else {
+          reply = `<strong>Apuracao do FGTS Digital via Pix (Competencia 09/2026):</strong><br>
+          - Base Total Tributavel FGTS CLT: R$ 268.627,50<br>
+          - Total a Recolher (8%): R$ 21.490,20<br>
+          - Data Limite de Pagamento: 20/10/2026.<br>
+          - Guia GFD pronta para emissao via Pix dinamico.`;
+        }
+
+        agentMsg.innerHTML = `<div class="font-semibold text-emerald-400">Agente Analista // Resposta Exata</div><div class="text-slate-300 leading-relaxed">${reply}</div>`;
+        chat.appendChild(agentMsg);
+      }, 500);
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>

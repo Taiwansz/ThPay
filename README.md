@@ -58,8 +58,9 @@ Em vez de forcar uma unica linguagem para dominios fundamentalmente distintos, o
 
 ## 3. Documentacao Normativa Principal
 
-O mapeamento exaustivo de todas as regras trabalhistas, previdenciarias e fiscais esta formalizado no documento:
+O mapeamento exaustivo de todas as regras trabalhistas, previdenciarias, fiscais e de produto esta formalizado nos documentos:
 - **[SPECIFICATION.md](SPECIFICATION.md):** Especificacao mestre com tabelas, algoritmos de fatiamento marginal de INSS, comparador automatico de IRRF tradicional vs simplificado, DCTFWeb, FGTS Digital via Pix, modalidades de rescisao (Artigos 477 a 484-A CLT), calculo de ferias e 13o salario, e arquitetura poliglota.
+- **[docs/TAKO_PARADIGM_UI_UX.md](docs/TAKO_PARADIGM_UI_UX.md):** Especificacao de produto no padrao Tako (tako.ai), detalhando o calculo continuo (Continuous Payroll), unificacao CLT + PJ, design system de alta densidade e Agente Analista com IA.
 
 ---
 
@@ -71,28 +72,46 @@ ThPay/
 ├── SPECIFICATION.md               # Mapeamento integral e exaustivo de regras e calculos
 ├── pyproject.toml                 # Metadados e dependencias do prototipo analitico
 ├── .gitignore                     # Filtros de exclusao para controle de versao
+├── docs/                          # Documentos de arquitetura e design
+│   └── TAKO_PARADIGM_UI_UX.md     # Paradigma de produto e design system estilo Tako
+├── ui/                            # Prototipo visual e funcional interativo
+│   └── index.html                 # Interface SPA estilo Tako com Live Payslip Drawer e IA
 ├── thpay/                         # Prototipo funcional das regras de negocio em Python
 │   ├── domain/                    # Modelos de dominio tipados (Empresa, Contrato, Rubrica)
 │   ├── engine/                    # Motor DAG e ordenacao topologica
 │   ├── tax/                       # Algoritmos fiscais (INSS progressivo, IRRF comparado, FGTS)
 │   └── pipelines/                 # Pipeline de folha mensal com protecao anti-negativo
 ├── tests/                         # Suite de testes automatizados e regressao (11 testes)
-└── demo.py                        # Script demonstrativo executavel
+└── demo.py                        # Script demonstrativo executavel no terminal
 ```
 
 ---
 
-## 5. Como Executar o Prototipo Atual
+## 5. Como Executar e Validar
 
-### 5.1 Executar Demonstracao de Calculo
+### 5.1 Visualizar o Prototipo Visual Interativo (Estilo Tako)
+Abra diretamente o arquivo `ui/index.html` em qualquer navegador web ou sirva via HTTP local:
+```bash
+python3 -m http.server 3000 --directory ui
+# Acesse: http://localhost:3000
+```
+Recursos incluidos no prototipo web:
+- Dashboard de fechamento continuo com readiness bar.
+- Diretorio unificado CLT + PJ com badges semanticos.
+- Live Payslip Inspector lateral (deslizante) com fatiamento de INSS e comparador IRRF.
+- Interface conversacional simulada com o Agente Analista ThPay.
+- Central de eventos eSocial e guias Pix (GFD).
+
+### 5.2 Executar Demonstracao de Calculo no Terminal
 ```bash
 python3 demo.py
 ```
 
-### 5.2 Executar Testes Unitarios
+### 5.3 Executar Testes Unitarios
 ```bash
 python3 -m unittest discover tests/
 ```
+
 
 ---
 *ThPay Core Team // Arquitetura Sagital de Sistemas Críticos*
