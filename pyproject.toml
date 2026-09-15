@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thpay"
+version = "0.1.0"
+description = "Deterministic Brazilian Payroll Engine and eSocial Compliance Core"
+readme = "README.md"
+authors = [
+    { name = "Matheus Sousa dos Santos", email = "stdmatheus@gmail.com" }
+]
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["thpay*"]
