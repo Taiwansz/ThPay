@@ -1,93 +1,97 @@
 # ThPay // Motor de Folha de Pagamento e Conformidade Trabalhista
 
-> Sistema de processamento de folha de pagamento corporativo brasileiro (CLT / eSocial / RFB / MTE), fundamentado em arquitetura bitemporal, resolucao por grafo aciclico dirigido (DAG) e determinismo fiscal centavo a centavo.
+> Sistema de processamento de folha de pagamento corporativo brasileiro (CLT / eSocial / RFB / MTE), fundamentado em arquitetura poliglota especializada, bitemporalidade, resolucao por grafo aciclico dirigido (DAG) e determinismo fiscal centavo a centavo.
 
 ---
 
 ## 1. Visao Geral
 
-O **ThPay** e um motor de calculo e conformidade trabalhista projetado para atender com precisao matematica irrestrita as exigencias da legislacao brasileira, integrando-se aos ecossistemas do **eSocial**, **DCTFWeb**, **FGTS Digital** e **EFD-Reinf**.
+O **ThPay** e uma plataforma de calculo e conformidade trabalhista projetada para atender com precisao matematica irrestrita as exigencias da legislacao brasileira, integrando-se aos ecossistemas do **eSocial**, **DCTFWeb**, **FGTS Digital** e **EFD-Reinf**.
 
-Diferente de sistemas legados acoplados a bancos relacionais com processamento procedural imperativo, o ThPay adota:
-1. **Resolucao Topologica em Grafo (DAG):** Cada verba, adicional, desconto ou encargo e um no de dependencia matematica, garantindo ordem de execucao estrita e deteccao preventiva de ciclos.
-2. **Arquitetura Bitemporal:** Diferenciacao categorica entre *Valid Time* (momento em que o fato trabalhista ocorreu na realidade) e *Transaction Time* (momento em que o fato foi escriturado no sistema), permitindo retroatividade e apuracao de dissidios sem corromper fechamentos historicos.
-3. **Imutabilidade e Version Lock:** Fechamentos mensais geram hashes criptograficos imutaveis (SHA-256), assegurando integridade contabil e paridade com os totalizadores oficiais do governo (S-5001, S-5002, S-5003, S-5011, S-5012).
-4. **Zero Emojis e Densidade Maxima:** Documentacao, logs e commits estritamente tecnicos e normativos.
+Em vez de forcar uma unica linguagem para dominios fundamentalmente distintos, o ThPay adota uma **Arquitetura Poliglota Especializada**, selecionando para cada camada a tecnologia que oferece a maxima solidez tecnica:
+1. **Calculo e Conformidade eSocial:** **Java 21 (LTS)** com Virtual Threads, Records e XMLDSig nativo.
+2. **Interface do DP e Portal do Colaborador:** **TypeScript / Next.js 15** com React Server Components.
+3. **Simulador em Tempo Real (In-Browser):** **Rust (Wasm)** para calculos instantaneos no cliente.
+4. **Data Analytics, ETL e Auditoria Salarial:** **Python 3.12+** com Polars para conformidade da Lei 14.611/2023.
 
 ---
 
-## 2. Documentacao Normativa Principal
+## 2. Matriz Arquitetural de Decisao Tecnologica
+
+```
++-----------------------------------------------------------------------------------------+
+|                    PORTAL WEB / DP / COLABORADOR (TypeScript & Next.js 15)              |
+|        Painel de Fechamento | Espelho de Ponto | Visualizador de Holerites              |
++--------------------------------------------+--------------------------------------------+
+                                             |
+                      +----------------------+----------------------+
+                      | (REST / OpenAPI / gRPC)                     | (Execucao Local Wasm)
+                      v                                             v
++--------------------------------------------+  +-----------------------------------------+
+|   CORE ENGINE & ESOCIAL (Java 21 LTS)      |  |  SIMULADOR CLIENT-SIDE (Rust / Wasm)    |
+| - Motor DAG com BigDecimal nativo          |  | - Pre-visualizacao de ferias/rescisao   |
+| - Virtual Threads (Loom) para 50k vidas    |  | - Resposta sub-milissegundo no browser  |
+| - Assinatura XMLDSig A1/A3 (JCA/JCE)       |  +-----------------------------------------+
+| - Conectividade Bancaria CNAB 240/400      |
++---------------------+----------------------+
+                      |
+        (Eventos e Fechamentos Consolidados)
+                      v
++-----------------------------------------------------------------------------------------+
+|               ANALYTICS, COMPLIANCE & MIGRACAO (Python 3.12 / Polars)                   |
+|   Relatorio Lei 14.611 (Equidade Salarial) | Deteccao de Anomalias | Ingestao Legada    |
++-----------------------------------------------------------------------------------------+
+```
+
+### 2.1 Justificativa Tecnica por Camada
+
+| Camada do Sistema | Tecnologia Escolhida | Justificativa de Engenharia |
+|---|---|---|
+| **Core de Calculo & eSocial Gateway** | **Java 21 (LTS)** (Spring Boot 3 / Quarkus) | `BigDecimal` nativo para calculo financeiro estrito; Virtual Threads (Loom) para paralelismo massivo em batch; JCA/JCE nativo para XMLDSig e certificados A1/A3; Caelum Stella e geradores CNAB 240/400 maduros. |
+| **Frontend DP & Self-Service** | **TypeScript** (Next.js 15, Tailwind, React 19) | Produtividade maxima em UI, tipagem de contratos sincronizada via OpenAPI, Server Components para paineis analiticos e acessibilidade. |
+| **Simulador de Borda (Live Preview)** | **Rust -> WebAssembly (Wasm)** | Calculo deterministico sem latencia de rede rodando no navegador do operador enquanto ele digita horas extras ou simula rescisao. |
+| **Auditoria, Relatorios & ETL** | **Python 3.12+** (Polars, DuckDB, FastAPI) | Ecossistema de dados imativel para gerar o Relatorio de Transparencia Salarial (Lei 14.611/2023), auditorias de compliance e migracao de bancos legados. |
+| **Mensageria e Filas eSocial** | **RabbitMQ / Redis Streams** | Garantia de entrega, idempotencia e retry com backoff exponencial para transmissao de lotes XML ao governo. |
+| **Persistencia e Auditoria** | **PostgreSQL 16+** | Suporte a particionamento por competencia, dados bitemporais e trilha de auditoria append-only. |
+
+---
+
+## 3. Documentacao Normativa Principal
 
 O mapeamento exaustivo de todas as regras trabalhistas, previdenciarias e fiscais esta formalizado no documento:
-- **[SPECIFICATION.md](SPECIFICATION.md):** Especificacao mestre com tabelas, algoritmos de fatiamento marginal de INSS, comparador automatico de IRRF tradicional vs simplificado, DCTFWeb, FGTS Digital via Pix, modalidades de rescisao (Artigos 477 a 484-A CLT), calculo de ferias e 13o salario, e matriz de casos extremos (*edge cases*).
+- **[SPECIFICATION.md](SPECIFICATION.md):** Especificacao mestre com tabelas, algoritmos de fatiamento marginal de INSS, comparador automatico de IRRF tradicional vs simplificado, DCTFWeb, FGTS Digital via Pix, modalidades de rescisao (Artigos 477 a 484-A CLT), calculo de ferias e 13o salario, e arquitetura poliglota.
 
 ---
 
-## 3. Estrutura do Repositorio
+## 4. Estrutura do Repositorio
 
 ```
 ThPay/
-├── README.md                      # Apresentacao executiva e guia operacional
+├── README.md                      # Apresentacao executiva e matriz arquitetural
 ├── SPECIFICATION.md               # Mapeamento integral e exaustivo de regras e calculos
-├── pyproject.toml                 # Metadados e dependencias do projeto
+├── pyproject.toml                 # Metadados e dependencias do prototipo analitico
 ├── .gitignore                     # Filtros de exclusao para controle de versao
-├── thpay/                         # Pacote principal do motor
-│   ├── __init__.py                # Exportacoes do modulo
+├── thpay/                         # Prototipo funcional das regras de negocio em Python
 │   ├── domain/                    # Modelos de dominio tipados (Empresa, Contrato, Rubrica)
-│   │   ├── __init__.py
-│   │   ├── entities.py            # Entidades centrais do negocio
-│   │   └── rubrics.py             # Dicionario canonico e naturezas eSocial
-│   ├── engine/                    # Motor de calculo e resolucao
-│   │   ├── __init__.py
-│   │   ├── dag.py                 # Grafo Aciclico Dirigido e ordenacao topologica
-│   │   └── context.py             # Contexto de avaliacao e variaveis de ponto
-│   ├── tax/                       # Modulos tributarios e previdenciarios
-│   │   ├── __init__.py
-│   │   ├── inss.py                # Calculo progressivo marginal EC 103/2019
-│   │   ├── irrf.py                # IRRF tradicional vs desconto simplificado
-│   │   └── fgts.py                # FGTS mensal, jovem aprendiz e rescisorio
-│   └── pipelines/                 # Orquestradores de processamento
-│       ├── __init__.py
-│       └── monthly.py             # Pipeline de folha de pagamento mensal
-├── tests/                         # Suite de testes automatizados e regressao
-│   ├── __init__.py
-│   ├── test_inss.py               # Validacao de faixas marginais de INSS
-│   ├── test_irrf.py               # Validacao de comparador de IRRF
-│   └── test_dag.py                # Validacao de ordenacao e resolucao de dependencias
+│   ├── engine/                    # Motor DAG e ordenacao topologica
+│   ├── tax/                       # Algoritmos fiscais (INSS progressivo, IRRF comparado, FGTS)
+│   └── pipelines/                 # Pipeline de folha mensal com protecao anti-negativo
+├── tests/                         # Suite de testes automatizados e regressao (11 testes)
 └── demo.py                        # Script demonstrativo executavel
 ```
 
 ---
 
-## 4. Como Executar e Validar
+## 5. Como Executar o Prototipo Atual
 
-### 4.1 Requisitos
-- Python 3.10+
-- Ambiente com suporte a tipos nativos `decimal.Decimal`
-
-### 4.2 Executar Demonstracao de Calculo
+### 5.1 Executar Demonstracao de Calculo
 ```bash
 python3 demo.py
 ```
 
-### 4.3 Executar Testes Unitarios
+### 5.2 Executar Testes Unitarios
 ```bash
 python3 -m unittest discover tests/
-```
-
----
-
-## 5. Resumo do Ciclo Operacional
-
-```
-[Cadastro e Contratos] ──> [Espelho de Ponto] ──> [Motor DAG ThPay]
-                                                         │
-         ┌───────────────────────────────────────────────┴────────────────────────────────────────┐
-         ▼                                               ▼                                        ▼
-[Demonstrativo / Holerite]                      [Eventos eSocial]                               [DCTFWeb / FGTS Digital]
-- Proventos e Adicionais                        - S-1200 (Remuneracao)                          - DARF Previdenciario Unico
-- Descontos e Pensao                            - S-1210 (Pagamentos IRRF)                      - Guia GFD (Pix)
-- Salario Liquido Garantido                     - S-1299 (Fechamento)                           - Conciliacao centavo a centavo
 ```
 
 ---

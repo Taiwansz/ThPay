@@ -682,6 +682,75 @@ Fase 5: Conectividade Financeira & Bancaria
 *ThPay - Engineered for absolute precision, zero tolerance to fiscal discrepancies and complete operational integrity.*
 """)
 
+
+sections.append("""## 13. Arquitetura Poliglota de Referencia e Decisoes Tecnologicas
+
+Para atender simultaneamente a requisitos de determinismo matematico absoluto, vazao massiva em lote, integracao com certificados brasileiros, usabilidade em tempo real e analise estatistica avancada, o ThPay rejeita o monolitismo monolingue e adota uma **Arquitetura Poliglota Especializada**.
+
+```
++-----------------------------------------------------------------------------------------+
+|                  CAMADA 1: FRONTEND & EXPERIENCIA DO USUARIO (TypeScript)               |
+| Stack: Next.js 15 | React 19 | Tailwind CSS | Radix UI                                  |
+| Escopo: Portal do DP, Espelho de Ponto, Central de Admissao e Autoatendimento           |
++--------------------------------------------+--------------------------------------------+
+                                             |
+                      +----------------------+----------------------+
+                      | (API REST / OpenAPI / gRPC)                 | (Execucao Local Wasm)
+                      v                                             v
++--------------------------------------------+  +-----------------------------------------+
+|    CAMADA 2: MOTOR CORE & ESOCIAL (Java)   |  |   CAMADA 3: SIMULADOR DE BORDA (Rust)   |
+| Stack: Java 21 LTS | Virtual Threads (Loom)|  | Stack: Rust | WebAssembly (Wasm)        |
+| Framework: Spring Boot 3 ou Quarkus        |  | Escopo: Pre-visualizacao de rescisao,   |
+| Escopo: Motor DAG, BigDecimal, XMLDSig     |  | simulador de ferias e horas extras no   |
+| ICP-Brasil A1/A3, CNAB 240/400, eSocial WS |  | navegador sem latencia de rede.         |
++---------------------+----------------------+  +-----------------------------------------+
+                      |
+        (Fechamentos e Eventos Gravados)
+                      v
++-----------------------------------------------------------------------------------------+
+|               CAMADA 4: ANALYTICS, AUDITORIA & MIGRACAO DE DADOS (Python)               |
+| Stack: Python 3.12+ | Polars | DuckDB | FastAPI                                         |
+| Escopo: Relatorio de Transparencia Salarial (Lei 14.611/2023), deteccao de anomalias   |
+| em ponto, auditorias de passivo trabalhista e ingestao de bases legadas.                |
++-----------------------------------------------------------------------------------------+
+```
+
+### 13.1 Detalhamento das Decisoes Tecnologicas
+
+#### 1. Core de Calculo e Mensageria eSocial: Java 21 LTS
+- **Motivacao Central:** O processamento de folha em lote para 10.000 a 50.000 colaboradores exige precisao de ponto fixo e concorrencia massiva com isolamento.
+- **Diferenciais Tecnicos:**
+  - `java.math.BigDecimal` com `RoundingMode.HALF_UP`: Padrao industrial inegociavel para calculo financeiro e tributario.
+  - **Virtual Threads (Projeto Loom):** Cada colaborador e processado em sua propria thread virtual (`newVirtualThreadPerTaskExecutor`), saturando o hardware com uso minimo de memoria e sem os limites do GIL do Python.
+  - **Criptografia ICP-Brasil e XMLDSig:** A arquitetura JCA/JCE do Java e a API `javax.xml.crypto.dsig` oferecem suporte nativo e estavel para certificados A1 (PKCS#12) e tokens A3 (PKCS#11), eliminando a dependencia de bibliotecas C instaveis (`libxmlsec`).
+  - **Ecossistema Brasileiro:** Disponibilidade de bibliotecas consolidadas como Caelum Stella (validacao de CPF/CNPJ/PIS) e motores maduros para geracao de arquivos bancarios FEBRABAN CNAB 240 e 400.
+
+#### 2. Portal do DP e Experiencia do Colaborador: TypeScript (Next.js 15)
+- **Motivacao Central:** Interfaces de Departamento Pessoal sao ricas em dados, exigindo formularios complexos de admissao, visao em grade de espelhos de ponto e renderizacao instantanea de holerites.
+- **Diferenciais Tecnicos:**
+  - Contratos de dados tipados gerados automaticamente a partir da definicao OpenAPI do backend Java.
+  - React Server Components (RSC) para carregar dashboards analiticos pesados diretamente do servidor sem penalizar o bundle do cliente.
+  - Acessibilidade e design system corporativo padronizado via Tailwind CSS.
+
+#### 3. Simulador de Borda e Pre-Visualizacao: Rust (WebAssembly)
+- **Motivacao Central:** O operador do DP precisa saber imediatamente qual sera o impacto de um aumento de salario, de 10 horas extras ou de uma rescisao antes de submeter o lote oficial ao backend.
+- **Diferenciais Tecnicos:**
+  - O motor de formulas compilado em Rust para WebAssembly roda diretamente na aba do navegador do cliente.
+  - Tempo de resposta sub-milissegundo (< 1 ms), sem trafego de rede e sem sobrecarregar os servidores principais com simulacoes descartaveis.
+  - Seguranca estrita de memoria e ausencia de runtime garbage-collected.
+
+#### 4. Analytics, Compliance de Equidade e ETL: Python 3.12+ (Polars)
+- **Motivacao Central:** O setor de DP e Recursos Humanos lida com volumosos conjuntos de dados historicos e obrigacoes analiticas recentes.
+- **Diferenciais Tecnicos:**
+  - **Lei 14.611/2023 (Igualdade e Transparencia Salarial):** Exige analise estatistica de medianas salariais por genero, raca e CBO. O ecossistema Python com Polars processa milhoes de registros em milissegundos com sintaxe vetorizada expressiva.
+  - **Deteccao de Anomalias:** Algoritmos de Machine Learning para identificar desvios de lancamentos de horas extras e inconsistencias antes do fechamento.
+  - **Migracao e Carga Inicial:** Scripts ageis para converter dumps de sistemas legados (TOTVS, Senior, Folhamatic, Excel) em modelos canonicos do ThPay.
+
+#### 5. Infraestrutura de Mensageria e Persistencia
+- **Fila Assincrona:** RabbitMQ ou Redis Streams para orquestrar a esteira de eventos do eSocial, garantindo entrega garantida (*at-least-once*), controle de taxa de transmissao governamental (*rate limiting*) e reprocessamento com *dead-letter queues*.
+- **Banco de Dados Relacional:** PostgreSQL 16+ com particionamento de tabelas por competencia civil (`competence_year_month`), garantindo consultas bitemporais ultra-rapidas e integridade referencial estrita.
+""")
+
 with open('/root/ThPay/SPECIFICATION.md', 'w', encoding='utf-8') as f:
     f.write('\n\n'.join(sections))
 
