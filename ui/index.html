@@ -2440,35 +2440,144 @@
     </div>
   </div>
 
-  <!-- MODAL: OFFICIAL PAYSLIP PRINT PREVIEW (DEMONSTRATIVO DE PAGAMENTO) -->
-  <div id="modal-print-payslip" class="fixed inset-0 bg-[#101a44]/60 z-50 overflow-y-auto p-3 sm:p-6 flex justify-center items-start hidden">
-    <div class="max-w-4xl w-full my-4 space-y-4">
-      
-      <!-- Top Action Bar (Hidden in Print) -->
-      <div class="bg-[var(--thp-surface)] border border-[var(--thp-border)] rounded-thp p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-thp-card print:hidden">
-        <div class="flex items-center gap-3">
-          <div class="w-9 h-9 rounded-thp-sm bg-[#2f66f3]/10 text-[#2f66f3] flex items-center justify-center font-bold shrink-0">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+  <!-- MODAL: OFFICIAL BROWSER PRINT PREVIEW (VISUALIZACAO COMPLETA DE IMPRESSAO) -->
+  <div id="modal-print-payslip" class="fixed inset-0 z-50 flex flex-col md:flex-row bg-[#1c2858] hidden">
+    
+    <!-- LEFT SIDEBAR: NATIVE BROWSER PRINT SETTINGS PANEL (PAINEL DE CONFIGURACOES DE IMPRESSAO) -->
+    <div class="w-full md:w-80 lg:w-96 bg-[#ffffff] border-r border-[#e5ded5] flex flex-col justify-between p-5 text-xs text-[#101a44] shadow-2xl z-20 shrink-0 overflow-y-auto">
+      <div class="space-y-5">
+        <!-- Dialog Title & Header -->
+        <div class="flex items-center justify-between border-b border-[#e5ded5] pb-4">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-thp-sm bg-[#2f66f3]/10 text-[#2f66f3] flex items-center justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            </div>
+            <div>
+              <h2 class="text-sm font-bold text-[#101a44]">Imprimir</h2>
+              <p class="text-[11px] text-[#64708a]">Total: 1 folha de papel (A4)</p>
+            </div>
           </div>
-          <div>
-            <h3 class="text-sm font-bold text-[var(--thp-text)]">Demonstrativo de Pagamento de Salario (Holerite Oficial)</h3>
-            <p class="text-xs text-[var(--thp-text-muted)]">Visualizacao previa de impressao e geracao de PDF em formato padrao CLT</p>
+          <button onclick="closePrintModal()" class="text-[#64708a] hover:text-[#101a44] p-1.5 rounded-thp-sm min-h-[36px] min-w-[36px] flex items-center justify-center" aria-label="Fechar visualizacao">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+
+        <!-- Setting: Destination / Destino -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold text-[#64708a] uppercase tracking-wider block">Destino</label>
+          <div class="flex items-center gap-2.5 p-2.5 rounded-thp-sm bg-[#f6f2ec] border border-[#e5ded5]">
+            <svg class="w-4 h-4 text-[#2f66f3] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <div class="flex-1 min-w-0">
+              <span class="font-bold text-xs text-[#101a44] block truncate">Salvar como PDF</span>
+              <span class="text-[10px] text-[#64708a] block">Documento Portatil Adobe</span>
+            </div>
+            <span class="text-[10px] text-[#64708a] font-medium bg-[#ffffff] px-2 py-0.5 rounded-sm border border-[#e5ded5]">Padrao</span>
           </div>
         </div>
 
+        <!-- Setting: Pages / Paginas -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold text-[#64708a] uppercase tracking-wider block">Paginas</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2 rounded-thp-sm bg-[#f6f2ec] border border-[#2f66f3] cursor-pointer">
+              <input type="radio" name="print-pages-choice" checked class="accent-[#2f66f3]" />
+              <span class="font-semibold text-xs text-[#101a44]">Tudo (1)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-thp-sm bg-[#ffffff] border border-[#e5ded5] text-[#64708a] cursor-pointer">
+              <input type="radio" name="print-pages-choice" class="accent-[#2f66f3]" />
+              <span class="text-xs">Personalizado</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Setting: Copies / Copias -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold text-[#64708a] uppercase tracking-wider block">Copias</label>
+          <input type="number" value="1" min="1" max="99" class="w-full px-3 py-2 rounded-thp-sm bg-[#f6f2ec] border border-[#e5ded5] text-xs text-[#101a44] font-medium min-h-[40px]" />
+        </div>
+
+        <!-- Setting: Layout -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold text-[#64708a] uppercase tracking-wider block">Layout</label>
+          <select class="w-full px-3 py-2 rounded-thp-sm bg-[#f6f2ec] border border-[#e5ded5] text-xs text-[#101a44] font-medium min-h-[40px]">
+            <option selected>Retrato (Vertical A4)</option>
+            <option>Paisagem (Horizontal)</option>
+          </select>
+        </div>
+
+        <!-- Setting: Color / Cor -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-bold text-[#64708a] uppercase tracking-wider block">Cor</label>
+          <select class="w-full px-3 py-2 rounded-thp-sm bg-[#f6f2ec] border border-[#e5ded5] text-xs text-[#101a44] font-medium min-h-[40px]">
+            <option selected>Colorida (Alta Fidelidade)</option>
+            <option>Preto e Branco / Monocromatico</option>
+          </select>
+        </div>
+
+        <!-- Collapsible: More Settings / Mais Definicoes -->
+        <div class="pt-3 border-t border-[#e5ded5] space-y-2">
+          <div class="text-[11px] font-bold text-[#64708a] uppercase tracking-wider">Definicoes Avancadas</div>
+          
+          <div class="space-y-1.5 text-xs">
+            <div class="flex justify-between py-1 text-[#64708a] border-b border-[#e5ded5]">
+              <span>Tamanho do Papel:</span>
+              <span class="font-semibold text-[#101a44]">A4 (210 x 297 mm)</span>
+            </div>
+            <div class="flex justify-between py-1 text-[#64708a] border-b border-[#e5ded5]">
+              <span>Margens:</span>
+              <span class="font-semibold text-[#101a44]">Padrao (15 mm)</span>
+            </div>
+            <div class="flex justify-between py-1 text-[#64708a]">
+              <span>Escala:</span>
+              <span class="font-semibold text-[#101a44]">Padrao (100%)</span>
+            </div>
+          </div>
+
+          <div class="space-y-1.5 pt-2">
+            <label class="flex items-center gap-2 text-xs text-[#101a44] cursor-pointer">
+              <input type="checkbox" checked class="accent-[#2f66f3]" />
+              <span>Graficos de segundo plano</span>
+            </label>
+            <label class="flex items-center gap-2 text-xs text-[#101a44] cursor-pointer">
+              <input type="checkbox" checked class="accent-[#2f66f3]" />
+              <span>Autenticacao digital eSocial</span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Action Buttons in Sidebar -->
+      <div class="pt-5 border-t border-[#e5ded5] flex items-center justify-end gap-2 shrink-0">
+        <button onclick="closePrintModal()" class="px-4 py-2 rounded-thp-sm border border-[#e5ded5] bg-[#ffffff] hover:bg-[#f6f2ec] text-[#101a44] font-semibold text-xs min-h-[40px]">
+          Cancelar
+        </button>
+        <button onclick="window.print()" class="px-5 py-2 rounded-thp-sm bg-[#2f66f3] hover:bg-[#1746c9] text-white font-bold text-xs flex items-center gap-1.5 shadow-sm min-h-[40px]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span>Salvar</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- RIGHT MAIN STAGE: THE PRINT PREVIEW DESK & A4 SHEET -->
+    <div class="flex-1 overflow-y-auto p-4 sm:p-8 flex flex-col items-center justify-start relative custom-scrollbar bg-[#1c2858]">
+      
+      <!-- Preview Canvas Watermark / Status Header Bar -->
+      <div class="w-full max-w-3xl mb-4 flex items-center justify-between text-xs text-[#bcc6db]">
         <div class="flex items-center gap-2">
-          <button onclick="window.print()" class="px-4 py-2 rounded-thp-sm bg-[#2f66f3] hover:opacity-95 text-white text-xs font-semibold flex items-center gap-2 shadow-sm min-h-[40px]">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-            <span>Imprimir / Salvar PDF</span>
-          </button>
-          <button onclick="closePrintModal()" class="px-4 py-2 rounded-thp-sm border border-[var(--thp-border)] bg-[var(--thp-surface)] hover:bg-[var(--thp-surface-soft)] text-[var(--thp-text)] text-xs font-medium min-h-[40px]">
-            Fechar
-          </button>
+          <span class="w-2 h-2 rounded-full bg-[#188a64]"></span>
+          <span class="font-semibold text-white">Pre-visualizacao de Impressao (1 de 1)</span>
+        </div>
+        <div class="flex items-center gap-3 font-mono text-[11px]">
+          <span>Zoom: 100%</span>
+          <span>•</span>
+          <span>A4 Oficial CLT</span>
         </div>
       </div>
 
-      <!-- THE OFFICIAL PRINTABLE PAYSLIP SHEET (FOLHA A4) -->
-      <div id="official-payslip-sheet" class="bg-[#ffffff] text-[#101a44] p-6 sm:p-8 rounded-thp border border-[#e5ded5] shadow-lg font-sans space-y-4">
+      <!-- THE OFFICIAL PRINTABLE PAYSLIP SHEET (FOLHA A4 COM SOMBRA REALISTA) -->
+      <div id="official-payslip-sheet" class="bg-[#ffffff] text-[#101a44] p-6 sm:p-8 rounded-sm shadow-2xl border border-[#e5ded5] font-sans space-y-4 max-w-3xl w-full my-2">
         
         <!-- Header: Company & Title -->
         <div class="border-b-2 border-[#101a44] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -2611,6 +2720,7 @@
       </div>
 
     </div>
+
   </div>
 
   <script src="./dataset_400.js"></script>

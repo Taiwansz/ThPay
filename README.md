@@ -108,13 +108,14 @@ Ao clicar sobre qualquer colaborador no diretório, o sistema abre uma gaveta la
 
 ---
 
-### 3.4 Demonstrativo de Pagamento & Impressão Oficial de Holerite (Padrão CLT / eSocial)
+### 3.4 Tela de Pré-Visualização de Impressão Oficial do Holerite (Padrão CLT / eSocial)
 
-Ao acionar a opção de impressão no Raio-X do holerite ou no portal corporativo, o sistema expande a visualização prévia de impressão contendo o espelho oficial do Recibo de Pagamento de Salário formatado nos padrões exigidos pela legislação trabalhista brasileira e pelo eSocial.
+Ao acionar a opção de impressão no Raio-X do holerite ou no portal corporativo, o sistema expande o ambiente completo de pré-visualização de impressão (*Print Preview Stage*), reproduzindo com fidelidade a experiência do diálogo de impressão do navegador integrado ao design system ThPay. A tela conta com painel lateral de controle (opções de destino em PDF, seleção de páginas, cópias, orientação retrato e definições avançadas) e mesa centralizada de alta legibilidade apresentando o Recibo de Pagamento de Salário em folha A4 física.
 
 ![Impressao do Holerite Oficial](docs/screenshots/10_impressao_holerite_oficial.png)
 
-**Estrutura e Elementos do Recibo Oficial:**
+**Estrutura da Experiência e Elementos do Recibo Oficial:**
+- **Painel Lateral de Configurações de Impressão:** Seletor de destino (*Salvar como PDF*), controle de páginas (*Tudo* ou *Personalizado*), quantidade de cópias, orientação de layout (*Retrato A4*), modo de cor (*Colorida em Alta Fidelidade*) e definições avançadas com margens normatizadas de 15 mm e gráficos de segundo plano ativos.
 - **Identificação Patronal Completa:** Razão Social (Tech Solutions Brasil Ltda), CNPJ (12.345.678/0001-90), Inscrição Estadual, endereço completo e competência de apuração discriminados no cabeçalho.
 - **Identificação Contratual do Trabalhador:** Matrícula funcional, Nome completo, CPF, Classificação Brasileira de Ocupações (CBO), Cargo, Departamento e Categoria eSocial (CLT 101 / PJ 701).
 - **Discriminação Analítica de Proventos e Descontos:** Tabela com código oficial de rubrica, descrição, base/referência de dias ou horas, proventos e descontos nominais.
@@ -122,7 +123,7 @@ Ao acionar a opção de impressão no Raio-X do holerite ou no portal corporativ
 - **Bases de Cálculo Legais (CLT / eSocial):** Salário base contratual, base de cálculo do INSS (com respeito ao teto previdenciário), base de cálculo do FGTS, depósito FGTS do mês (8%) e base de cálculo do IRRF.
 - **Canhoto de Quitação e Assinatura:** Termo formal de recebimento com data e campo para assinatura física ou validação por certificado digital ICP-Brasil.
 - **Trilha Criptográfica de Autenticidade:** Carimbo digital contendo a chave hash criptográfica SHA-256 exclusiva do cálculo, assegurando integridade e inviolabilidade jurídica do demonstrativo.
-- **Estilo de Impressão Otimizado (`@media print`):** Ao enviar para a impressora ou exportar em PDF (via Ctrl+P ou botão dedicado), a folha de estilo oculta automaticamente barras de navegação, cabeçalhos do sistema e botões de ação, gerando uma folha A4 limpa e profissional com 100% de nitidez tipográfica.
+- **Estilo de Impressão Otimizado (`@media print`):** Ao enviar para a impressora física ou exportar em PDF (via Ctrl+P ou botão dedicado), a folha de estilo oculta automaticamente barras de navegação, cabeçalhos do sistema e botões de ação, gerando uma folha A4 limpa e profissional com 100% de nitidez tipográfica.
 
 ---
 
