@@ -47,7 +47,10 @@ async function capture() {
 
   // 2. Raio-X do Holerite e Custo Empresa (Drawer)
   console.log('Capturando 02_raio_x_holerite_drawer.png...');
-  await page.evaluate(() => openDrawer(0));
+  await page.evaluate(() => {
+    switchView('directory');
+    openDrawer(0);
+  });
   await new Promise(r => setTimeout(r, 500));
   await page.screenshot({ path: path.join(OUTPUT_DIR, '02_raio_x_holerite_drawer.png'), fullPage: false });
 

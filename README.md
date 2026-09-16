@@ -73,16 +73,25 @@ Acesso seguro corporativo com validação de credenciais via hash salted SHA-256
 
 ---
 
-### 3.2 Tela Inicial Pós-Login do Analista: Dashboard Geral de Pessoal & Folha Contínua
+### 3.2 Tela Inicial Pós-Login do Analista: Dashboard Executivo Consolidado com Gráficos & Acessos Rápidos
 
-A tela inicial apresentada ao analista de folha logo após a autenticação consolida todas as métricas financeiras da empresa, o status de prontidão da competência e a listagem operacional de colaboradores para conferência em tempo real.
+A tela inicial apresentada ao analista de folha logo após a autenticação corporativa é um painel executivo 100% consolidado, sem exposição de listagens nominais de colaboradores na visão principal. O analista visualiza indicadores estratégicos de prontidão, gráficos analíticos de custos e botões de navegação rápida para os módulos operacionais e itens recentes.
 
-![Dashboard Geral do Analista e Folha Continua](docs/screenshots/01_dashboard_folha_continua.png)
+![Dashboard Geral Consolidado do Analista](docs/screenshots/01_dashboard_folha_continua.png)
 
-**Funcionalidades do Painel Geral:**
-- **Métricas Executivas Consolidadas:** Custo Total de Pessoal (Fator real 1.68x sobre o salário base), Líquido a Pagar da Folha (remessas bancárias CNAB 240 / Pix), Tributos & Encargos Patronais (DARF Previdenciário e GFD/FGTS Digital) e Quadro de Colaboradores (Headcount CLT vs PJ).
-- **Barra de Prontidão da Folha (Readiness Bar):** Diagnóstico contínuo do fechamento da competência (98,2% validado), alerta visual de pendências a homologar (ex.: divergências de ponto) e botão para pré-fechamento da folha.
-- **Diretório e Folha Contínua:** Tabela com busca instantânea por nome, cargo ou CPF, filtros por regime de contratação (Todos, Apenas CLT, Apenas PJ), exportação de relatórios em CSV e geração da remessa bancária CNAB 240.
+**Estrutura e Recursos do Dashboard Consolidado:**
+- **Métricas Executivas de Topo:** Custo Total de Pessoal (R$ 384.210,40 com fator real 1.68x sobre o base), Líquido a Pagar da Folha (R$ 254.120,80 pronto para remessa CNAB 240 / Pix), Tributos & Encargos Patronais (R$ 130.089,60 com vencimento em 20/10) e Quadro Total de Colaboradores (48 pessoas, sendo 36 CLT e 12 PJ).
+- **Barra de Prontidão da Folha (Readiness Bar):** Diagnóstico contínuo do fechamento da competência (98,2% validado), alerta visual de pendências a homologar (1 divergência de ponto eletrônico pendente) e ação direta para pré-fechamento.
+- **Gráfico de Evolução Mensal do Custo de Pessoal:** Histórico consolidado dos últimos 6 meses (Abr a Set/2026) com valores discriminados em milhares de reais, taxa de variação (+12,3% vs Abr) e cálculo da média semestral (R$ 365.050,00).
+- **Gráfico de Composição das Despesas de Pessoal:** Barra de segmentação proporcional e cartões analíticos dividindo os custos em Salários Líquidos (66,1%), Tributos & Encargos Patronais (28,3%) e Benefícios & Provisões (5,6%).
+- **Gráficos de Regime Contratual & Alocação por Centros de Custo:** Proporção contratual CLT (75%) vs PJ (25%) com respectivos custos médios, e decomposição orçamentária por departamento (Tecnologia 40%, Operações 25%, Vendas 20%, Administrativo 15%).
+- **Grade de Acesso Rápido às Operações e Itens Recentes:** 6 atalhos diretos para os módulos do sistema:
+  1. *Diretório de Colaboradores (48 Ativos):* Acesso à listagem completa com busca, filtros contratuais, exportação CSV e holerites analíticos.
+  2. *Admissões & Onboarding em Massa:* Gestão do último lote processado com 50 pessoas, validação OCR de documentos e geração de eventos S-2200.
+  3. *eSocial & Guias Pix (DARF / FGTS):* Transmissão de eventos periódicos e emissão do QR Code Pix da guia GFD.
+  4. *Central de Chamados do Service Desk:* Acompanhamento das 3 solicitações pendentes de colaboradores.
+  5. *Simulador de Custos & Dissídio:* Modelagem preditiva de reajustes sindicais e contratações em Rust/Wasm.
+  6. *Assistente IA de Auditoria:* Diagnóstico de conformidade e conferência automatizada de rubricas.
 
 ---
 

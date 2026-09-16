@@ -139,7 +139,7 @@
           </button>
 
           <div class="flex items-center gap-3">
-            <a href="javascript:void(0)" onclick="switchView('directory')" class="flex items-center gap-2" title="ThPay Home">
+            <a href="javascript:void(0)" onclick="switchView('dashboard')" class="flex items-center gap-2" title="ThPay Home">
               <img src="./brand/thpay-primary-dark.svg" alt="ThPay" class="h-8 w-auto dark:hidden" />
               <img src="./brand/thpay-primary-light.svg" alt="ThPay" class="h-8 w-auto hidden dark:block" />
             </a>
@@ -155,7 +155,7 @@
 
         <!-- Center: Perspective Switcher (DP vs Employee) -->
         <div class="hidden md:flex items-center bg-[var(--thp-surface-soft)] p-1 rounded-thp-sm border border-[var(--thp-border)]">
-          <button onclick="switchView('directory')" id="mode-btn-dp" class="flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-semibold bg-[var(--thp-surface)] text-[#2F66F3] shadow-xs border border-[var(--thp-border)] transition-all min-h-[36px]">
+          <button onclick="switchView('dashboard')" id="mode-btn-dp" class="flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-semibold bg-[var(--thp-surface)] text-[#2F66F3] shadow-xs border border-[var(--thp-border)] transition-all min-h-[36px]">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
             <span>Painel do DP & Folha</span>
           </button>
@@ -231,16 +231,20 @@
       <div class="space-y-2">
         <div class="text-[11px] font-bold text-[var(--thp-text-muted)] uppercase tracking-wider">Perfil de Acesso</div>
         <div class="grid grid-cols-2 gap-2">
-          <button onclick="switchView('directory'); toggleMobileMenu();" class="p-2.5 rounded-thp-sm text-xs font-semibold bg-[#2F66F3]/10 text-[#2F66F3] border border-[#2F66F3]/30 text-center min-h-[44px]">Painel DP</button>
+          <button onclick="switchView('dashboard'); toggleMobileMenu();" class="p-2.5 rounded-thp-sm text-xs font-semibold bg-[#2F66F3]/10 text-[#2F66F3] border border-[#2F66F3]/30 text-center min-h-[44px]">Painel DP</button>
           <button onclick="switchView('employee-portal'); toggleMobileMenu();" class="p-2.5 rounded-thp-sm text-xs font-semibold bg-[var(--thp-surface-soft)] text-[var(--thp-text)] border border-[var(--thp-border)] text-center min-h-[44px]">Colaborador</button>
         </div>
       </div>
 
       <!-- Navigation Links -->
       <nav class="space-y-1 text-sm font-medium">
-        <button onclick="switchView('directory'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-thp-sm text-[var(--thp-text)] hover:bg-[var(--thp-surface-soft)] min-h-[44px]">
-          <svg class="w-4 h-4 text-[#2F66F3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          <span>Folha Continua</span>
+        <button onclick="switchView('dashboard'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-thp-sm text-[var(--thp-text)] hover:bg-[var(--thp-surface-soft)] min-h-[44px]">
+          <svg class="w-4 h-4 text-[#2F66F3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          <span>Visao Geral (Dashboard)</span>
+        </button>
+        <button onclick="switchView('directory'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-thp-sm text-[var(--thp-text-muted)] hover:bg-[var(--thp-surface-soft)] hover:text-[var(--thp-text)] min-h-[44px]">
+          <svg class="w-4 h-4 text-[#2F66F3]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+          <span>Colaboradores & Folha</span>
         </button>
         <button onclick="switchView('simulator'); toggleMobileMenu();" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-thp-sm text-[var(--thp-text-muted)] hover:bg-[var(--thp-surface-soft)] hover:text-[var(--thp-text)] min-h-[44px]">
           <svg class="w-4 h-4 text-[#FFC83D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
@@ -372,9 +376,14 @@
     <!-- DESKTOP SUB-NAVIGATION TABS (DP) -->
     <div id="dp-nav-container" class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--thp-border)] pb-3">
       <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 custom-scrollbar">
-        <button onclick="switchView('directory')" id="nav-directory" class="flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-bold bg-[#2F66F3]/10 text-[#2F66F3] border border-[#2F66F3]/30 shrink-0 transition-colors min-h-[40px]">
+        <button onclick="switchView('dashboard')" id="nav-dashboard" class="flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-bold bg-[#2F66F3]/10 text-[#2F66F3] border border-[#2F66F3]/30 shrink-0 transition-colors min-h-[40px]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+          <span>Visao Geral (Dashboard)</span>
+        </button>
+
+        <button onclick="switchView('directory')" id="nav-directory" class="flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-semibold text-[var(--thp-text-muted)] hover:text-[var(--thp-text)] hover:bg-[var(--thp-surface-soft)] shrink-0 transition-colors min-h-[40px]">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-          <span>Diretorio & Folha Continua</span>
+          <span>Colaboradores & Folha</span>
         </button>
 
         <button onclick="switchView('simulator')" id="nav-simulator" class="flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-semibold text-[var(--thp-text-muted)] hover:text-[var(--thp-text)] hover:bg-[var(--thp-surface-soft)] shrink-0 transition-colors min-h-[40px]">
@@ -494,8 +503,376 @@
       </section>
     </div>
 
+    <!-- VIEW 0: CONSOLIDATED EXECUTIVE DASHBOARD (DEFAULT ON LOGIN FOR ANALYST) -->
+    <div id="view-dashboard" class="space-y-6">
+      
+      <!-- ANALYTICAL CHARTS SECTION (CONSOLIDATED VISUALIZATIONS) -->
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- Chart 1: Evolucao Mensal do Custo de Pessoal (Semestral) -->
+        <div class="lg:col-span-2 bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[var(--thp-border)] pb-3">
+            <div>
+              <h2 class="text-sm font-bold text-[var(--thp-text)]">Evolucao Mensal do Custo de Pessoal</h2>
+              <p class="text-xs text-[var(--thp-text-muted)]">Historico consolidado dos ultimos 6 meses com projecao continua</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#2F66F3]/10 text-[#2F66F3]">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#2F66F3]"></span>
+                Semestre Atual
+              </span>
+              <span class="text-xs font-semibold text-[#188A64] bg-[#188A64]/10 px-2 py-1 rounded-full">+12,3% vs Abr</span>
+            </div>
+          </div>
+
+          <!-- Bar Chart Visualization (Pure CSS/SVG Responsive) -->
+          <div class="h-56 flex items-end justify-between gap-3 pt-4 px-2">
+            <!-- Mes Abr -->
+            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+              <span class="text-[11px] font-semibold text-[var(--thp-text-muted)] tabular-nums group-hover:text-[#2F66F3] transition-colors">342k</span>
+              <div class="w-full max-w-[48px] bg-[var(--thp-surface-soft)] group-hover:bg-[#2F66F3]/30 rounded-t-thp transition-all" style="height: 68%;"></div>
+              <span class="text-[11px] font-medium text-[var(--thp-text-muted)]">Abr</span>
+            </div>
+            <!-- Mes Mai -->
+            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+              <span class="text-[11px] font-semibold text-[var(--thp-text-muted)] tabular-nums group-hover:text-[#2F66F3] transition-colors">355k</span>
+              <div class="w-full max-w-[48px] bg-[var(--thp-surface-soft)] group-hover:bg-[#2F66F3]/30 rounded-t-thp transition-all" style="height: 74%;"></div>
+              <span class="text-[11px] font-medium text-[var(--thp-text-muted)]">Mai</span>
+            </div>
+            <!-- Mes Jun -->
+            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+              <span class="text-[11px] font-semibold text-[var(--thp-text-muted)] tabular-nums group-hover:text-[#2F66F3] transition-colors">361k</span>
+              <div class="w-full max-w-[48px] bg-[var(--thp-surface-soft)] group-hover:bg-[#2F66F3]/30 rounded-t-thp transition-all" style="height: 78%;"></div>
+              <span class="text-[11px] font-medium text-[var(--thp-text-muted)]">Jun</span>
+            </div>
+            <!-- Mes Jul -->
+            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+              <span class="text-[11px] font-semibold text-[var(--thp-text-muted)] tabular-nums group-hover:text-[#2F66F3] transition-colors">370k</span>
+              <div class="w-full max-w-[48px] bg-[var(--thp-surface-soft)] group-hover:bg-[#2F66F3]/30 rounded-t-thp transition-all" style="height: 83%;"></div>
+              <span class="text-[11px] font-medium text-[var(--thp-text-muted)]">Jul</span>
+            </div>
+            <!-- Mes Ago -->
+            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+              <span class="text-[11px] font-semibold text-[var(--thp-text-muted)] tabular-nums group-hover:text-[#2F66F3] transition-colors">378k</span>
+              <div class="w-full max-w-[48px] bg-[var(--thp-surface-soft)] group-hover:bg-[#2F66F3]/30 rounded-t-thp transition-all" style="height: 89%;"></div>
+              <span class="text-[11px] font-medium text-[var(--thp-text-muted)]">Ago</span>
+            </div>
+            <!-- Mes Set (Atual) -->
+            <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+              <span class="text-xs font-bold text-[#2F66F3] tabular-nums">384k</span>
+              <div class="w-full max-w-[48px] bg-[#2F66F3] rounded-t-thp shadow-xs relative group-hover:bg-[#1746C9] transition-all" style="height: 96%;">
+                <div class="absolute -top-2 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-[#FFC83D]"></div>
+              </div>
+              <span class="text-[11px] font-bold text-[var(--thp-text)]">Set (Atual)</span>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-between gap-4 pt-3 border-t border-[var(--thp-border)] text-xs text-[var(--thp-text-muted)]">
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-sm bg-[#2F66F3]"></span>
+                <span>Mes Vigente (R$ 384.210,40)</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="w-2.5 h-2.5 rounded-sm bg-[var(--thp-surface-soft)]"></span>
+                <span>Meses Anteriores Homologados</span>
+              </div>
+            </div>
+            <span class="font-medium">Media semestral: R$ 365.050,00</span>
+          </div>
+        </div>
+
+        <!-- Chart 2: Composicao do Custo da Folha -->
+        <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card space-y-4 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between border-b border-[var(--thp-border)] pb-3">
+              <div>
+                <h2 class="text-sm font-bold text-[var(--thp-text)]">Composicao do Custo</h2>
+                <p class="text-xs text-[var(--thp-text-muted)]">Distribuicao das despesas de pessoal</p>
+              </div>
+              <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#188A64]/10 text-[#188A64]">100%</span>
+            </div>
+
+            <!-- Proportional Multi-Segment Horizontal Bar -->
+            <div class="mt-4 space-y-2">
+              <div class="h-4 w-full bg-[var(--thp-surface-soft)] rounded-full overflow-hidden flex">
+                <div style="width: 66.1%" class="bg-[#2F66F3] h-full" title="Salarios Liquidos: 66,1%"></div>
+                <div style="width: 28.3%" class="bg-[#FFC83D] h-full" title="Tributos Patronais: 28,3%"></div>
+                <div style="width: 5.6%" class="bg-[#188A64] h-full" title="Beneficios & Outros: 5,6%"></div>
+              </div>
+              <div class="flex justify-between text-[11px] text-[var(--thp-text-muted)]">
+                <span>R$ 0</span>
+                <span>Total: R$ 384.210,40</span>
+              </div>
+            </div>
+
+            <!-- Breakdown Items -->
+            <div class="mt-4 space-y-3">
+              <div class="flex items-center justify-between p-2.5 rounded-thp-sm bg-[var(--thp-surface-soft)] border border-[var(--thp-border)]">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-3 h-3 rounded-full bg-[#2F66F3] shrink-0"></span>
+                  <div>
+                    <p class="text-xs font-semibold text-[var(--thp-text)]">Salarios Liquidos</p>
+                    <p class="text-[11px] text-[var(--thp-text-muted)]">Credito a 48 colaboradores</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs font-bold text-[var(--thp-text)] tabular-nums">R$ 254.120,80</p>
+                  <p class="text-[11px] text-[var(--thp-text-muted)] font-medium">66,1%</p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between p-2.5 rounded-thp-sm bg-[var(--thp-surface-soft)] border border-[var(--thp-border)]">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-3 h-3 rounded-full bg-[#FFC83D] shrink-0"></span>
+                  <div>
+                    <p class="text-xs font-semibold text-[var(--thp-text)]">Tributos & Encargos</p>
+                    <p class="text-[11px] text-[var(--thp-text-muted)]">INSS, IRRF, FGTS Digital</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs font-bold text-[var(--thp-text)] tabular-nums">R$ 108.599,40</p>
+                  <p class="text-[11px] text-[var(--thp-text-muted)] font-medium">28,3%</p>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between p-2.5 rounded-thp-sm bg-[var(--thp-surface-soft)] border border-[var(--thp-border)]">
+                <div class="flex items-center gap-2.5">
+                  <span class="w-3 h-3 rounded-full bg-[#188A64] shrink-0"></span>
+                  <div>
+                    <p class="text-xs font-semibold text-[var(--thp-text)]">Beneficios & Provisoes</p>
+                    <p class="text-[11px] text-[var(--thp-text-muted)]">VR, VT, Saude, 13o proporcional</p>
+                  </div>
+                </div>
+                <div class="text-right">
+                  <p class="text-xs font-bold text-[var(--thp-text)] tabular-nums">R$ 21.490,20</p>
+                  <p class="text-[11px] text-[var(--thp-text-muted)] font-medium">5,6%</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="pt-2 border-t border-[var(--thp-border)] text-[11px] text-[var(--thp-text-muted)] text-center">
+            Provisao de 13o e Ferias integrada no calculo continuo
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Chart 3: Distribuicao por Regime e Departamentos -->
+      <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <!-- Regime Contratual -->
+        <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card space-y-3">
+          <div class="flex items-center justify-between border-b border-[var(--thp-border)] pb-2">
+            <h2 class="text-xs font-bold text-[var(--thp-text)] uppercase tracking-wider">Regime Contratual (Headcount 48)</h2>
+            <span class="text-xs text-[var(--thp-text-muted)]">CLT vs PJ</span>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 pt-1">
+            <div class="p-3 rounded-thp-sm bg-[var(--thp-surface-soft)] border border-[var(--thp-border)] space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-[#2F66F3]">CLT (36)</span>
+                <span class="text-xs font-bold text-[var(--thp-text)]">75%</span>
+              </div>
+              <div class="w-full bg-[var(--thp-border)] rounded-full h-2 overflow-hidden">
+                <div class="bg-[#2F66F3] h-2 rounded-full" style="width: 75%"></div>
+              </div>
+              <p class="text-[11px] text-[var(--thp-text-muted)] pt-1">Custo Medio: R$ 8.940/mes</p>
+            </div>
+
+            <div class="p-3 rounded-thp-sm bg-[var(--thp-surface-soft)] border border-[var(--thp-border)] space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-[#188A64]">PJ (12)</span>
+                <span class="text-xs font-bold text-[var(--thp-text)]">25%</span>
+              </div>
+              <div class="w-full bg-[var(--thp-border)] rounded-full h-2 overflow-hidden">
+                <div class="bg-[#188A64] h-2 rounded-full" style="width: 25%"></div>
+              </div>
+              <p class="text-[11px] text-[var(--thp-text-muted)] pt-1">Custo Medio: R$ 5.190/mes</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Departamentos -->
+        <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card space-y-3">
+          <div class="flex items-center justify-between border-b border-[var(--thp-border)] pb-2">
+            <h2 class="text-xs font-bold text-[var(--thp-text)] uppercase tracking-wider">Custo por Departamento</h2>
+            <span class="text-xs text-[var(--thp-text-muted)]">Alocacao Orcamentaria</span>
+          </div>
+
+          <div class="space-y-2 pt-1 text-xs">
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span class="font-medium text-[var(--thp-text)]">Tecnologia & Produto</span>
+                <span class="font-bold text-[var(--thp-text)] tabular-nums">R$ 153.684,16 (40%)</span>
+              </div>
+              <div class="w-full bg-[var(--thp-surface-soft)] rounded-full h-1.5 overflow-hidden">
+                <div class="bg-[#2F66F3] h-1.5 rounded-full" style="width: 40%"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span class="font-medium text-[var(--thp-text)]">Operacoes & Logistica</span>
+                <span class="font-bold text-[var(--thp-text)] tabular-nums">R$ 96.052,60 (25%)</span>
+              </div>
+              <div class="w-full bg-[var(--thp-surface-soft)] rounded-full h-1.5 overflow-hidden">
+                <div class="bg-[#8FE1CF] h-1.5 rounded-full" style="width: 25%"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span class="font-medium text-[var(--thp-text)]">Vendas & Comercial</span>
+                <span class="font-bold text-[var(--thp-text)] tabular-nums">R$ 76.842,08 (20%)</span>
+              </div>
+              <div class="w-full bg-[var(--thp-surface-soft)] rounded-full h-1.5 overflow-hidden">
+                <div class="bg-[#FFC83D] h-1.5 rounded-full" style="width: 20%"></div>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <div class="flex justify-between">
+                <span class="font-medium text-[var(--thp-text)]">Administrativo & Financas</span>
+                <span class="font-bold text-[var(--thp-text)] tabular-nums">R$ 57.631,56 (15%)</span>
+              </div>
+              <div class="w-full bg-[var(--thp-surface-soft)] rounded-full h-1.5 overflow-hidden">
+                <div class="bg-[#F7A7B8] h-1.5 rounded-full" style="width: 15%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- QUICK-ACCESS ACTION GRID (ATALHOS E ITENS RECENTES) -->
+      <section class="space-y-3">
+        <div class="flex items-center justify-between border-b border-[var(--thp-border)] pb-2">
+          <div>
+            <h2 class="text-sm font-bold text-[var(--thp-text)]">Acesso Rapido as Operacoes e Itens Recentes</h2>
+            <p class="text-xs text-[var(--thp-text-muted)]">Navegue diretamente para os modulos operacionais e tarefas pendentes</p>
+          </div>
+          <span class="text-xs text-[var(--thp-text-muted)]">6 Modulos Disponiveis</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          
+          <!-- Card 1: Diretorio de Colaboradores -->
+          <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card flex flex-col justify-between hover:border-[#2F66F3]/50 transition-colors">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-thp-sm bg-[#2F66F3]/10 text-[#2F66F3] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </div>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#2F66F3]/10 text-[#2F66F3]">48 Ativos</span>
+              </div>
+              <h3 class="text-sm font-bold text-[var(--thp-text)]">Diretorio de Colaboradores</h3>
+              <p class="text-xs text-[var(--thp-text-muted)]">Consulte a listagem completa, holerites detalhados, remessa CNAB 240 e espelho de calculo de cada colaborador.</p>
+            </div>
+            <button onclick="switchView('directory')" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-thp-sm bg-[#2F66F3] hover:bg-[#1746C9] text-white text-xs font-semibold transition-colors min-h-[44px]">
+              <span>Acessar Diretorio de Colaboradores</span>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Card 2: Lote de Admissao Recente -->
+          <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card flex flex-col justify-between hover:border-[#188A64]/50 transition-colors">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-thp-sm bg-[#188A64]/10 text-[#188A64] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
+                </div>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#188A64]/10 text-[#188A64]">Lote Recente</span>
+              </div>
+              <h3 class="text-sm font-bold text-[var(--thp-text)]">Admissao & Onboarding em Massa</h3>
+              <p class="text-xs text-[var(--thp-text-muted)]">Ultimo lote com 50 pessoas processadas: validacao OCR/IA de documentos, qualificacao cadastral e envio S-2200.</p>
+            </div>
+            <button onclick="switchView('admissions')" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-thp-sm bg-[var(--thp-surface-soft)] hover:bg-[var(--thp-border)] text-[var(--thp-text)] border border-[var(--thp-border)] text-xs font-semibold transition-colors min-h-[44px]">
+              <span>Gerenciar Admissoes Recentes</span>
+              <svg class="w-4 h-4 text-[var(--thp-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Card 3: eSocial & Guias Pix FGTS -->
+          <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card flex flex-col justify-between hover:border-[#FFC83D]/50 transition-colors">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-thp-sm bg-[#FFC83D]/20 text-[#9A6500] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                </div>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#FFC83D]/20 text-[#9A6500]">Venc 20/10</span>
+              </div>
+              <h3 class="text-sm font-bold text-[var(--thp-text)]">eSocial & Guias Pix (DARF / FGTS)</h3>
+              <p class="text-xs text-[var(--thp-text-muted)]">Transmissao de eventos periodicos S-1200 / S-1210 e geracao do QR Code Pix para liquidacao imediata da DCTFWeb.</p>
+            </div>
+            <button onclick="switchView('esocial')" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-thp-sm bg-[var(--thp-surface-soft)] hover:bg-[var(--thp-border)] text-[var(--thp-text)] border border-[var(--thp-border)] text-xs font-semibold transition-colors min-h-[44px]">
+              <span>Abrir Central eSocial & Pix</span>
+              <svg class="w-4 h-4 text-[var(--thp-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Card 4: Service Desk / Chamados Recentes -->
+          <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card flex flex-col justify-between hover:border-[#2F66F3]/50 transition-colors">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-thp-sm bg-[#2F66F3]/10 text-[#2F66F3] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+                </div>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#FFC83D]/20 text-[#9A6500]">3 Pendentes</span>
+              </div>
+              <h3 class="text-sm font-bold text-[var(--thp-text)]">Chamados do Service Desk</h3>
+              <p class="text-xs text-[var(--thp-text-muted)]">Solicitacoes de informes de rendimentos, duvidas sobre adicionais e pedidos de adiantamento salarial de colaboradores.</p>
+            </div>
+            <button onclick="switchView('employee-portal'); switchPortalTab('tickets');" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-thp-sm bg-[var(--thp-surface-soft)] hover:bg-[var(--thp-border)] text-[var(--thp-text)] border border-[var(--thp-border)] text-xs font-semibold transition-colors min-h-[44px]">
+              <span>Ver Chamados de Colaboradores</span>
+              <svg class="w-4 h-4 text-[var(--thp-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Card 5: Simulador de Custos & Dissidio -->
+          <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card flex flex-col justify-between hover:border-[#2F66F3]/50 transition-colors">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-thp-sm bg-[#2F66F3]/10 text-[#2F66F3] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                </div>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-[var(--thp-surface-soft)] text-[var(--thp-text-muted)]">Planejamento</span>
+              </div>
+              <h3 class="text-sm font-bold text-[var(--thp-text)]">Simulador de Custos & Dissidio</h3>
+              <p class="text-xs text-[var(--thp-text-muted)]">Simule impactos de reajuste sindical (ex: +5%), aumento salarial e novas contratacoes no orcamento anual.</p>
+            </div>
+            <button onclick="switchView('simulator')" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-thp-sm bg-[var(--thp-surface-soft)] hover:bg-[var(--thp-border)] text-[var(--thp-text)] border border-[var(--thp-border)] text-xs font-semibold transition-colors min-h-[44px]">
+              <span>Abrir Simulador de Cenarios</span>
+              <svg class="w-4 h-4 text-[var(--thp-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+          <!-- Card 6: Assistente IA da Folha -->
+          <div class="bg-[var(--thp-surface)] p-5 rounded-thp border border-[var(--thp-border)] shadow-thp-card flex flex-col justify-between hover:border-[#188A64]/50 transition-colors">
+            <div class="space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="w-9 h-9 rounded-thp-sm bg-[#188A64]/10 text-[#188A64] flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                </div>
+                <span class="text-xs font-semibold px-2 py-0.5 rounded-full bg-[#188A64]/10 text-[#188A64]">Ativo</span>
+              </div>
+              <h3 class="text-sm font-bold text-[var(--thp-text)]">Assistente IA de Auditoria</h3>
+              <p class="text-xs text-[var(--thp-text-muted)]">Auditoria preventiva com deteccao de inconsistencias nas tabelas de INSS/IRRF e recomendacoes automaticas.</p>
+            </div>
+            <button onclick="switchView('analyst')" class="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-thp-sm bg-[var(--thp-surface-soft)] hover:bg-[var(--thp-border)] text-[var(--thp-text)] border border-[var(--thp-border)] text-xs font-semibold transition-colors min-h-[44px]">
+              <span>Consultar Assistente IA</span>
+              <svg class="w-4 h-4 text-[var(--thp-text-muted)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
     <!-- VIEW 1: DIRECTORY & CONTINUOUS PAYROLL -->
-    <div id="view-directory" class="space-y-4">
+    <div id="view-directory" class="space-y-4 hidden">
       
       <!-- Filter and Action Toolbar -->
       <div class="bg-[var(--thp-surface)] p-4 rounded-thp border border-[var(--thp-border)] shadow-thp-card flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -2454,7 +2831,7 @@
       if (profileType === 'analyst') {
         currentUserRole = 'DP_GESTOR';
         updateUserWidget('Maria Silva', 'Analista de DP / Gestor', 'MS');
-        switchView('directory');
+        switchView('dashboard');
         showToast('Autenticado com Sucesso', 'Bem-vinda, Maria Silva. Acesso liberado ao Dashboard Geral da Folha.');
       } else if (profileType === 'collaborator') {
         currentUserRole = 'COLABORADOR_SELF_SERVICE';
@@ -2491,7 +2868,7 @@
     }
 
     function switchView(viewId) {
-      const views = ['login', 'directory', 'simulator', 'esocial', 'admissions', 'analyst', 'employee-portal'];
+      const views = ['login', 'dashboard', 'directory', 'simulator', 'esocial', 'admissions', 'analyst', 'employee-portal'];
       views.forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if (el) el.classList.add('hidden');
@@ -2548,7 +2925,7 @@
           modeBtnColab.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-medium text-[var(--thp-text-muted)] hover:text-[var(--thp-text)] transition-all min-h-[36px]";
         }
 
-        ['directory', 'simulator', 'esocial', 'admissions', 'analyst'].forEach(navKey => {
+        ['dashboard', 'directory', 'simulator', 'esocial', 'admissions', 'analyst'].forEach(navKey => {
           const btn = document.getElementById(`nav-${navKey}`);
           if (btn) {
             if (navKey === viewId) {
