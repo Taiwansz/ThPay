@@ -108,7 +108,25 @@ Ao clicar sobre qualquer colaborador no diretório, o sistema abre uma gaveta la
 
 ---
 
-### 3.4 Portal do Colaborador & Gestão Autônoma de Benefícios Flexíveis
+### 3.4 Demonstrativo de Pagamento & Impressão Oficial de Holerite (Padrão CLT / eSocial)
+
+Ao acionar a opção de impressão no Raio-X do holerite ou no portal corporativo, o sistema expande a visualização prévia de impressão contendo o espelho oficial do Recibo de Pagamento de Salário formatado nos padrões exigidos pela legislação trabalhista brasileira e pelo eSocial.
+
+![Impressao do Holerite Oficial](docs/screenshots/10_impressao_holerite_oficial.png)
+
+**Estrutura e Elementos do Recibo Oficial:**
+- **Identificação Patronal Completa:** Razão Social (Tech Solutions Brasil Ltda), CNPJ (12.345.678/0001-90), Inscrição Estadual, endereço completo e competência de apuração discriminados no cabeçalho.
+- **Identificação Contratual do Trabalhador:** Matrícula funcional, Nome completo, CPF, Classificação Brasileira de Ocupações (CBO), Cargo, Departamento e Categoria eSocial (CLT 101 / PJ 701).
+- **Discriminação Analítica de Proventos e Descontos:** Tabela com código oficial de rubrica, descrição, base/referência de dias ou horas, proventos e descontos nominais.
+- **Quadro Fiscal Consolidado:** Total de vencimentos (proventos), total de descontos e valor líquido a receber destacado em tipografia de alta legibilidade.
+- **Bases de Cálculo Legais (CLT / eSocial):** Salário base contratual, base de cálculo do INSS (com respeito ao teto previdenciário), base de cálculo do FGTS, depósito FGTS do mês (8%) e base de cálculo do IRRF.
+- **Canhoto de Quitação e Assinatura:** Termo formal de recebimento com data e campo para assinatura física ou validação por certificado digital ICP-Brasil.
+- **Trilha Criptográfica de Autenticidade:** Carimbo digital contendo a chave hash criptográfica SHA-256 exclusiva do cálculo, assegurando integridade e inviolabilidade jurídica do demonstrativo.
+- **Estilo de Impressão Otimizado (`@media print`):** Ao enviar para a impressora ou exportar em PDF (via Ctrl+P ou botão dedicado), a folha de estilo oculta automaticamente barras de navegação, cabeçalhos do sistema e botões de ação, gerando uma folha A4 limpa e profissional com 100% de nitidez tipográfica.
+
+---
+
+### 3.5 Portal do Colaborador & Gestão Autônoma de Benefícios Flexíveis
 
 Ambiente individual e centralizado no qual o colaborador acessa suas informações contratuais, holerite digital e exerce autonomia na personalização de seus benefícios corporativos, operando estritamente dentro das regras de negócio e limites orçamentários definidos pela organização.
 
@@ -122,7 +140,7 @@ Ambiente individual e centralizado no qual o colaborador acessa suas informaçõ
 
 ---
 
-### 3.5 Central de Chamados do Colaborador (Service Desk Integrado ao DP)
+### 3.6 Central de Chamados do Colaborador (Service Desk Integrado ao DP)
 
 Canal formal e estruturado para que o colaborador registre dúvidas, solicitações de ajuste cadastral, requerimentos de férias, contestações de ponto ou pedidos de declarações oficiais junto à equipe de Departamento Pessoal.
 
@@ -135,7 +153,7 @@ Canal formal e estruturado para que o colaborador registre dúvidas, solicitaç�
 
 ---
 
-### 3.6 Detalhes do Chamado & Linha do Tempo com Anexos de Evidência
+### 3.7 Detalhes do Chamado & Linha do Tempo com Anexos de Evidência
 
 Ao selecionar um chamado, a plataforma expande uma gaveta com o histórico cronológico de interações, permitindo troca de mensagens bidirecionais entre o colaborador e o analista de DP responsável.
 
@@ -148,7 +166,7 @@ Ao selecionar um chamado, a plataforma expande uma gaveta com o histórico crono
 
 ---
 
-### 3.7 Leaderboard Operacional & Gamificação com Privacidade LGPD
+### 3.8 Leaderboard Operacional & Gamificação com Privacidade LGPD
 
 Módulo de acompanhamento de desempenho individual e de equipes baseado em métricas puramente operacionais, incentivando o engajamento e a pontualidade sem expor informações remuneratórias.
 
@@ -160,7 +178,7 @@ Módulo de acompanhamento de desempenho individual e de equipes baseado em métr
 
 ---
 
-### 3.8 Simulador de Borda em Tempo Real (Rust / Wasm)
+### 3.9 Simulador de Borda em Tempo Real (Rust / Wasm)
 
 Ferramenta interativa de cálculo preditivo executada localmente no navegador do usuário. Permite prever impactos tributários e financeiros antes da efetivação de contratações, demissões ou promoções.
 
@@ -173,7 +191,7 @@ Ferramenta interativa de cálculo preditivo executada localmente no navegador do
 
 ---
 
-### 3.9 Central eSocial & Guias Unificadas Pix (FGTS Digital)
+### 3.10 Central eSocial & Guias Unificadas Pix (FGTS Digital)
 
 Central de transmissão e monitoramento dos lotes de eventos enviados ao ambiente nacional do eSocial, DCTFWeb e emissão das guias rescisórias e mensais do FGTS Digital via Pix.
 
@@ -186,7 +204,7 @@ Central de transmissão e monitoramento dos lotes de eventos enviados ao ambient
 
 ---
 
-### 3.10 Módulo de Admissão em Lote, Onboarding & eSocial (S-2190 / S-2200)
+### 3.11 Módulo de Admissão em Lote, Onboarding & eSocial (S-2190 / S-2200)
 
 Interface de importação e validação de admissões individuais e em lote, com suporte a planilhas XLSX multiabas e CSV, mapeamento semântico de colunas com sinônimos em português, validação linha a linha e correção de erros diretamente no sistema antes da efetivação.
 
@@ -239,7 +257,8 @@ ThPay/
 │       ├── 06_leaderboard_desempenho.png
 │       ├── 07_simulador_cenarios.png
 │       ├── 08_esocial_guias_pix.png
-│       └── 09_admissoes_lotes_onboarding.png
+│       ├── 09_admissoes_lotes_onboarding.png
+│       └── 10_impressao_holerite_oficial.png
 ├── ui/                            # Prototipo SPA interativo de alta fidelidade
 │   ├── index.html                 # Interface completa com Dashboard, Admissoes, Portal, Chamados e Guias Pix
 │   └── dataset_400.js             # Base oficial de 400 colaboradores reais e rubricas de mercado Robert Half

@@ -94,10 +94,11 @@
     }
     @media print {
       body * { visibility: hidden; }
-      #print-area, #print-area * { visibility: visible; }
-      #print-area {
+      #official-payslip-sheet, #official-payslip-sheet * { visibility: visible; }
+      #official-payslip-sheet {
         position: absolute; left: 0; top: 0; width: 100%;
         background: #FFFFFF !important; color: #101A44 !important;
+        border: none !important; box-shadow: none !important; padding: 0 !important;
       }
     }
   </style>
@@ -2301,6 +2302,8 @@
         <button onclick="document.getElementById('close-modal').classList.add('hidden'); showToast('Pre-Fechamento Concluido', 'Folha homologada. Eventos S-1299 prontos para envio ao eSocial.');" class="px-4 py-2 rounded-thp-sm bg-[#188A64] hover:opacity-95 text-white font-semibold shadow-sm min-h-[40px]">Concluir Homologacao</button>
       </div>
     </div>
+  </div>
+
   <!-- MODAL: NOVO LOTE DE ADMISSAO -->
   <div id="modal-new-batch" class="fixed inset-0 bg-[#101A44]/50 z-50 flex items-center justify-center p-4 hidden">
     <div class="w-full max-w-md bg-[var(--thp-surface)] rounded-thp-lg border border-[var(--thp-border)] shadow-thp-soft p-6 text-xs space-y-4">
@@ -2434,6 +2437,179 @@
         <button onclick="document.getElementById('modal-edit-admission-row').classList.add('hidden')" class="px-4 py-2 rounded-thp-sm border border-[var(--thp-border)] hover:bg-[var(--thp-surface-soft)] text-[var(--thp-text)] font-medium min-h-[40px]">Cancelar</button>
         <button onclick="submitEditAdmissionRow()" class="px-4 py-2 rounded-thp-sm bg-[#2F66F3] hover:opacity-95 text-white font-semibold shadow-sm min-h-[40px]">Salvar e Revalidar</button>
       </div>
+    </div>
+  </div>
+
+  <!-- MODAL: OFFICIAL PAYSLIP PRINT PREVIEW (DEMONSTRATIVO DE PAGAMENTO) -->
+  <div id="modal-print-payslip" class="fixed inset-0 bg-[#101a44]/60 z-50 overflow-y-auto p-3 sm:p-6 flex justify-center items-start hidden">
+    <div class="max-w-4xl w-full my-4 space-y-4">
+      
+      <!-- Top Action Bar (Hidden in Print) -->
+      <div class="bg-[var(--thp-surface)] border border-[var(--thp-border)] rounded-thp p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-thp-card print:hidden">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-thp-sm bg-[#2f66f3]/10 text-[#2f66f3] flex items-center justify-center font-bold shrink-0">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-[var(--thp-text)]">Demonstrativo de Pagamento de Salario (Holerite Oficial)</h3>
+            <p class="text-xs text-[var(--thp-text-muted)]">Visualizacao previa de impressao e geracao de PDF em formato padrao CLT</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="window.print()" class="px-4 py-2 rounded-thp-sm bg-[#2f66f3] hover:opacity-95 text-white text-xs font-semibold flex items-center gap-2 shadow-sm min-h-[40px]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            <span>Imprimir / Salvar PDF</span>
+          </button>
+          <button onclick="closePrintModal()" class="px-4 py-2 rounded-thp-sm border border-[var(--thp-border)] bg-[var(--thp-surface)] hover:bg-[var(--thp-surface-soft)] text-[var(--thp-text)] text-xs font-medium min-h-[40px]">
+            Fechar
+          </button>
+        </div>
+      </div>
+
+      <!-- THE OFFICIAL PRINTABLE PAYSLIP SHEET (FOLHA A4) -->
+      <div id="official-payslip-sheet" class="bg-[#ffffff] text-[#101a44] p-6 sm:p-8 rounded-thp border border-[#e5ded5] shadow-lg font-sans space-y-4">
+        
+        <!-- Header: Company & Title -->
+        <div class="border-b-2 border-[#101a44] pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <span class="w-3.5 h-3.5 rounded-sm bg-[#2f66f3] inline-block"></span>
+              <span class="text-base font-extrabold tracking-tight text-[#101a44]">TECH SOLUTIONS BRASIL LTDA</span>
+            </div>
+            <p class="text-[11px] text-[#64708a]">CNPJ: 12.345.678/0001-90 • Inscricao Estadual: 110.223.334.115</p>
+            <p class="text-[11px] text-[#64708a]">Av. Paulista, 1000 - Bela Vista - Sao Paulo / SP - CEP 01310-100</p>
+          </div>
+
+          <div class="sm:text-right border-t sm:border-t-0 pt-2 sm:pt-0 border-[#e5ded5]">
+            <div class="text-sm font-extrabold uppercase tracking-wide text-[#2f66f3]">Recibo de Pagamento de Salario</div>
+            <p class="text-xs font-semibold text-[#101a44] mt-0.5">Competencia: <span class="text-[#2f66f3]">09/2026</span></p>
+            <p class="text-[11px] text-[#64708a]">Tipo: Folha Mensal Normal</p>
+          </div>
+        </div>
+
+        <!-- Employee Info Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 p-3 rounded-thp-sm bg-[#f6f2ec] border border-[#e5ded5] text-xs">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">Matricula:</span>
+            <span class="font-bold text-[#101a44] font-mono text-xs" id="ps-emp-id">MAT-0001</span>
+          </div>
+          <div class="sm:col-span-2">
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">Colaborador:</span>
+            <span class="font-bold text-[#101a44] text-xs" id="ps-emp-name">Carlos Eduardo da Silva</span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">CPF:</span>
+            <span class="font-mono text-[#101a44] text-xs" id="ps-emp-cpf">100.022.471-60</span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">CBO / Funcao:</span>
+            <span class="text-[#101a44] text-[11px]"><span id="ps-emp-cbo" class="font-mono">2124-05</span></span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">Cargo:</span>
+            <span class="font-medium text-[#101a44] text-xs" id="ps-emp-role">Engenheiro de Software Senior</span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">Departamento:</span>
+            <span class="text-[#101a44] text-xs" id="ps-emp-dept">Tecnologia & Engenharia</span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">Regime / Contrato:</span>
+            <span class="font-bold text-[#2f66f3] text-xs" id="ps-emp-type">CLT (101)</span>
+          </div>
+        </div>
+
+        <!-- Rubrics Table -->
+        <div class="border border-[#e5ded5] rounded-thp-sm overflow-hidden">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-[#f6f2ec] text-[#64708a] text-[10px] font-bold uppercase border-b border-[#e5ded5]">
+              <tr>
+                <th class="px-3 py-2 w-16">Cod</th>
+                <th class="px-3 py-2">Descricao do Lancamento</th>
+                <th class="px-3 py-2 text-center w-24">Referencia</th>
+                <th class="px-3 py-2 text-right w-28">Vencimentos</th>
+                <th class="px-3 py-2 text-right w-28">Descontos</th>
+              </tr>
+            </thead>
+            <tbody id="ps-table-body" class="divide-y divide-[#e5ded5] text-xs text-[#101a44]">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Totals and Net Pay Box -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 border border-[#e5ded5] rounded-thp-sm p-3.5 bg-[#f6f2ec]">
+          <div>
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">Total de Vencimentos (Proventos)</span>
+            <span class="text-sm font-bold text-[#188a64] tabular-nums" id="ps-gross">R$ 17.850,00</span>
+          </div>
+          <div>
+            <span class="text-[10px] uppercase font-bold text-[#64708a] block">Total de Descontos</span>
+            <span class="text-sm font-bold text-[#c83d4d] tabular-nums" id="ps-disc">R$ 5.019,54</span>
+          </div>
+          <div class="sm:text-right p-2.5 rounded-thp-sm bg-[#2f66f3]/10 border border-[#2f66f3]/30">
+            <span class="text-[10px] uppercase font-bold text-[#2f66f3] block">Valor Liquido a Receber</span>
+            <span class="text-lg font-extrabold text-[#101a44] tabular-nums" id="ps-net">R$ 12.830,46</span>
+          </div>
+        </div>
+
+        <!-- Tax & Legal Bases (Calculos da Previdencia e FGTS) -->
+        <div class="border border-[#e5ded5] rounded-thp-sm p-3 text-xs bg-[#ffffff] space-y-2">
+          <div class="text-[10px] font-bold uppercase tracking-wider text-[#64708a] border-b border-[#e5ded5] pb-1">
+            Bases de Calculo e Contribuicoes Legais (CLT / eSocial)
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+            <div>
+              <span class="text-[10px] text-[#64708a] block">Salario Base</span>
+              <span class="font-semibold text-[#101a44] tabular-nums" id="ps-base-salary">R$ 16.500,00</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-[#64708a] block">Base Calc. INSS</span>
+              <span class="font-semibold text-[#101a44] tabular-nums" id="ps-base-inss">R$ 7.786,02</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-[#64708a] block">Base Calc. FGTS</span>
+              <span class="font-semibold text-[#101a44] tabular-nums" id="ps-base-fgts">R$ 17.850,00</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-[#64708a] block">FGTS do Mes (8%)</span>
+              <span class="font-semibold text-[#188a64] tabular-nums" id="ps-val-fgts">R$ 1.428,00</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-[#64708a] block">Base Calc. IRRF</span>
+              <span class="font-semibold text-[#101a44] tabular-nums" id="ps-base-irrf">R$ 16.941,14</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Payment Acknowledgement & Signature Stub -->
+        <div class="border border-[#e5ded5] rounded-thp-sm p-3.5 text-xs space-y-4">
+          <p class="text-[10px] text-[#64708a] uppercase leading-relaxed text-justify">
+            DECLARO TER RECEBIDO A IMPORTANCIA LIQUIDA DISCRIMINADA NESTE RECIBO, CORRESPONDENTE A QUITACAO DA REMUNERACAO DO MES INDICADO, DANDO PLENA E GERAL QUITACAO DAS PARCELAS AQUI DESCRITAS.
+          </p>
+          <div class="pt-4 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div class="text-[11px] text-[#64708a]">
+              Data: _____ / _____ / _________
+            </div>
+            <div class="border-t border-[#101a44] pt-1 text-center min-w-[280px]">
+              <span class="text-[11px] font-semibold text-[#101a44] block">Assinatura do Colaborador</span>
+              <span class="text-[10px] text-[#64708a]">Validado por Certificacao eSocial ICP-Brasil</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Digital Authenticity Stamp -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 text-[10px] text-[#64708a] border-t border-[#e5ded5]">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#188a64]"></span>
+            <span>Chave SHA-256: <span id="ps-hash" class="font-mono text-[#101a44]">7ea66698b8bef2fc0f660b80a7fa77cca35441358efa4dc02fda14b58ccab0e5</span></span>
+          </div>
+          <div>Recibo Digital emitido em 16/09/2026 atraves da Plataforma ThPay v2.0</div>
+        </div>
+
+      </div>
+
     </div>
   </div>
 
@@ -3087,8 +3263,62 @@
       document.getElementById('close-modal').classList.remove('hidden');
     }
 
+    function openPrintModal(index) {
+      if (typeof index === 'undefined' || index === null) {
+        index = currentEmployeeIndex || 0;
+      }
+      currentEmployeeIndex = index;
+      const emp = dataset[index];
+      if (!emp) return;
+
+      document.getElementById('ps-emp-name').innerText = emp.name;
+      document.getElementById('ps-emp-id').innerText = emp.id;
+      document.getElementById('ps-emp-cpf').innerText = emp.cpf;
+      document.getElementById('ps-emp-role').innerText = emp.role;
+      document.getElementById('ps-emp-cbo').innerText = emp.cbo || '2124-05';
+      document.getElementById('ps-emp-dept').innerText = emp.dept;
+      document.getElementById('ps-emp-type').innerText = `${emp.type} (${emp.type === 'CLT' ? '101' : '701'})`;
+      document.getElementById('ps-base-salary').innerText = `R$ ${emp.baseSalary.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('ps-gross').innerText = `R$ ${emp.earnings.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('ps-disc').innerText = `R$ ${emp.discounts.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('ps-net').innerText = `R$ ${emp.net.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('ps-hash').innerText = emp.hash;
+
+      const inssBase = Math.min(emp.earnings, 7786.02);
+      const fgtsVal = emp.type === 'CLT' ? (emp.earnings * 0.08) : 0;
+      const inssVal = emp.items.find(i => i.code === '5000')?.desc || 0;
+      const depDeduction = (emp.dependents || 0) * 189.59;
+      const irrfBase = Math.max(0, emp.earnings - inssVal - depDeduction);
+
+      document.getElementById('ps-base-inss').innerText = `R$ ${inssBase.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      document.getElementById('ps-base-fgts').innerText = emp.type === 'CLT' ? `R$ ${emp.earnings.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : 'Isento (PJ)';
+      document.getElementById('ps-val-fgts').innerText = emp.type === 'CLT' ? `R$ ${fgtsVal.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : 'R$ 0,00';
+      document.getElementById('ps-base-irrf').innerText = `R$ ${irrfBase.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+
+      const tbody = document.getElementById('ps-table-body');
+      tbody.innerHTML = '';
+      emp.items.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = "border-b border-[#e5ded5]";
+        tr.innerHTML = `
+          <td class="px-3 py-1.5 font-mono text-[11px] text-[#64708a]">${item.code}</td>
+          <td class="px-3 py-1.5 font-medium text-[#101a44]">${item.name}</td>
+          <td class="px-3 py-1.5 text-center font-mono text-[11px] text-[#64708a]">${item.ref}</td>
+          <td class="px-3 py-1.5 text-right tabular-nums text-[#188a64] font-medium">${item.prov > 0 ? 'R$ ' + item.prov.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}</td>
+          <td class="px-3 py-1.5 text-right tabular-nums text-[#c83d4d] font-medium">${item.desc > 0 ? 'R$ ' + item.desc.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2}) : '-'}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      document.getElementById('modal-print-payslip').classList.remove('hidden');
+    }
+
+    function closePrintModal() {
+      document.getElementById('modal-print-payslip').classList.add('hidden');
+    }
+
     function printOfficialPayslip() {
-      window.print();
+      openPrintModal(currentEmployeeIndex);
     }
 
     function downloadCSVReport() {

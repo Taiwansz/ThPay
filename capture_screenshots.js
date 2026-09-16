@@ -119,8 +119,18 @@ async function capture() {
   await new Promise(r => setTimeout(r, 600));
   await page.screenshot({ path: path.join(OUTPUT_DIR, '09_admissoes_lotes_onboarding.png'), fullPage: false });
 
+  // 10. Impressao do Holerite Oficial (Recibo de Pagamento de Salario CLT)
+  console.log('Capturando 10_impressao_holerite_oficial.png...');
+  await page.evaluate(() => {
+    switchView('directory');
+    openPrintModal(0);
+  });
+  await new Promise(r => setTimeout(r, 600));
+  await page.screenshot({ path: path.join(OUTPUT_DIR, '10_impressao_holerite_oficial.png'), fullPage: false });
+  await page.evaluate(() => closePrintModal());
+
   await browser.close();
-  console.log('Todas as 10 capturas foram concluidas com sucesso em:', OUTPUT_DIR);
+  console.log('Todas as 11 capturas foram concluidas com sucesso em:', OUTPUT_DIR);
 }
 
 capture().catch(err => {
