@@ -59,21 +59,34 @@ O ecossistema atende tanto à equipe de Departamento Pessoal (DP) e Recursos Hum
 
 Abaixo estao detalhados os modulos operacionais do ThPay com registros visuais de alta resolucao capturados diretamente da interface operacional da plataforma.
 
-### 3.1 Dashboard de Folha Continua & Fechamento em Tempo Real
+### 3.1 Tela de Autenticação Corporativa & Seleção de Perfil (Login RBAC)
 
-O painel principal do Departamento Pessoal implementa o conceito de folha de pagamento viva. O indicador de prontidão de fechamento (**Readiness Bar**) monitora constantemente a consistência de apontamentos de ponto, admissões, férias, atestados e variáveis contratuais.
+Acesso seguro corporativo com validação de credenciais via hash salted SHA-256 e sessões persistentes com tokens de 256 bits no banco relacional. O sistema utiliza RBAC (*Role-Based Access Control*) com 12 perfis e realiza o direcionamento automático: analistas de DP e operadores acessam diretamente o Dashboard Geral da Folha, enquanto colaboradores acessam exclusivamente o Portal Self-Service.
 
-![Dashboard de Folha Continua](docs/screenshots/01_dashboard_folha_continua.png)
+![Autenticacao Corporativa e Login](docs/screenshots/00_login_autenticacao.png)
 
-**Funcionalidades Operacionais:**
-- **Readiness Score (98.4%):** Diagnóstico automático de inconsistências impeditivas de fechamento da competência atual.
-- **Métricas Executivas Consolidadas:** Volume bruto previsto (R$ 1.482.900,00), encargos e tributos patronais (R$ 412.350,00), provisões de 13º e férias proporcionais.
-- **Diretório Unificado CLT + PJ:** Visão tabular consolidada de prestadores PJ e funcionários registrados sob a CLT, eliminando sistemas paralelos e garantindo transparência fiscal.
-- **Barra de Ações Rápidas:** Disparo do motor de cálculo instantâneo, abertura da central eSocial e acesso aos relatórios regulatórios.
+**Recursos de Autenticação & Controle de Acesso:**
+- **Redirecionamento Inteligente por Perfil:** Analistas de folha (`DP_GESTOR`, `DP_OPERADOR`, `RH_OPERADOR`, `EMPRESA_ADMIN`) caem automaticamente no Dashboard Geral da Folha; colaboradores (`COLABORADOR_SELF_SERVICE`) têm acesso restrito apenas ao seu portal individual.
+- **Sessões Persistentes e Revogáveis:** Tokens opacos armazenados no servidor com expiração configurável e encerramento imediato de sessão no logout.
+- **Seleção Rápida de Perfis para Avaliação:** Botões de acesso em 1 clique para demonstração com os perfis de Analista de DP (Maria Silva) e Colaborador CLT (Ana Souza).
+- **Conformidade de Segurança:** Alinhamento com a LGPD e registro automático de todos os eventos de acesso no log imutável de auditoria.
 
 ---
 
-### 3.2 Raio-X do Holerite (Live Payslip Inspector Lateral)
+### 3.2 Tela Inicial Pós-Login do Analista: Dashboard Geral de Pessoal & Folha Contínua
+
+A tela inicial apresentada ao analista de folha logo após a autenticação consolida todas as métricas financeiras da empresa, o status de prontidão da competência e a listagem operacional de colaboradores para conferência em tempo real.
+
+![Dashboard Geral do Analista e Folha Continua](docs/screenshots/01_dashboard_folha_continua.png)
+
+**Funcionalidades do Painel Geral:**
+- **Métricas Executivas Consolidadas:** Custo Total de Pessoal (Fator real 1.68x sobre o salário base), Líquido a Pagar da Folha (remessas bancárias CNAB 240 / Pix), Tributos & Encargos Patronais (DARF Previdenciário e GFD/FGTS Digital) e Quadro de Colaboradores (Headcount CLT vs PJ).
+- **Barra de Prontidão da Folha (Readiness Bar):** Diagnóstico contínuo do fechamento da competência (98,2% validado), alerta visual de pendências a homologar (ex.: divergências de ponto) e botão para pré-fechamento da folha.
+- **Diretório e Folha Contínua:** Tabela com busca instantânea por nome, cargo ou CPF, filtros por regime de contratação (Todos, Apenas CLT, Apenas PJ), exportação de relatórios em CSV e geração da remessa bancária CNAB 240.
+
+---
+
+### 3.3 Raio-X do Holerite (Live Payslip Inspector Lateral)
 
 Ao clicar sobre qualquer colaborador no diretório, o sistema abre uma gaveta lateral deslizante (*slide-in drawer*) que apresenta a anatomia completa do cálculo sem que o analista perca o contexto da lista geral.
 
@@ -86,7 +99,7 @@ Ao clicar sobre qualquer colaborador no diretório, o sistema abre uma gaveta la
 
 ---
 
-### 3.3 Portal do Colaborador & Gestão Autônoma de Benefícios Flexíveis
+### 3.4 Portal do Colaborador & Gestão Autônoma de Benefícios Flexíveis
 
 Ambiente individual e centralizado no qual o colaborador acessa suas informações contratuais, holerite digital e exerce autonomia na personalização de seus benefícios corporativos, operando estritamente dentro das regras de negócio e limites orçamentários definidos pela organização.
 
@@ -100,7 +113,7 @@ Ambiente individual e centralizado no qual o colaborador acessa suas informaçõ
 
 ---
 
-### 3.4 Central de Chamados do Colaborador (Service Desk Integrado ao DP)
+### 3.5 Central de Chamados do Colaborador (Service Desk Integrado ao DP)
 
 Canal formal e estruturado para que o colaborador registre dúvidas, solicitações de ajuste cadastral, requerimentos de férias, contestações de ponto ou pedidos de declarações oficiais junto à equipe de Departamento Pessoal.
 
@@ -113,7 +126,7 @@ Canal formal e estruturado para que o colaborador registre dúvidas, solicitaç�
 
 ---
 
-### 3.5 Detalhes do Chamado & Linha do Tempo com Anexos de Evidência
+### 3.6 Detalhes do Chamado & Linha do Tempo com Anexos de Evidência
 
 Ao selecionar um chamado, a plataforma expande uma gaveta com o histórico cronológico de interações, permitindo troca de mensagens bidirecionais entre o colaborador e o analista de DP responsável.
 
@@ -126,7 +139,7 @@ Ao selecionar um chamado, a plataforma expande uma gaveta com o histórico crono
 
 ---
 
-### 3.6 Leaderboard Operacional & Gamificação com Privacidade LGPD
+### 3.7 Leaderboard Operacional & Gamificação com Privacidade LGPD
 
 Módulo de acompanhamento de desempenho individual e de equipes baseado em métricas puramente operacionais, incentivando o engajamento e a pontualidade sem expor informações remuneratórias.
 
@@ -138,7 +151,7 @@ Módulo de acompanhamento de desempenho individual e de equipes baseado em métr
 
 ---
 
-### 3.7 Simulador de Borda em Tempo Real (Rust / Wasm)
+### 3.8 Simulador de Borda em Tempo Real (Rust / Wasm)
 
 Ferramenta interativa de cálculo preditivo executada localmente no navegador do usuário. Permite prever impactos tributários e financeiros antes da efetivação de contratações, demissões ou promoções.
 
@@ -151,7 +164,7 @@ Ferramenta interativa de cálculo preditivo executada localmente no navegador do
 
 ---
 
-### 3.8 Central eSocial & Guias Unificadas Pix (FGTS Digital)
+### 3.9 Central eSocial & Guias Unificadas Pix (FGTS Digital)
 
 Central de transmissão e monitoramento dos lotes de eventos enviados ao ambiente nacional do eSocial, DCTFWeb e emissão das guias rescisórias e mensais do FGTS Digital via Pix.
 
@@ -164,7 +177,7 @@ Central de transmissão e monitoramento dos lotes de eventos enviados ao ambient
 
 ---
 
-### 3.9 Módulo de Admissão em Lote, Onboarding & eSocial (S-2190 / S-2200)
+### 3.10 Módulo de Admissão em Lote, Onboarding & eSocial (S-2190 / S-2200)
 
 Interface de importação e validação de admissões individuais e em lote, com suporte a planilhas XLSX multiabas e CSV, mapeamento semântico de colunas com sinônimos em português, validação linha a linha e correção de erros diretamente no sistema antes da efetivação.
 
@@ -208,6 +221,7 @@ ThPay/
 │   ├── TAKO_PARADIGM_UI_UX.md     # Paradigma de produto estilo Tako e arquitetura de interfaces
 │   ├── PORTAL_COLABORADOR_E_BENEFICIOS_FLEXIVEIS.md # Engenharia do Self-Service e Service Desk
 │   └── screenshots/               # Galeria de registros visuais em alta definicao
+│       ├── 00_login_autenticacao.png
 │       ├── 01_dashboard_folha_continua.png
 │       ├── 02_raio_x_holerite_drawer.png
 │       ├── 03_portal_colaborador_beneficios.png

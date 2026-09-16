@@ -193,6 +193,18 @@
             <span class="hidden sm:inline">Pre-Fechamento</span>
           </button>
 
+          <!-- Authenticated User Profile & Logout Widget -->
+          <div id="user-header-widget" class="flex items-center gap-2 pl-2 sm:pl-3 border-l border-[var(--thp-border)]">
+            <div class="w-8 h-8 rounded-full bg-[#2F66F3]/10 text-[#2F66F3] font-bold text-xs flex items-center justify-center shrink-0 border border-[#2F66F3]/30" id="user-avatar-initials">MS</div>
+            <div class="hidden xl:block text-left">
+              <div class="text-xs font-bold text-[var(--thp-text)] leading-tight" id="user-display-name">Maria Silva</div>
+              <div class="text-[10px] text-[var(--thp-text-muted)] leading-tight" id="user-role-label">Analista de DP / Gestor</div>
+            </div>
+            <button onclick="logoutUser()" class="p-1.5 rounded-thp-sm text-[var(--thp-text-muted)] hover:text-[#C83D4D] hover:bg-[var(--thp-surface-soft)] transition-colors min-h-[36px] min-w-[36px] flex items-center justify-center" title="Sair do sistema (Logout)" aria-label="Sair">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+            </button>
+          </div>
+
           <!-- Hidden button for script test compatibility -->
           <button onclick="switchView('employee-portal')" id="header-employee-btn" class="hidden"></button>
         </div>
@@ -259,6 +271,103 @@
 
   <!-- MAIN APPLICATION CONTAINER -->
   <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6 w-full flex-1 flex flex-col gap-6">
+
+    <!-- VIEW 0: LOGIN & AUTHENTICATION (RBAC GATEWAY) -->
+    <div id="view-login" class="max-w-xl mx-auto w-full py-6 space-y-6 hidden">
+      
+      <!-- Brand Connection Card -->
+      <div class="bg-[var(--thp-surface)] rounded-thp border border-[var(--thp-border)] shadow-thp-card p-6 sm:p-8 space-y-6 relative overflow-hidden">
+        
+        <!-- Header with Official Logo -->
+        <div class="flex items-center justify-between pb-5 border-b border-[var(--thp-border)]">
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <img src="./brand/thpay-primary-dark.svg" alt="ThPay" class="h-8 w-auto dark:hidden" />
+              <img src="./brand/thpay-primary-light.svg" alt="ThPay" class="h-8 w-auto hidden dark:block" />
+            </div>
+            <p class="text-xs text-[var(--thp-text-muted)]">Gestão Contínua de Folha & Autoatendimento de Benefícios</p>
+          </div>
+          <span class="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#188A64]/10 text-[#188A64] border border-[#188A64]/30">Acesso Seguro</span>
+        </div>
+
+        <!-- Title and context explanation -->
+        <div class="space-y-1.5">
+          <h2 class="text-xl font-bold text-[var(--thp-text)] tracking-tight">Autenticação Corporativa</h2>
+          <p class="text-xs text-[var(--thp-text-muted)] leading-relaxed">
+            Faça login com suas credenciais corporativas. O redirecionamento e as permissões de acesso são definidos automaticamente pelo perfil funcional associado à sua conta (RBAC).
+          </p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="form-login" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+          <div class="space-y-1.5">
+            <label for="login-email" class="block text-xs font-semibold text-[var(--thp-text)]">E-mail Corporativo</label>
+            <div class="relative">
+              <svg class="w-4 h-4 text-[var(--thp-text-muted)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206"/></svg>
+              <input type="email" id="login-email" required value="analista.dp@techsolutions.com.br" class="w-full pl-9 pr-3 py-2.5 text-xs bg-[var(--thp-surface-soft)] border border-[var(--thp-border)] rounded-thp-sm text-[var(--thp-text)] placeholder-[var(--thp-text-muted)] focus:outline-none focus:border-[#2F66F3] min-h-[44px]" placeholder="seu.email@empresa.com.br" />
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label for="login-password" class="block text-xs font-semibold text-[var(--thp-text)]">Senha de Acesso</label>
+              <span class="text-[11px] text-[var(--thp-text-muted)]">PBKDF2 / Salted SHA-256</span>
+            </div>
+            <div class="relative">
+              <svg class="w-4 h-4 text-[var(--thp-text-muted)] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              <input type="password" id="login-password" required value="senha123" class="w-full pl-9 pr-3 py-2.5 text-xs bg-[var(--thp-surface-soft)] border border-[var(--thp-border)] rounded-thp-sm text-[var(--thp-text)] placeholder-[var(--thp-text-muted)] focus:outline-none focus:border-[#2F66F3] min-h-[44px]" placeholder="••••••••" />
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between text-xs pt-1">
+            <label class="flex items-center gap-2 cursor-pointer text-[var(--thp-text-muted)]">
+              <input type="checkbox" checked class="w-4 h-4 rounded border-[var(--thp-border)] text-[#2F66F3] focus:ring-0" />
+              <span>Manter sessão ativa neste dispositivo</span>
+            </label>
+            <span class="text-[11px] font-semibold text-[#2F66F3]">Ambiente Homologado</span>
+          </div>
+
+          <button type="submit" id="btn-login-submit" class="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-thp-sm bg-[#2F66F3] hover:opacity-95 text-white font-semibold text-xs transition-opacity shadow-sm min-h-[44px]">
+            <span>Acessar Plataforma</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </form>
+
+        <!-- Quick Profile Selection for Demonstrations and Reviewers -->
+        <div class="pt-5 border-t border-[var(--thp-border)] space-y-3">
+          <div class="text-[11px] font-bold text-[var(--thp-text-muted)] uppercase tracking-wider">Acesso Rápido por Perfil (Ambiente de Demonstração):</div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <button onclick="loginAsProfile('analyst')" class="flex items-start gap-3 p-3 rounded-thp-sm bg-[var(--thp-surface-soft)] border border-[var(--thp-border)] hover:border-[#2F66F3] text-left transition-colors group">
+              <div class="w-8 h-8 rounded-thp-sm bg-[#2F66F3]/10 text-[#2F66F3] flex items-center justify-center shrink-0 group-hover:bg-[#2F66F3] group-hover:text-white transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              </div>
+              <div class="space-y-0.5">
+                <div class="text-xs font-bold text-[var(--thp-text)] group-hover:text-[#2F66F3] transition-colors">Analista de DP / Gestor</div>
+                <div class="text-[10px] text-[var(--thp-text-muted)]">Maria Silva • Direciona para o Dashboard Geral da Folha</div>
+              </div>
+            </button>
+
+            <button onclick="loginAsProfile('collaborator')" class="flex items-start gap-3 p-3 rounded-thp-sm bg-[var(--thp-surface-soft)] border border-[var(--thp-border)] hover:border-[#188A64] text-left transition-colors group">
+              <div class="w-8 h-8 rounded-thp-sm bg-[#8FE1CF]/20 text-[#101A44] dark:text-[#8FE1CF] flex items-center justify-center shrink-0 group-hover:bg-[#188A64] group-hover:text-white transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              </div>
+              <div class="space-y-0.5">
+                <div class="text-xs font-bold text-[var(--thp-text)] group-hover:text-[#188A64] transition-colors">Colaborador CLT</div>
+                <div class="text-[10px] text-[var(--thp-text-muted)]">Ana Souza • Direciona para o Portal Self-Service</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Security & Compliance Footer -->
+        <div class="flex items-center gap-2 pt-2 text-[11px] text-[var(--thp-text-muted)]">
+          <svg class="w-3.5 h-3.5 text-[#188A64] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <span>Conexão criptografada TLS 1.3 • Trilha de auditoria imutável e conformidade LGPD</span>
+        </div>
+
+      </div>
+    </div>
 
     <!-- DESKTOP SUB-NAVIGATION TABS (DP) -->
     <div id="dp-nav-container" class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[var(--thp-border)] pb-3">
@@ -2339,8 +2448,50 @@
       renderTable();
     }
 
+    let currentUserRole = 'DP_GESTOR';
+
+    function loginAsProfile(profileType) {
+      if (profileType === 'analyst') {
+        currentUserRole = 'DP_GESTOR';
+        updateUserWidget('Maria Silva', 'Analista de DP / Gestor', 'MS');
+        switchView('directory');
+        showToast('Autenticado com Sucesso', 'Bem-vinda, Maria Silva. Acesso liberado ao Dashboard Geral da Folha.');
+      } else if (profileType === 'collaborator') {
+        currentUserRole = 'COLABORADOR_SELF_SERVICE';
+        updateUserWidget('Ana Souza', 'Colaborador CLT', 'AS');
+        switchView('employee-portal');
+        showToast('Autenticado com Sucesso', 'Bem-vinda, Ana Souza. Acesso liberado ao Portal do Colaborador.');
+      }
+    }
+
+    function handleLoginSubmit(e) {
+      if (e) e.preventDefault();
+      const emailInput = document.getElementById('login-email');
+      const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+      if (email.includes('colab') || email.includes('ana')) {
+        loginAsProfile('collaborator');
+      } else {
+        loginAsProfile('analyst');
+      }
+    }
+
+    function updateUserWidget(name, role, initials) {
+      const nameEl = document.getElementById('user-display-name');
+      const roleEl = document.getElementById('user-role-label');
+      const initialsEl = document.getElementById('user-avatar-initials');
+      if (nameEl) nameEl.textContent = name;
+      if (roleEl) roleEl.textContent = role;
+      if (initialsEl) initialsEl.textContent = initials;
+    }
+
+    function logoutUser() {
+      currentUserRole = null;
+      switchView('login');
+      showToast('Sessão Encerrada', 'Você saiu do sistema com segurança.');
+    }
+
     function switchView(viewId) {
-      const views = ['directory', 'simulator', 'esocial', 'admissions', 'analyst', 'employee-portal'];
+      const views = ['login', 'directory', 'simulator', 'esocial', 'admissions', 'analyst', 'employee-portal'];
       views.forEach(v => {
         const el = document.getElementById(`view-${v}`);
         if (el) el.classList.add('hidden');
@@ -2353,17 +2504,49 @@
       const dpNav = document.getElementById('dp-nav-container');
       const modeBtnDP = document.getElementById('mode-btn-dp');
       const modeBtnColab = document.getElementById('mode-btn-colab');
+      const userWidget = document.getElementById('user-header-widget');
+      const btnFechamento = document.getElementById('btn-fechamento-dp');
+
+      if (viewId === 'login') {
+        if (dpHeader) dpHeader.classList.add('hidden');
+        if (dpNav) dpNav.classList.add('hidden');
+        if (modeBtnDP) modeBtnDP.classList.add('hidden');
+        if (modeBtnColab) modeBtnColab.classList.add('hidden');
+        if (userWidget) userWidget.classList.add('hidden');
+        if (btnFechamento) btnFechamento.classList.add('hidden');
+        return;
+      }
+
+      if (userWidget) userWidget.classList.remove('hidden');
 
       if (viewId === 'employee-portal') {
         if (dpHeader) dpHeader.classList.add('hidden');
         if (dpNav) dpNav.classList.add('hidden');
-        if (modeBtnDP) modeBtnDP.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-medium text-[var(--thp-text-muted)] hover:text-[var(--thp-text)] transition-all min-h-[36px]";
-        if (modeBtnColab) modeBtnColab.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-semibold bg-[var(--thp-surface)] text-[#2F66F3] shadow-xs border border-[var(--thp-border)] transition-all min-h-[36px]";
+        if (btnFechamento) btnFechamento.classList.add('hidden');
+        if (modeBtnDP) {
+          if (currentUserRole === 'COLABORADOR_SELF_SERVICE') {
+            modeBtnDP.classList.add('hidden');
+          } else {
+            modeBtnDP.classList.remove('hidden');
+            modeBtnDP.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-medium text-[var(--thp-text-muted)] hover:text-[var(--thp-text)] transition-all min-h-[36px]";
+          }
+        }
+        if (modeBtnColab) {
+          modeBtnColab.classList.remove('hidden');
+          modeBtnColab.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-semibold bg-[var(--thp-surface)] text-[#2F66F3] shadow-xs border border-[var(--thp-border)] transition-all min-h-[36px]";
+        }
       } else {
         if (dpHeader) dpHeader.classList.remove('hidden');
         if (dpNav) dpNav.classList.remove('hidden');
-        if (modeBtnDP) modeBtnDP.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-semibold bg-[var(--thp-surface)] text-[#2F66F3] shadow-xs border border-[var(--thp-border)] transition-all min-h-[36px]";
-        if (modeBtnColab) modeBtnColab.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-medium text-[var(--thp-text-muted)] hover:text-[var(--thp-text)] transition-all min-h-[36px]";
+        if (btnFechamento) btnFechamento.classList.remove('hidden');
+        if (modeBtnDP) {
+          modeBtnDP.classList.remove('hidden');
+          modeBtnDP.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-semibold bg-[var(--thp-surface)] text-[#2F66F3] shadow-xs border border-[var(--thp-border)] transition-all min-h-[36px]";
+        }
+        if (modeBtnColab) {
+          modeBtnColab.classList.remove('hidden');
+          modeBtnColab.className = "flex items-center gap-2 px-3.5 py-2 rounded-thp-sm text-xs font-medium text-[var(--thp-text-muted)] hover:text-[var(--thp-text)] transition-all min-h-[36px]";
+        }
 
         ['directory', 'simulator', 'esocial', 'admissions', 'analyst'].forEach(navKey => {
           const btn = document.getElementById(`nav-${navKey}`);

@@ -33,10 +33,16 @@ async function capture() {
   await page.goto('file:///root/ThPay/ui/index.html', { waitUntil: 'networkidle0' });
   await new Promise(r => setTimeout(r, 1200)); // Wait for Tailwind CDN and fonts
 
-  // 1. Dashboard de Folha Continua (Visao DP)
-  console.log('Capturando 01_dashboard_folha_continua.png...');
-  await page.evaluate(() => switchView('directory'));
+  // 0. Tela de Autenticacao Corporativa (Login RBAC)
+  console.log('Capturando 00_login_autenticacao.png...');
+  await page.evaluate(() => switchView('login'));
   await new Promise(r => setTimeout(r, 400));
+  await page.screenshot({ path: path.join(OUTPUT_DIR, '00_login_autenticacao.png'), fullPage: false });
+
+  // 1. Dashboard de Folha Continua (Visao DP / Analista - Tela Inicial Pos-Login)
+  console.log('Capturando 01_dashboard_folha_continua.png...');
+  await page.evaluate(() => loginAsProfile('analyst'));
+  await new Promise(r => setTimeout(r, 500));
   await page.screenshot({ path: path.join(OUTPUT_DIR, '01_dashboard_folha_continua.png'), fullPage: false });
 
   // 2. Raio-X do Holerite e Custo Empresa (Drawer)
@@ -111,7 +117,7 @@ async function capture() {
   await page.screenshot({ path: path.join(OUTPUT_DIR, '09_admissoes_lotes_onboarding.png'), fullPage: false });
 
   await browser.close();
-  console.log('Todas as 9 capturas foram concluidas com sucesso em:', OUTPUT_DIR);
+  console.log('Todas as 10 capturas foram concluidas com sucesso em:', OUTPUT_DIR);
 }
 
 capture().catch(err => {
