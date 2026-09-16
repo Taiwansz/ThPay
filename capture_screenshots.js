@@ -102,8 +102,16 @@ async function capture() {
   await new Promise(r => setTimeout(r, 400));
   await page.screenshot({ path: path.join(OUTPUT_DIR, '08_esocial_guias_pix.png'), fullPage: false });
 
+  // 9. Módulo de Admissão & Onboarding
+  console.log('Capturando 09_admissoes_lotes_onboarding.png...');
+  await page.evaluate(() => {
+    switchView('admissions');
+  });
+  await new Promise(r => setTimeout(r, 600));
+  await page.screenshot({ path: path.join(OUTPUT_DIR, '09_admissoes_lotes_onboarding.png'), fullPage: false });
+
   await browser.close();
-  console.log('Todas as 8 capturas foram concluidas com sucesso em:', OUTPUT_DIR);
+  console.log('Todas as 9 capturas foram concluidas com sucesso em:', OUTPUT_DIR);
 }
 
 capture().catch(err => {

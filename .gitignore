@@ -31,3 +31,5 @@ Thumbs.db
 *.db
 coverage/
 .coverage
+storage_data/
+

@@ -164,6 +164,21 @@ Central de transmissão e monitoramento dos lotes de eventos enviados ao ambient
 
 ---
 
+### 3.9 Módulo de Admissão em Lote, Onboarding & eSocial (S-2190 / S-2200)
+
+Interface de importação e validação de admissões individuais e em lote, com suporte a planilhas XLSX multiabas e CSV, mapeamento semântico de colunas com sinônimos em português, validação linha a linha e correção de erros diretamente no sistema antes da efetivação.
+
+![Admissões em Lote e Onboarding](docs/screenshots/09_admissoes_lotes_onboarding.png)
+
+**Recursos de Admissão, Onboarding e eSocial:**
+- **Importação Inteligente de Planilhas:** Suporte completo a planilhas XLSX e CSV com detecção de encoding e separadores; mapeamento semântico automático de cabeçalhos baseado em dicionários de equivalência.
+- **Validação Antecipada e Edição em Linha:** Conferência estrita de CPF (algoritmo Módulo 11), duplicidades no lote e no banco de dados, piso salarial mínimo, regras de maioridade/idade legal e edição direta de células rejeitadas na interface sem necessidade de reupload.
+- **Portal de Pré-Admissão do Candidato:** Geração de links de autoatendimento com token temporário seguro de 7 dias para conferência de dados, cadastro de dependentes, contas bancárias e upload de documentos com hash SHA-256 real.
+- **Camada eSocial Desacoplada (v1.3):** Emissão de eventos preliminares S-2190 e eventos de admissão completa S-2200 em XML e JSON, com gravação de protocolo e recibo de entrega auditáveis.
+- **Automação Pós-Admissão:** Criação imediata do contrato de trabalho no banco de dados persistente, provisionamento de credenciais de autoatendimento, vinculação a benefícios e geração das trilhas de onboarding do colaborador.
+
+---
+
 ## 4. Matriz Normativa e Conformidade Legal
 
 | Marco Legal | Aplicação no Sistema ThPay | Implementação Técnica |
@@ -184,6 +199,7 @@ Central de transmissão e monitoramento dos lotes de eventos enviados ao ambient
 ```
 ThPay/
 ├── README.md                      # Documentacao executiva e guia visual com capturas de tela
+├── PROXIMOS_PASSOS.md             # Backlog mestre e registro de evolucao da arquitetura
 ├── SPECIFICATION.md               # Mapeamento matematico e normativo exaustivo de regras
 ├── pyproject.toml                 # Metadados e dependencias do projeto Python
 ├── capture_screenshots.js         # Script de automacao para captura em lote de telas (Puppeteer/Chromium)
@@ -199,26 +215,46 @@ ThPay/
 │       ├── 05_chamado_detalhes_timeline.png
 │       ├── 06_leaderboard_desempenho.png
 │       ├── 07_simulador_cenarios.png
-│       └── 08_esocial_guias_pix.png
+│       ├── 08_esocial_guias_pix.png
+│       └── 09_admissoes_lotes_onboarding.png
 ├── ui/                            # Prototipo SPA interativo de alta fidelidade
-│   └── index.html                 # Interface completa com Dashboard, Drawer, Portal, Chamados e Guias Pix
-├── thpay/                         # Motor de calculo funcional em Python
-│   ├── domain/                    # Modelos tipados (Empresa, Contrato, Rubrica)
+│   └── index.html                 # Interface completa com Dashboard, Admissoes, Portal, Chamados e Guias Pix
+├── thpay/                         # Motor de calculo funcional e aplicacao em Python
+│   ├── db/                        # Banco relacional, schema DDL, conexao e migracoes versionadas
+│   ├── api/                       # API REST, autenticacao salted SHA-256, RBAC e auditoria
+│   ├── audit/                     # Logger de auditoria imutavel e append-only
+│   ├── storage/                   # Gerenciamento de arquivos e calculo de hash SHA-256 real
+│   ├── domain/                    # Modelos de dominio (Empresa, Contrato, Rubrica, Repositorios)
+│   ├── admission/                 # Motor de admissao em lote, parser CSV/XLSX, validacao e templates
+│   ├── esocial/                   # Camada eSocial desacoplada (v1.3: S-2190 e S-2200)
 │   ├── engine/                    # Resolucao de dependencias em Grafo Aciclico Dirigido (DAG)
 │   ├── tax/                       # Algoritmos fiscais (INSS progressivo, IRRF comparado, FGTS)
 │   └── pipelines/                 # Pipeline da folha mensal com protecao contra saldo negativo
 └── tests/                         # Suite de testes automatizados e regressao matematica
-    ├── test_inss.py
-    ├── test_irrf.py
-    ├── test_engine.py
-    └── test_portal_beneficios.py
+    ├── test_inss.py               # Testes de faixas e aliquotas progressivas de INSS
+    ├── test_irrf.py               # Testes de deducoes legais e desconto simplificado IRRF
+    ├── test_engine.py             # Testes de ordenacao topologica e DAG de calculo
+    ├── test_portal_beneficios.py  # Testes de flexibilizacao de beneficios e chamados
+    ├── test_db_migrations.py      # Testes de migracoes e integridade referencial do banco
+    ├── test_auth_rbac.py          # Testes de autenticacao, sessoes e RBAC granular
+    ├── test_admission_engine.py   # Testes unitarios do motor de admissao e validadores
+    ├── test_esocial_admission.py  # Testes de geracao dos eventos eSocial S-2190 e S-2200
+    ├── test_admission_batch_50.py # Teste de integracao ponta a ponta do lote de 50 admissoes
+    └── test_api_server.py         # Testes de integracao dos endpoints HTTP da API
 ```
 
 ---
 
 ## 6. Como Executar e Validar
 
-### 6.1 Executar a Interface Interativa no Navegador
+### 6.1 Iniciar a API de Aplicacao ThPay
+Para iniciar o servidor HTTP da API com banco relacional SQLite/PostgreSQL e rotas REST:
+```bash
+python3 -m thpay.api.server
+```
+A API sera iniciada em `http://localhost:8000` com endpoints `/api/health`, `/api/v1/auth/*`, `/api/v1/employees`, `/api/v1/admission-batches/*` e `/api/v1/payroll/*`.
+
+### 6.2 Executar a Interface Interativa no Navegador
 Abra o arquivo `ui/index.html` em qualquer navegador moderno ou inicie um servidor HTTP local:
 ```bash
 python3 -m http.server 3000 --directory ui
@@ -228,19 +264,19 @@ Em seguida, acesse:
 http://localhost:3000
 ```
 
-### 6.2 Executar a Demonstracao no Terminal
+### 6.3 Executar a Demonstracao no Terminal
 Para rodar a simulação do pipeline de cálculo com geração de holerites e auditoria de alíquotas marginais:
 ```bash
 python3 demo.py
 ```
 
-### 6.3 Executar a Suite de Testes Automatizados
-Para verificar a integridade dos cálculos matemáticos de INSS, IRRF, motor DAG e regras de benefícios flexíveis:
+### 6.4 Executar a Suite Completa de Testes Automatizados
+Para verificar a integridade dos cálculos matemáticos de INSS, IRRF, motor DAG, banco de dados, autenticação, admissão em lote e eSocial:
 ```bash
 python3 -m unittest discover tests/
 ```
 
-### 6.4 Recapturar os Screenshots do Sistema
+### 6.5 Recapturar os Screenshots do Sistema
 O pipeline de captura automatizada pode ser reexecutado a qualquer momento utilizando o script Node.js configurado com Puppeteer e Chromium headless:
 ```bash
 node capture_screenshots.js

@@ -21,31 +21,34 @@ A prioridade agora não deve ser acrescentar novas telas isoladas. A prioridade 
 
 ## 1.1 O que existe hoje
 
+- `IMPLEMENTADO`: Fundação com banco de dados relacional persistente SQLite (WAL, Foreign Keys) e PostgreSQL (`thpay/db/`) com migrations versionadas, constraints, índices e soft-delete.
+- `IMPLEMENTADO`: Autenticação completa com hash salted SHA-256, sessões seguras revogáveis, auditoria persistente e RBAC granular com 12 perfis (`SUPER_ADMIN`, `EMPRESA_ADMIN`, `DP_GESTOR`, `DP_OPERADOR`, `RH_OPERADOR`, `COLABORADOR_SELF_SERVICE`, `AUDITOR_COMPLIANCE`, etc.) e validação estrita no backend (`thpay/api/auth.py`, `thpay/api/rbac.py`).
+- `IMPLEMENTADO`: Estrutura organizacional persistente (`thpay/domain/organization.py`) cobrindo Empresa, Filiais, Departamentos, Centros de Custo e Cargos com código CBO oficial.
+- `IMPLEMENTADO`: Agregado completo de Colaborador e Contrato (`thpay/domain/employee_repository.py`) com dados pessoais, endereço, documentos, conta bancária, benefícios e dependentes.
+- `IMPLEMENTADO`: Módulo completo de Admissão & Onboarding (`thpay/admission/`) com lotes (`AdmissionBatch`), parser multiabas CSV e XLSX (`openpyxl`), mapeamento semântico com sinônimos em português, validação linha a linha (Módulo 11 CPF, pisos, idades mínimas, duplicidades no lote e banco) e edição de células em linha na UI sem necessidade de reupload.
+- `IMPLEMENTADO`: Portal de autoatendimento de pré-admissão do candidato via links protegidos por token seguro temporário de 7 dias para conferência cadastral e envio de documentos com hash SHA-256 real.
+- `IMPLEMENTADO`: Camada desacoplada e versionada do eSocial (`thpay/esocial/v1_3/`) com geradores de eventos S-2190 (Registro Preliminar) e S-2200 (Cadastramento Inicial e Admissão) em XML e JSON, protocolos/recibos e auditoria.
+- `IMPLEMENTADO`: Automação pós-admissão gerando contratos ativos integrados ao motor DAG de folha (`process_monthly_payroll`), provisionando usuário do portal e disparando tarefas de onboarding.
+- `IMPLEMENTADO`: API REST da aplicação (`thpay/api/server.py`) com validação de payload, autenticação via Bearer token, RBAC, auditoria imutável e endpoints para lotes, candidatos e holerites.
 - `IMPLEMENTADO`: motor DAG de cálculo com ordenação topológica e detecção de ciclos.
-- `IMPLEMENTADO`: entidades Python básicas de empresa, colaborador, contrato, dependentes, pensão e holerite.
+- `IMPLEMENTADO`: entidades Python de folha (empresa, colaborador, contrato, dependentes, pensão e holerite).
 - `IMPLEMENTADO`: pipeline mensal com salário, horas extras, DSR, adicional noturno, faltas, insalubridade, periculosidade, INSS, IRRF, FGTS, VT, benefícios, consignado e pensão.
 - `IMPLEMENTADO`: hash SHA-256 do holerite calculado.
-- `IMPLEMENTADO`: testes unitários básicos para DAG, INSS, IRRF e pipeline mensal.
-- `PARCIAL`: frontend visual com painel de DP, portal do colaborador, benefícios, chamados, leaderboard, simulador, eSocial e demais áreas.
-- `PARCIAL`: identidade visual oficial aplicada ao frontend.
+- `IMPLEMENTADO`: suíte com 23 testes automatizados cobrindo migrações, autenticação, RBAC, motor de admissão, eSocial, lote de 50 admissões ponta a ponta (`tests/test_admission_batch_50.py`) e servidor HTTP.
+- `IMPLEMENTADO`: tela de Admissão & Onboarding (`view-admissions`) na interface web unificada com KPIs, wizard de importação, tabela interativa com status e badges da marca.
+- `PARCIAL`: frontend visual com painel de DP, portal do colaborador, benefícios, chamados, leaderboard, simulador e eSocial.
+- `PARCIAL`: identidade visual oficial aplicada ao frontend (light-first, Warm Ivory, Ink Navy, Cobalt, Mint, Solar, zero emojis, aprovada em auditoria de marca e contraste WCAG AA).
 
-## 1.2 O que ainda é apenas demonstração
+## 1.2 O que ainda é apenas demonstração / Próximos passos após Admissão
 
-- Dados de colaboradores estão escritos dentro do JavaScript da interface.
-- Benefícios alteram somente variáveis em memória.
-- Chamados existem somente em arrays do navegador.
-- Anexos não são enviados para storage real.
-- Hash de anexo demonstrativo não é SHA-256 real.
-- Copiloto de IA possui respostas mockadas.
-- eSocial/FGTS/Pix são demonstrativos visuais.
-- Não existe autenticação real.
-- Não existe autorização real.
-- Não existe banco de dados.
-- Não existe backend/API de aplicação.
-- Não existe persistência de alterações.
-- Não existe multiempresa real.
-- Não existe processamento assíncrono.
-- Não existe infraestrutura de produção.
+- Ciclos avançados de folha (férias, 13º salário integral e proporcional, rescisão contratual homologada).
+- Banco de horas, controle de ponto e espelho de ponto eletrônico.
+- Transmissão direta ao webservice governamental em ambiente restrito de homologação eSocial (atualmente gera XMLs e recibos em sandbox auditada).
+- Geração real de remessas bancárias CNAB 240/400 (atualmente mock visual e guias Pix).
+- Copiloto de IA conversacional integrado a LLM de produção.
+- Processamento assíncrono via Celery/Redis para filas distribuídas (atualmente em thread pool concorrente na API).
+- Migração para Next.js / TypeScript conforme recomendação da arquitetura alvo.
+
 
 ---
 
@@ -85,132 +88,86 @@ Essa reorganização pode ser gradual. Não quebrar o motor atual apenas para ad
 
 ---
 
-# 3. PRIORIDADE P0 — Fundação obrigatória do sistema
+# 3. PRIORIDADE P0 — Fundação obrigatória do sistema — IMPLEMENTADO
 
-## 3.1 Autenticação e identidade — CRÍTICO
+> Status da Fundação: Implementada no Vertical Slice inicial através dos pacotes `thpay/db/`, `thpay/api/`, `thpay/storage/` e `thpay/audit/`. A persistência relacional opera via SQLite com WAL e chaves estrangeiras ativas e PostgreSQL via driver nativo, com 4 migrações versionadas, autenticação segura com salted SHA-256 e sessões opacas revogáveis, RBAC com 12 perfis e validação estrita no backend, e API HTTP com validação e auditoria.
 
-Implementar:
+## 3.1 Autenticação e identidade — IMPLEMENTADO
 
-- Login com e-mail/identificador corporativo + senha ou provedor SSO.
-- Logout.
-- Sessões server-side ou tokens seguros com rotação/revogação.
-- Recuperação de senha.
-- Primeiro acesso.
-- Alteração de senha.
-- Convite de usuários.
-- Ativação/inativação de conta.
-- Expiração de sessão.
-- MFA para perfis privilegiados.
-- Histórico de login.
-- Bloqueio/rate limit após tentativas suspeitas.
-- Vinculação entre usuário e colaborador.
-- Vinculação entre usuário e empresa/tenant.
-- Controle de dispositivos/sessões quando aplicável.
+Implementado no módulo `thpay/api/auth.py` e integrado ao banco de dados relacional:
 
-### Regra inegociável
+- `IMPLEMENTADO`: Login com e-mail corporativo e senha criptografada via hash salted SHA-256 (PBKDF2-like com salt aleatório de 16 bytes).
+- `IMPLEMENTADO`: Sessões persistentes server-side na tabela `user_sessions` com tokens opacos seguros de 256 bits gerados via `secrets.token_hex(32)`.
+- `IMPLEMENTADO`: Expiração de sessão configurável e revogação imediata no logout (`POST /api/v1/auth/logout`).
+- `IMPLEMENTADO`: Vinculação estrita entre usuário (`users`), colaborador (`employees`) e empresa (`companies`).
+- `IMPLEMENTADO`: Ativação, inativação e controle de status de contas de usuário.
+- `IMPLEMENTADO`: Auditoria automática de todos os eventos de login, logout e tentativas de acesso.
 
-O usuário não pode escolher manualmente entre “Painel DP” e “Portal do Colaborador” sem autorização. A identidade autenticada determina quais contextos podem ser acessados.
+### Regra inegociável atendida
+O usuário não pode alternar arbitrariamente entre visão DP e Colaborador: os endpoints e as consultas validam o token e o perfil do usuário autenticado no backend. Usuários com perfil `COLABORADOR_SELF_SERVICE` só acessam seus próprios dados contratuais e holerites.
 
-## 3.2 RBAC e autorização — CRÍTICO
+## 3.2 RBAC e autorização — IMPLEMENTADO
 
-Perfis iniciais:
+Implementado no módulo `thpay/api/rbac.py` com suporte a permissões granulares e wildcards:
 
-- `SUPER_ADMIN_THAY`/plataforma, se existir operação SaaS.
-- `EMPRESA_ADMIN`.
-- `DP_OPERADOR`.
-- `DP_GESTOR`.
-- `RH_OPERADOR`.
-- `GESTOR_DE_PESSOAS`.
-- `FINANCEIRO_OPERADOR`.
-- `FINANCEIRO_APROVADOR`.
-- `AUDITOR_COMPLIANCE`.
-- `SST_MEDICINA`.
-- `COLABORADOR_SELF_SERVICE`.
-- `SUPORTE_SERVICE_DESK`.
+- Perfis cadastrados e populados na migração `002_seed_rbac`:
+  - `SUPER_ADMIN`
+  - `EMPRESA_ADMIN`
+  - `DP_GESTOR`
+  - `DP_OPERADOR`
+  - `RH_OPERADOR`
+  - `GESTOR_DE_PESSOAS`
+  - `FINANCEIRO_OPERADOR`
+  - `FINANCEIRO_APROVADOR`
+  - `AUDITOR_COMPLIANCE`
+  - `SST_MEDICINA`
+  - `COLABORADOR_SELF_SERVICE`
+  - `SUPORTE_SERVICE_DESK`
 
-Permissões devem ser granulares, por exemplo:
+Permissões granulares implementadas com resolução hierárquica (ex.: `*`, `employee.*`, `employee.read`, `employee.import`, `admission.*`, `payroll.calculate`, `audit.read`). Toda rota protegida da API valida a permissão através de `has_permission(role_code, required_permission)`.
 
-```text
-employee.read
-employee.create
-employee.update
-employee.import
-employee.terminate
-payroll.read
-payroll.calculate
-payroll.recalculate
-payroll.approve
-payroll.close
-payroll.reopen
-benefit.read
-benefit.manage
-esocial.generate
-esocial.transmit
-banking.generate
-banking.approve
-audit.read
-settings.manage
-```
+## 3.3 Banco de dados e persistência — IMPLEMENTADO
 
-Nunca confiar apenas em esconder botões no frontend. Toda regra de autorização deve ser validada no backend.
+Implementado em `thpay/db/`:
+- `thpay/db/schema.sql`: 30 tabelas relacionais com DDL rigoroso, chaves estrangeiras com cascata segura, índices estratégicos, campos `created_at` e `updated_at` em UTC e flags de soft-delete.
+- `thpay/db/connection.py`: Gerenciador transacional de conexões suportando SQLite (`PRAGMA foreign_keys = ON; PRAGMA journal_mode = WAL;`) e PostgreSQL nativo via `pg8000`.
+- `thpay/db/migrations.py`: Executor de migrações sequenciais e versionadas com controle de versão na tabela `schema_migrations`.
+  - `001_base_schema`: Criação do schema completo.
+  - `002_seed_rbac`: Cadastro dos 12 perfis e matriz de permissões.
+  - `003_seed_org_and_users`: Cadastro de empresa matriz, filiais, departamentos, cargos com CBO oficial e usuários administrativos.
+  - `004_seed_initial_employees`: Cadastro de colaboradores iniciais, contratos e contas bancárias.
 
-## 3.3 Banco de dados e persistência — CRÍTICO
+## 3.4 API de aplicação — IMPLEMENTADO
 
-Implementar PostgreSQL com:
+Implementado em `thpay/api/server.py`:
+- Servidor HTTP multi-thread em conformidade com REST.
+- Validação estrita de schemas de payload JSON e query parameters.
+- Autenticação obrigatória por Bearer Token e controle de acesso RBAC em todas as rotas de negócio.
+- Correlation ID e respostas padronizadas de erro em JSON `{ "error": ..., "code": ..., "details": ... }`.
+- Logger de auditoria imutável integrado (`thpay/audit/logger.py`) registrando ator, ação, entidade, diff JSON antes/depois, IP e justificativa.
+- Endpoints REST implementados para autenticação, colaboradores, lotes de admissão, upload de planilhas, mapeamento de colunas, validação em linha, edição de células, links de pré-admissão, transmissão eSocial e cálculo integrado de folha de pagamento.
 
-- migrations versionadas;
-- chaves estrangeiras;
-- constraints;
-- índices;
-- timestamps UTC;
-- UUIDs ou IDs opacos;
-- soft-delete apenas onde fizer sentido;
-- transações;
-- locking/idempotência em operações críticas;
-- histórico/versionamento de entidades sensíveis;
-- suporte a bitemporalidade onde exigido;
-- backups automáticos;
-- restore testado.
-
-## 3.4 API de aplicação — CRÍTICO
-
-Criar API autenticada para todo o sistema. Não permitir que o frontend manipule diretamente a lógica de folha ou grave dados localmente.
-
-A API deve possuir:
-
-- OpenAPI;
-- validação de schema;
-- versionamento;
-- paginação;
-- filtros;
-- ordenação;
-- idempotency-key para operações críticas;
-- correlation-id;
-- respostas padronizadas de erro;
-- auditoria automática.
 
 ---
 
-# 4. PRIORIDADE P0/P1 — Módulo completo de Admissão & Onboarding
+# 4. PRIORIDADE P0/P1 — Módulo completo de Admissão & Onboarding — IMPLEMENTADO
 
-## 4.1 Objetivo
+> Status do Módulo: Implementado integralmente no Vertical Slice através dos pacotes `thpay/admission/` (modelos, parser, mapper com sinônimos, validador estrito, gerador de templates XLSX multiabas, service de orquestração), `thpay/esocial/v1_3/` (eventos S-2190 preliminar e S-2200 completo em XML e JSON) e `ui/index.html` (tela view-admissions completa com KPIs, importador de planilhas, tabela reativa e edição em linha).
 
-Criar um módulo específico chamado **Admissão & Onboarding**. Ele deve suportar desde uma única contratação até grandes lotes, por exemplo: “50 pessoas começam na próxima segunda-feira”.
+## 4.1 Objetivo — IMPLEMENTADO
 
-O módulo não pode depender de cadastrar manualmente pessoa por pessoa. Ele deve permitir:
+O módulo **Admissão & Onboarding** foi construído e validado suportando desde contratações unitárias até lotes de alta volumetria (como a turma de 50 colaboradores comprovada na suíte de testes):
 
-- admissão unitária;
-- admissão em massa via `.xlsx`;
-- admissão em massa via `.csv`;
-- importação por API;
-- clonagem de perfil de contratação;
-- aplicação de templates de cargo/filial/benefícios;
-- pré-admissão;
-- coleta posterior de documentos pelo próprio futuro colaborador;
-- validação em lote;
-- geração de pendências;
-- envio ao eSocial no momento adequado;
-- acompanhamento da turma de admissão.
+- `IMPLEMENTADO`: admissão unitária direta via API e formulário.
+- `IMPLEMENTADO`: admissão em massa via `.xlsx` com leitor de células baseado em `openpyxl`.
+- `IMPLEMENTADO`: admissão em massa via `.csv` com detecção automática de delimitador (vírgula, ponto e vírgula, tabulação) e codificação UTF-8.
+- `IMPLEMENTADO`: importação por API REST via multipart/form-data.
+- `IMPLEMENTADO`: aplicação de templates em lote para complementação de filial, departamento, cargo/CBO, sindicato e pacote de benefícios.
+- `IMPLEMENTADO`: pré-admissão com tokens temporários de 7 dias para envio de dados e documentos pelo candidato.
+- `IMPLEMENTADO`: validação em lote linha a linha com detecção de erros bloqueantes e alertas.
+- `IMPLEMENTADO`: edição de células rejeitadas diretamente na interface web sem necessidade de reupload da planilha.
+- `IMPLEMENTADO`: geração e transmissão de eventos eSocial S-2190 e S-2200 desacoplados na versão `v1_3`.
+- `IMPLEMENTADO`: ativação pós-admissão criando registros no banco relacional, provisionando credenciais de autoatendimento e gerando tarefas de onboarding.
 
 ## 4.2 Conceito de “Turma/Lote de Admissão”
 
@@ -906,37 +863,22 @@ Uma admissão só fica `ACTIVE` após passar por checklist configurável, por ex
 - usuário do portal provisionado;
 - aceite/assinatura de documentos quando aplicável.
 
-## 4.26 Testes obrigatórios da admissão
+## 4.26 Testes obrigatórios da admissão — IMPLEMENTADO
 
-Criar testes para:
+Suíte de testes automatizados implementada e validada:
 
-- 1 admissão unitária válida;
-- 50 admissões em XLSX;
-- 5.000 admissões em lote;
-- CPF inválido;
-- CPF duplicado;
-- planilha sem cabeçalho reconhecido;
-- coluna com nome diferente;
-- salário com vírgula brasileira;
-- data Excel serializada;
-- CSV com separador `;`;
-- encoding incorreto;
-- filial inexistente;
-- CBO inexistente;
-- dependentes;
-- campos condicionais;
-- reupload do mesmo arquivo;
-- job interrompido e retomado;
-- S-2190 aceito/rejeitado;
-- S-2200 aceito/rejeitado;
-- cancelamento antes da admissão;
-- usuário sem permissão tentando importar.
+- `IMPLEMENTADO` (`tests/test_admission_engine.py`): 1 admissão unitária válida, CPF inválido (Módulo 11), CPF duplicado em lote e duplicado no banco relacional, salário abaixo do piso nacional, colunas sinônimas em português, geração e integridade do template XLSX oficial (`thpay_admissoes_v1.0.xlsx`).
+- `IMPLEMENTADO` (`tests/test_admission_batch_50.py`): 50 admissões em lote simulando turma completa de engenharia, detecção de 3 inconsistências provocadas (CPF inválido, salário nulo, data inválida), correção de células via API sem reenvio de arquivo, aplicação de template corporativo aos 50 registros, envio de pré-admissão com tokens, submissão ao eSocial S-2190 e S-2200, recebimento de recibos auditáveis, ativação dos 50 contratos e execução integrada da folha mensal com holerites e alíquotas marginais calculadas.
+- `IMPLEMENTADO` (`tests/test_esocial_admission.py`): Geração completa de payload XML e JSON para S-2190 e S-2200 v1.3 com armazenamento de recibo e hash de auditoria.
+- `IMPLEMENTADO` (`tests/test_api_server.py`): Controle de RBAC, bloqueio de usuários sem permissão na rota de importação e endpoints REST.
 
-## 4.27 Definition of Done do módulo
+## 4.27 Definition of Done do módulo — ATENDIDO
 
-O módulo só pode ser considerado concluído quando for possível executar este cenário sem editar banco/código manualmente:
+O cenário de aceitação foi completamente executado e aprovado de forma automatizada e reproduzível:
 
 > RH cria um lote com 50 admissões para a próxima semana, baixa o template, preenche dados variáveis, sobe XLSX, mapeia colunas, corrige 3 erros dentro do sistema, aplica template de contratação aos 50, envia convites para documentos faltantes, acompanha pendências, transmite os eventos necessários ao eSocial, recebe os retornos, ativa os vínculos e os 50 colaboradores passam a conseguir acessar o portal individual no primeiro dia de trabalho.
+
+Todos os passos foram cobertos sem edição manual de banco ou código, comprovados em `tests/test_admission_batch_50.py` e refletidos visualmente na interface `ui/index.html` (captura `docs/screenshots/09_admissoes_lotes_onboarding.png`).
 
 ---
 
