@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 420" role="img" aria-label="THP Connection Blocks">
+  <rect width="720" height="420" rx="32" fill="#FFF9F1"/>
+  <path d="M0 54c0-30 24-54 54-54h188v116c0 30-24 54-54 54H0V54Z" fill="#2F66F3"/>
+  <path d="M242 0h170v116c0 30-24 54-54 54H242V0Z" fill="#8FE1CF"/>
+  <path d="M412 0h254c30 0 54 24 54 54v96H558c-30 0-54-24-54-54V64c0-20-16-36-36-36h-56V0Z" fill="#F7A7B8"/>
+  <path d="M0 252h206c30 0 54 24 54 54v114H54c-30 0-54-24-54-54V252Z" fill="#FF7D72"/>
+  <rect x="286" y="210" width="168" height="118" rx="54" fill="#FFC83D"/>
+  <path d="M512 216h208v150c0 30-24 54-54 54H512V216Z" fill="#101A44"/>
+</svg>

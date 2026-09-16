@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="THP connection pattern">
+  <rect width="480" height="480" fill="#FFF9F1"/>
+  <g opacity=".28">
+    <rect x="24" y="28" width="160" height="72" rx="36" fill="#2F66F3"/>
+    <rect x="136" y="84" width="72" height="154" rx="36" fill="#8FE1CF"/>
+    <path d="M266 18h190v130H354c-49 0-88-39-88-88V18Z" fill="#F7A7B8"/>
+    <rect x="252" y="202" width="196" height="82" rx="41" fill="#FFC83D"/>
+    <path d="M20 296h190v164H98c-43 0-78-35-78-78v-86Z" fill="#FF7D72"/>
+    <path d="M278 318h178v142H350c-40 0-72-32-72-72v-70Z" fill="#101A44"/>
+  </g>
+</svg>

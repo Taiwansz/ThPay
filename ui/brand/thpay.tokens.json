@@ -1,0 +1,26 @@
+{
+  "color": {
+    "brand": {
+      "inkNavy": "#101A44",
+      "cobalt": "#2F66F3",
+      "solar": "#FFC83D",
+      "mint": "#8FE1CF",
+      "blush": "#F7A7B8",
+      "coral": "#FF7D72",
+      "warmIvory": "#FFF9F1",
+      "softPaper": "#F6F2EC",
+      "line": "#E5DED5",
+      "mutedInk": "#64708A"
+    },
+    "semantic": {
+      "success": "#188A64",
+      "warning": "#9A6500",
+      "danger": "#C83D4D",
+      "info": "#2F66F3"
+    }
+  },
+  "radius": {"sm": 12, "md": 16, "lg": 20, "xl": 24},
+  "spacing": {"1": 4, "2": 8, "3": 12, "4": 16, "5": 20, "6": 24, "8": 32, "10": 40},
+  "font": {"sans": "Plus Jakarta Sans, Inter, Segoe UI, Arial, sans-serif"},
+  "motion": {"fast": 160, "normal": 240, "easeOut": "cubic-bezier(.16,1,.3,1)"}
+}
