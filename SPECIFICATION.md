@@ -739,3 +739,64 @@ Para atender simultaneamente a requisitos de determinismo matematico absoluto, v
 #### 5. Infraestrutura de Mensageria e Persistencia
 - **Fila Assincrona:** RabbitMQ ou Redis Streams para orquestrar a esteira de eventos do eSocial, garantindo entrega garantida (*at-least-once*), controle de taxa de transmissao governamental (*rate limiting*) e reprocessamento com *dead-letter queues*.
 - **Banco de Dados Relacional:** PostgreSQL 16+ com particionamento de tabelas por competencia civil (`competence_year_month`), garantindo consultas bitemporais ultra-rapidas e integridade referencial estrita.
+
+
+## 14. Modulo de Autoatendimento do Colaborador, Beneficios Flexiveis e Service Desk
+
+### 14.1 Visao Geral e Posicionamento de Produto
+Alem da operacao centralizada de Departamento Pessoal, o ThPay integra um ambiente de autoatendimento (Employee Self-Service / EXP) individual e centralizado. O objetivo e descentralizar operacoes rotineiras, conferir transparencia sobre remuneracao e metricas de desempenho, e oferecer autonomia parametrizada ao colaborador dentro dos limites corporativos e regulatorios brasileiros.
+
+O modulo e estruturado em tres pilares funcionais:
+1. **Hub Pessoal e Desempenho (Profile & Leaderboard):** Consulta de informacoes cadastrais, contratuais, demonstrativos de pagamento e posicionamento em rankings corporativos de performance.
+2. **Motor de Beneficios Flexiveis (Flex Benefits Engine):** Painel de customizacao autônoma de beneficios dentro de matrizes de regras previamente parametrizadas pela empresa.
+3. **Central de Atendimento Interno (Internal Service Desk / Ticketing):** Canal oficial para abertura, envio de evidencias/documentos e acompanhamento de chamados direcionados aos setores corporativos (DP, RH, TI, Financeiro, Facilities).
+
+---
+
+### 14.2 Matriz de Beneficios Flexiveis e Conformidade Regulatoria
+
+A concessao e customizacao de beneficios pelo proprio colaborador e governada por regras parametricas rigorosas para evitar passivos trabalhistas, fiscais ou previdenciarios:
+
+| Beneficio | Operacao Permitida ao Colaborador | Restricoes Regulatorias e de Negocio | Impacto no Motor DAG da Folha |
+|---|---|---|---|
+| **Vale-Transporte (VT)** | Solicitacao de cancelamento (opt-out) ou reativacao (opt-in). | Lei 7.418/1985 e Decreto 95.247/1987. O cancelamento exige declaracao formal e termo de responsabilidade de nao utilizacao de transporte publico coletivo (ex: uso de veiculo proprio, carona ou regime teletrabalho integral). | Se ativo: gera rubrica de desconto de ate 6% sobre o salario base (limitado ao custo real das tarifas). Se cancelado: suprime a rubrica de desconto na competencia seguinte ao cut-off. |
+| **Vale-Alimentacao (VA) / Vale-Refeicao (VR)** | Ajuste da distribuicao percentual (split) entre os cartoes (ex: 100/0, 70/30, 50/50, 30/70, 0/100). | Regulamentacao do PAT (Decreto 10.854/2021 e Lei 14.442/2022). O valor total e fixado pelo plano da empresa. Vedada a conversao em especie (dinheiro) para preservar carater indenizatorio e isencao de INSS/FGTS (Art. 458 da CLT). | O valor e direcionado as operadoras de beneficios conveniadas; caso haja coparticipacao subsidiada em folha, lanca-se o desconto proporcional acordado. |
+| **Plano de Saude Medico** | Adesao (opt-in), cancelamento (opt-out), inclusao/exclusao de dependentes legais e selecao de acomodacao (enfermaria/apartamento). | Normas da ANS (RN 438/2018), vigencia de carencias e janelas de adesao livre (*open enrollment*) definidas pela apolice coletiva empresarial. Cancelamentos fora de janela exigem justificativa e ciencia de perda de portabilidade. | Mensalidade e coparticipacao geram rubricas de desconto dedutiveis da base de calculo do IRRF (Art. 8o, II, a da Lei 9.250/1995), alimentando campos especificos do informe de rendimentos e eSocial. |
+| **Plano Odontologico** | Adesao facultativa, cancelamento e gestao de dependentes. | Regras contratuais da operadora odontologica e permanencia minima estipulada em contrato (normalmente 12 meses). | Desconto mensal lancado em folha; dedutibilidade tributaria para fins de IRRF se caracterizado como plano privado de assistencia odontologica regulado pela ANS. |
+
+#### 14.2.1 Bitemporalidade, Janelas e Regra de Cut-Off
+- **Data de Corte (Cut-Off Date):** As solicitacoes de alteracao de beneficios registradas ate as 23h59 do dia de corte da empresa (padrao: dia 15 de cada mes) passam a vigorar na folha da competencia em curso (mes corrente).
+- **Solicitacoes Apos o Cut-Off:** Entram automaticamente com data de vigencia para a competencia subsequente (mes N+1).
+- **Historico e Auditoria Bitemporal:** Toda solicitacao gera um registro imutavel contendo `requested_at`, `effective_competence`, `previous_state`, `new_state`, `status` (`SUBMITTED`, `AUTO_APPROVED`, `UNDER_REVIEW`, `REJECTED`, `EFFECTIVE`) e identificador da sessao autenticada.
+
+---
+
+### 14.3 Leaderboard e Gestao de Desempenho com Conformidade Legal
+- **Proposito:** Fornecer visibilidade ao colaborador de seu desempenho relativo em metricas de negocio e metas acordadas na organizacao (KPIs operacionais, vendas, entregas de sprint, resolucao de chamados, assiduidade e conclusao de cursos corporativos).
+- **Protecao a Privacidade e Blindagem Juridica (LGPD e Art. 5o CF):**
+  - O leaderboard jamais exibe salarios, remuneracoes variaveis monetarias, descontos ou dados sensiveis (medicos/biometricos).
+  - A pontuacao e calculada com base em scores normalizados (0 a 1.000 pontos) ou percentuais de atingimento de metas.
+  - O colaborador pode visualizar seu ranking global, sua posicao dentro do squad/departamento e suas metricas de evolucao historica.
+
+---
+
+### 14.4 Central de Chamados Interna (Internal Service Desk)
+- **Categorizacao Parametrica de Chamados:**
+  - `FOLHA_E_HOLERITE`: Duvidas sobre horas extras, adicionais, descontos tributarios e demonstrativo.
+  - `BENEFICIOS`: Duvidas sobre cartoes VA/VR, coparticipacao medica, carteirinhas de planos e sinistros.
+  - `PONTO_E_FREQUENCIA`: Justificativa de marcacoes, envio de comprovantes de audiencia e atestados medicos.
+  - `FERIAS_E_AFASTAMENTOS`: Duvidas sobre periodo aquisitivo/concessivo e abono pecuniario.
+  - `TI_E_ACESSO`: Solicitacao de acessos, equipamentos e suporte a sistemas.
+  - `APOIO_GERAL_DP`: Solicitacao de certidoes, declaracoes de vinculo e atualizacao de dados cadastrais.
+- **Estrutura do Chamado:**
+  - `ticket_id`: Identificador unico (ex: `TCK-2026-0901`).
+  - `collaborator_id`: Matricula do solicitante.
+  - `category`: Categoria funcional para roteamento automatico de fila.
+  - `subject`: Resumo da demanda.
+  - `description`: Descricao detalhada da situacao.
+  - `urgency`: Nivel de prioridade (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`).
+  - `attachments`: Lista de arquivos anexados (PDFs, JPGs, PNGs) com hash SHA-256 e armazenamento seguro.
+  - `interactions`: Timeline de mensagens sequenciais entre colaborador e analista responsavel.
+  - `status`: `OPEN`, `IN_PROGRESS`, `WAITING_COLLABORATOR`, `RESOLVED`, `CLOSED`.
+  - `sla_tracking`: Prazo maximo regulamentar de resposta e resolucao.
+

@@ -59,7 +59,8 @@ Em vez de forcar uma unica linguagem para dominios fundamentalmente distintos, o
 ## 3. Documentacao Normativa Principal
 
 O mapeamento exaustivo de todas as regras trabalhistas, previdenciarias, fiscais e de produto esta formalizado nos documentos:
-- **[SPECIFICATION.md](SPECIFICATION.md):** Especificacao mestre com tabelas, algoritmos de fatiamento marginal de INSS, comparador automatico de IRRF tradicional vs simplificado, DCTFWeb, FGTS Digital via Pix, modalidades de rescisao (Artigos 477 a 484-A CLT), calculo de ferias e 13o salario, e arquitetura poliglota.
+- **[SPECIFICATION.md](SPECIFICATION.md):** Especificacao mestre com tabelas, algoritmos de fatiamento marginal de INSS, comparador automatico de IRRF tradicional vs simplificado, DCTFWeb, FGTS Digital via Pix, modalidades de rescisao (Artigos 477 a 484-A CLT), calculo de ferias e 13o salario, arquitetura poliglota e secao normativa de autoatendimento.
+- **[docs/PORTAL_COLABORADOR_E_BENEFICIOS_FLEXIVEIS.md](docs/PORTAL_COLABORADOR_E_BENEFICIOS_FLEXIVEIS.md):** Especificacao de engenharia para o Portal do Colaborador, motor de beneficios flexiveis (split VA/VR e opt-out de VT), central de chamados interna e leaderboard de desempenho.
 - **[docs/TAKO_PARADIGM_UI_UX.md](docs/TAKO_PARADIGM_UI_UX.md):** Especificacao de produto no padrao Tako (tako.ai), detalhando o calculo continuo (Continuous Payroll), unificacao CLT + PJ, design system de alta densidade e Agente Analista com IA.
 
 ---
@@ -73,9 +74,10 @@ ThPay/
 ├── pyproject.toml                 # Metadados e dependencias do prototipo analitico
 ├── .gitignore                     # Filtros de exclusao para controle de versao
 ├── docs/                          # Documentos de arquitetura e design
-│   └── TAKO_PARADIGM_UI_UX.md     # Paradigma de produto e design system estilo Tako
+│   ├── TAKO_PARADIGM_UI_UX.md     # Paradigma de produto e design system estilo Tako
+│   └── PORTAL_COLABORADOR_E_BENEFICIOS_FLEXIVEIS.md # Arquitetura do Portal do Colaborador e Service Desk
 ├── ui/                            # Prototipo visual e funcional interativo
-│   └── index.html                 # Interface SPA estilo Tako com Live Payslip Drawer e IA
+│   └── index.html                 # Interface SPA estilo Tako com Live Payslip Drawer, IA e Portal do Colaborador
 ├── thpay/                         # Prototipo funcional das regras de negocio em Python
 │   ├── domain/                    # Modelos de dominio tipados (Empresa, Contrato, Rubrica)
 │   ├── engine/                    # Motor DAG e ordenacao topologica

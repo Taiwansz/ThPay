@@ -134,8 +134,14 @@
         <span>eSocial S-1299 Reconciliado</span>
       </div>
 
+      <!-- Employee Portal Switcher Button in Header -->
+      <button onclick="switchView('employee-portal')" id="header-employee-btn" class="hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-surfaceElevated border border-borderSubtle hover:border-zinc-500 text-xs text-zinc-200 transition-colors">
+        <div class="w-4 h-4 rounded-full bg-accentGold/20 text-accentGold flex items-center justify-center font-bold text-[9px] font-mono">C</div>
+        <span>Visao do Colaborador</span>
+      </button>
+
       <!-- Action Button -->
-      <button onclick="openCloseModal()" class="px-3.5 py-1.5 rounded-md bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs tracking-tight transition-all shadow-sm flex items-center space-x-1.5">
+      <button onclick="openCloseModal()" id="btn-fechamento-dp" class="px-3.5 py-1.5 rounded-md bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs tracking-tight transition-all shadow-sm flex items-center space-x-1.5">
         <svg class="w-3.5 h-3.5 text-zinc-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
         <span>Painel de Fechamento</span>
       </button>
@@ -173,6 +179,18 @@
           <button onclick="switchView('analyst')" id="nav-analyst" class="w-full flex items-center space-x-2.5 px-2.5 py-2 text-xs font-medium rounded-md text-zinc-400 hover:bg-surfaceElevated hover:text-zinc-200 transition-all">
             <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
             <span>Agente Analista (IA)</span>
+          </button>
+        </div>
+
+        <!-- Self-Service / Employee Portal -->
+        <div class="space-y-1">
+          <div class="px-2.5 py-1 text-[10px] font-bold text-zinc-500 uppercase tracking-wider font-mono">Autoatendimento</div>
+          <button onclick="switchView('employee-portal')" id="nav-employee-portal" class="w-full flex items-center justify-between px-2.5 py-2 text-xs font-medium rounded-md text-zinc-400 hover:bg-surfaceElevated hover:text-zinc-200 transition-all">
+            <div class="flex items-center space-x-2.5">
+              <svg class="w-4 h-4 text-accentGold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+              <span>Portal do Colaborador</span>
+            </div>
+            <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-950/50 text-accentGold font-mono">Self</span>
           </button>
         </div>
 
@@ -217,83 +235,86 @@
     <!-- Main Dynamic Workspace -->
     <main class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar bg-background">
 
-      <!-- Executive Metric Bar -->
-      <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <!-- Metric 1 -->
-        <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
-          <div class="flex items-center justify-between text-xs text-zinc-400">
-            <span class="font-medium">Custo Total de Pessoal</span>
-            <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">Competencia 09</span>
-          </div>
-          <div class="text-2xl font-bold font-mono tracking-tight text-white tabular-nums" id="metric-total-cost">R$ 384.210,40</div>
-          <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
-            <span class="text-emerald-400 font-mono text-[11px] font-semibold">+ 1,42% vs ago/2026</span>
-            <span class="text-zinc-500 font-mono text-[10px]">Fator Real: 1.682x</span>
-          </div>
-        </div>
-
-        <!-- Metric 2 -->
-        <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
-          <div class="flex items-center justify-between text-xs text-zinc-400">
-            <span class="font-medium">Salarios Liquidos (Folha)</span>
-            <span class="text-[10px] font-mono text-zinc-500">Credito 5o dia util</span>
-          </div>
-          <div class="text-2xl font-bold font-mono tracking-tight text-zinc-100 tabular-nums" id="metric-net-salaries">R$ 254.120,80</div>
-          <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
-            <span class="text-zinc-500 font-mono text-[11px]">Remessa CNAB 240 / Pix</span>
-            <span class="text-accentGold font-mono text-[10px]">Pronto para envio</span>
-          </div>
-        </div>
-
-        <!-- Metric 3 -->
-        <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
-          <div class="flex items-center justify-between text-xs text-zinc-400">
-            <span class="font-medium">Tributos & Encargos Patronais</span>
-            <span class="text-[10px] font-mono text-zinc-500">DCTFWeb + FGTS</span>
-          </div>
-          <div class="text-2xl font-bold font-mono tracking-tight text-accentGold tabular-nums" id="metric-patronal-taxes">R$ 130.089,60</div>
-          <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
-            <span class="text-zinc-400 font-mono text-[11px]">DARF Unico: R$ 108.599,40</span>
-            <span class="text-emerald-400 font-mono text-[11px]">GFD: R$ 21.490,20</span>
-          </div>
-        </div>
-
-        <!-- Metric 4 -->
-        <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
-          <div class="flex items-center justify-between text-xs text-zinc-400">
-            <span class="font-medium">Headcount Ativo</span>
-            <span class="text-[10px] font-mono text-zinc-500">Unificado</span>
-          </div>
-          <div class="text-2xl font-bold font-mono tracking-tight text-white tabular-nums">48 <span class="text-sm font-normal text-zinc-400">vidas</span></div>
-          <div class="flex items-center space-x-2 text-xs pt-1">
-            <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-sky-400 border border-zinc-800 font-mono text-[11px]">36 CLT (101)</span>
-            <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-purple-400 border border-zinc-800 font-mono text-[11px]">12 PJ (Prestadores)</span>
-          </div>
-        </div>
-      </section>
-
-      <!-- Continuous Calculation Stream & Live Readiness Bar -->
-      <section class="p-4 rounded-lg bg-surface border border-borderSubtle flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div class="space-y-1.5 flex-1">
-          <div class="flex items-center justify-between text-xs">
-            <div class="flex items-center space-x-2">
-              <span class="w-2 h-2 rounded-full bg-accentEmerald"></span>
-              <span class="font-semibold text-zinc-200">Esteira Continua de Folha (Live Continuous Payroll)</span>
-              <span class="text-zinc-500 font-mono text-[11px]">| Ultimo evento: ha 4 minutos</span>
+      <!-- DP Header Section (Visible only in DP management views) -->
+      <div id="dp-header-section" class="space-y-6">
+        <!-- Executive Metric Bar -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+          <!-- Metric 1 -->
+          <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
+            <div class="flex items-center justify-between text-xs text-zinc-400">
+              <span class="font-medium">Custo Total de Pessoal</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.2 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">Competencia 09</span>
             </div>
-            <span class="font-mono text-accentEmerald font-bold text-xs">98,2% Validado</span>
+            <div class="text-2xl font-bold font-mono tracking-tight text-white tabular-nums" id="metric-total-cost">R$ 384.210,40</div>
+            <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
+              <span class="text-emerald-400 font-mono text-[11px] font-semibold">+ 1,42% vs ago/2026</span>
+              <span class="text-zinc-500 font-mono text-[10px]">Fator Real: 1.682x</span>
+            </div>
           </div>
-          <div class="w-full bg-background rounded-full h-1.5 overflow-hidden border border-borderSubtle">
-            <div class="bg-gradient-to-r from-emerald-500 via-accentGold to-indigo-500 h-1.5 rounded-full" style="width: 98.2%"></div>
+
+          <!-- Metric 2 -->
+          <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
+            <div class="flex items-center justify-between text-xs text-zinc-400">
+              <span class="font-medium">Salarios Liquidos (Folha)</span>
+              <span class="text-[10px] font-mono text-zinc-500">Credito 5o dia util</span>
+            </div>
+            <div class="text-2xl font-bold font-mono tracking-tight text-zinc-100 tabular-nums" id="metric-net-salaries">R$ 254.120,80</div>
+            <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
+              <span class="text-zinc-500 font-mono text-[11px]">Remessa CNAB 240 / Pix</span>
+              <span class="text-accentGold font-mono text-[10px]">Pronto para envio</span>
+            </div>
           </div>
-        </div>
-        <div class="flex items-center space-x-2 text-xs shrink-0">
-          <div class="flex items-center space-x-1.5 text-accentGold px-2.5 py-1 rounded bg-zinc-900 border border-zinc-700 font-mono text-[11px]">
-            <span class="w-1.5 h-1.5 rounded-full bg-accentGold"></span>
-            <span>1 divergencia de ponto a homologar</span>
+
+          <!-- Metric 3 -->
+          <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
+            <div class="flex items-center justify-between text-xs text-zinc-400">
+              <span class="font-medium">Tributos & Encargos Patronais</span>
+              <span class="text-[10px] font-mono text-zinc-500">DCTFWeb + FGTS</span>
+            </div>
+            <div class="text-2xl font-bold font-mono tracking-tight text-accentGold tabular-nums" id="metric-patronal-taxes">R$ 130.089,60</div>
+            <div class="flex items-center justify-between text-xs text-zinc-400 pt-1">
+              <span class="text-zinc-400 font-mono text-[11px]">DARF Unico: R$ 108.599,40</span>
+              <span class="text-emerald-400 font-mono text-[11px]">GFD: R$ 21.490,20</span>
+            </div>
           </div>
-        </div>
-      </section>
+
+          <!-- Metric 4 -->
+          <div class="p-4 rounded-lg bg-surface border border-borderSubtle space-y-1 hover:border-zinc-600 transition-colors">
+            <div class="flex items-center justify-between text-xs text-zinc-400">
+              <span class="font-medium">Headcount Ativo</span>
+              <span class="text-[10px] font-mono text-zinc-500">Unificado</span>
+            </div>
+            <div class="text-2xl font-bold font-mono tracking-tight text-white tabular-nums">48 <span class="text-sm font-normal text-zinc-400">vidas</span></div>
+            <div class="flex items-center space-x-2 text-xs pt-1">
+              <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-sky-400 border border-zinc-800 font-mono text-[11px]">36 CLT (101)</span>
+              <span class="px-1.5 py-0.5 rounded bg-zinc-900 text-purple-400 border border-zinc-800 font-mono text-[11px]">12 PJ (Prestadores)</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Continuous Calculation Stream & Live Readiness Bar -->
+        <section class="p-4 rounded-lg bg-surface border border-borderSubtle flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div class="space-y-1.5 flex-1">
+            <div class="flex items-center justify-between text-xs">
+              <div class="flex items-center space-x-2">
+                <span class="w-2 h-2 rounded-full bg-accentEmerald"></span>
+                <span class="font-semibold text-zinc-200">Esteira Continua de Folha (Live Continuous Payroll)</span>
+                <span class="text-zinc-500 font-mono text-[11px]">| Ultimo evento: ha 4 minutos</span>
+              </div>
+              <span class="font-mono text-accentEmerald font-bold text-xs">98,2% Validado</span>
+            </div>
+            <div class="w-full bg-background rounded-full h-1.5 overflow-hidden border border-borderSubtle">
+              <div class="bg-gradient-to-r from-emerald-500 via-accentGold to-indigo-500 h-1.5 rounded-full" style="width: 98.2%"></div>
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-xs shrink-0">
+            <div class="flex items-center space-x-1.5 text-accentGold px-2.5 py-1 rounded bg-zinc-900 border border-zinc-700 font-mono text-[11px]">
+              <span class="w-1.5 h-1.5 rounded-full bg-accentGold"></span>
+              <span>1 divergencia de ponto a homologar</span>
+            </div>
+          </div>
+        </section>
+      </div>
 
       <!-- VIEW 1: Directory & Continuous Payroll -->
       <div id="view-directory" class="space-y-4">
@@ -537,6 +558,500 @@
             </div>
           </div>
         </div>
+      </div>
+
+      <!-- VIEW 5: Employee Self-Service Portal (Visao do Colaborador) -->
+      <div id="view-employee-portal" class="space-y-6 hidden">
+
+        <!-- Collaborator Profile Header Card -->
+        <section class="p-6 rounded-lg bg-surface border border-borderSubtle space-y-4">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-borderSubtle pb-5">
+            <div class="flex items-center space-x-4">
+              <div class="w-14 h-14 rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-950 border border-zinc-700 flex items-center justify-center font-bold text-accentGold text-lg font-mono shadow-inner">
+                CS
+              </div>
+              <div class="space-y-1">
+                <div class="flex items-center space-x-2">
+                  <h2 class="text-lg font-bold text-white font-display tracking-tight">Carlos Eduardo da Silva</h2>
+                  <span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-sky-400 font-mono text-[11px] font-semibold">CLT (101)</span>
+                  <span class="px-2 py-0.5 rounded bg-emerald-950/40 border border-emerald-800/40 text-accentEmerald font-mono text-[11px]">Vinculo Ativo</span>
+                </div>
+                <div class="text-xs text-zinc-400 flex flex-wrap items-center gap-x-3 gap-y-1">
+                  <span>Engenheiro de Software Senior</span>
+                  <span class="text-zinc-600 font-mono">•</span>
+                  <span>Matricula: <strong class="text-zinc-300 font-mono">MAT-0042</strong></span>
+                  <span class="text-zinc-600 font-mono">•</span>
+                  <span>Squad: <strong class="text-zinc-300 font-mono">Core DAG Engine</strong></span>
+                  <span class="text-zinc-600 font-mono">•</span>
+                  <span>Admissao: <strong class="text-zinc-300 font-mono">15/03/2022</strong></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quick Action: Switch back to DP view -->
+            <div class="flex items-center space-x-2 shrink-0">
+              <button onclick="switchView('directory')" class="px-3 py-1.5 rounded bg-surfaceElevated hover:bg-zinc-800 border border-borderSubtle text-xs text-zinc-300 transition-colors flex items-center space-x-1.5">
+                <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+                <span>Voltar ao Painel DP</span>
+              </button>
+              <button onclick="openDrawer(0)" class="px-3 py-1.5 rounded bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-semibold transition-colors flex items-center space-x-1.5">
+                <svg class="w-3.5 h-3.5 text-zinc-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                <span>Ver Meu Holerite Completo</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Personalized Metrics Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
+            <div class="p-3.5 rounded bg-surfaceElevated border border-borderSubtle space-y-1">
+              <div class="text-[11px] text-zinc-400 uppercase font-mono">Salario Liquido Estimado</div>
+              <div class="text-xl font-bold font-mono text-white tabular-nums">R$ 4.814,71</div>
+              <div class="text-[11px] text-emerald-400 font-mono">Comp. 09/2026 • Credito 5o dia util</div>
+            </div>
+
+            <div class="p-3.5 rounded bg-surfaceElevated border border-borderSubtle space-y-1">
+              <div class="text-[11px] text-zinc-400 uppercase font-mono">Total de Beneficios Concedidos</div>
+              <div class="text-xl font-bold font-mono text-accentGold tabular-nums" id="colab-metric-benefits-total">R$ 1.840,00</div>
+              <div class="text-[11px] text-zinc-400 font-mono">VA/VR + VT + Saude/Odonto</div>
+            </div>
+
+            <div class="p-3.5 rounded bg-surfaceElevated border border-borderSubtle space-y-1">
+              <div class="text-[11px] text-zinc-400 uppercase font-mono">Posicao no Leaderboard</div>
+              <div class="text-xl font-bold font-mono text-white flex items-center space-x-2">
+                <span>#3 Geral</span>
+                <span class="text-xs px-2 py-0.5 rounded bg-amber-950/60 border border-amber-800/40 text-accentGold font-mono">942 pts</span>
+              </div>
+              <div class="text-[11px] text-zinc-400 font-mono">Top 6% da organizacao</div>
+            </div>
+
+            <div class="p-3.5 rounded bg-surfaceElevated border border-borderSubtle space-y-1">
+              <div class="text-[11px] text-zinc-400 uppercase font-mono">Central de Chamados</div>
+              <div class="text-xl font-bold font-mono text-white flex items-center space-x-2">
+                <span id="colab-metric-tickets-open">1 em andamento</span>
+              </div>
+              <div class="text-[11px] text-zinc-400 font-mono">Tempo medio de resposta: 2.4h</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Navigation Tabs of Employee Portal -->
+        <div class="flex border-b border-borderSubtle text-xs space-x-2">
+          <button onclick="switchPortalTab('benefits')" id="ptab-btn-benefits" class="py-2.5 px-4 font-semibold border-b-2 border-accentGold text-white transition-colors flex items-center space-x-2">
+            <svg class="w-4 h-4 text-accentGold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span>Beneficios Flexiveis & Autonomia</span>
+          </button>
+          <button onclick="switchPortalTab('tickets')" id="ptab-btn-tickets" class="py-2.5 px-4 font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-colors flex items-center space-x-2">
+            <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+            <span>Central de Chamados & Evidencias</span>
+            <span class="text-[10px] px-1.5 py-0.2 rounded bg-amber-950/60 text-accentGold font-mono" id="badge-open-tickets-count">1</span>
+          </button>
+          <button onclick="switchPortalTab('leaderboard')" id="ptab-btn-leaderboard" class="py-2.5 px-4 font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-colors flex items-center space-x-2">
+            <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            <span>Desempenho & Leaderboard</span>
+          </button>
+        </div>
+
+        <!-- SUB-TAB 1: BENEFICIOS FLEXIVEIS -->
+        <div id="subview-benefits" class="space-y-6">
+
+          <!-- Notice Banner on Cut-Off Rules -->
+          <div class="p-3.5 rounded-lg bg-surfaceElevated border border-borderSubtle flex items-center justify-between text-xs">
+            <div class="flex items-center space-x-3">
+              <div class="w-2 h-2 rounded-full bg-accentGold"></div>
+              <div class="text-zinc-300">
+                <span class="font-semibold text-white">Regra de Fechamento Bitemporal (Cut-Off):</span>
+                <span>As alteracoes de beneficios salvas hoje entrarao em vigor a partir da folha de <strong>Outubro/2026</strong> (Competencia 10/2026), respeitando a data de corte do dia 15.</span>
+              </div>
+            </div>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800 text-zinc-400">Status da Politica: Aberta</span>
+          </div>
+
+          <!-- Benefits Configuration Grid -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+            <!-- Card 1: Vale-Transporte (VT) -->
+            <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-4 flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-accentGold font-mono text-xs">
+                      VT
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-bold text-white">Vale-Transporte</h4>
+                      <p class="text-[11px] text-zinc-400">Lei 7.418/1985 e Dec. 95.247/87</p>
+                    </div>
+                  </div>
+                  <span id="colab-vt-badge" class="px-2 py-0.5 rounded-full border text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border-emerald-800/40">
+                    Ativo
+                  </span>
+                </div>
+
+                <div class="p-3 rounded bg-surfaceElevated border border-borderSubtle space-y-2 text-xs">
+                  <div class="flex items-center justify-between text-zinc-400">
+                    <span>Desconto em Holerite (6%):</span>
+                    <span class="font-mono text-rose-400 font-semibold" id="colab-vt-discount">- R$ 420,00</span>
+                  </div>
+                  <div class="flex items-center justify-between text-zinc-400">
+                    <span>Custo Estimado Tarifas:</span>
+                    <span class="font-mono text-zinc-200">R$ 510,00 / mes</span>
+                  </div>
+                  <div class="flex items-center justify-between text-zinc-400 border-t border-borderSubtle pt-2">
+                    <span>Subsidio Patronal Liquido:</span>
+                    <span class="font-mono text-accentEmerald font-semibold">+ R$ 90,00 / mes</span>
+                  </div>
+                </div>
+
+                <p class="text-[11px] text-zinc-400 leading-relaxed" id="colab-vt-text">
+                  Voce recebe passagens para deslocamento residencia-trabalho com desconto maximo legal de 6% sobre o salario base. O cancelamento exige formalizacao de declaracao de uso de conducao propria ou regime remoto.
+                </p>
+              </div>
+
+              <div class="pt-2">
+                <button onclick="handleVTToggleAction()" id="colab-vt-action-btn" class="w-full px-3 py-2 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-200 border border-borderSubtle text-xs font-semibold transition-colors flex items-center justify-center space-x-1.5">
+                  <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                  <span>Solicitar Cancelamento de VT</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 2: Flexibilizacao VA / VR -->
+            <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-4 flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-accentGold font-mono text-xs">
+                      AL
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-bold text-white">Distribuicao Flexivel VA / VR</h4>
+                      <p class="text-[11px] text-zinc-400">Programa PAT (Lei 14.442/2022)</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full border text-[10px] font-mono text-accentGold bg-amber-950/40 border-amber-800/40">
+                    Parametrico
+                  </span>
+                </div>
+
+                <div class="p-3 rounded bg-surfaceElevated border border-borderSubtle space-y-1.5 text-xs">
+                  <div class="flex items-center justify-between text-zinc-400">
+                    <span>Orcamento Total Disponivel:</span>
+                    <span class="font-mono text-white font-bold">R$ 1.200,00</span>
+                  </div>
+                  <div class="flex items-center justify-between text-zinc-400">
+                    <span>Cartao Refeicao (VR):</span>
+                    <span class="font-mono text-accentEmerald font-bold" id="label-vr-amount">R$ 840,00 (70%)</span>
+                  </div>
+                  <div class="flex items-center justify-between text-zinc-400">
+                    <span>Cartao Alimentacao (VA):</span>
+                    <span class="font-mono text-accentGold font-bold" id="label-va-amount">R$ 360,00 (30%)</span>
+                  </div>
+                </div>
+
+                <!-- Interactive Split Slider -->
+                <div class="space-y-2 pt-1">
+                  <div class="flex items-center justify-between text-[11px] font-mono">
+                    <span class="text-zinc-400">Refeicao: <strong class="text-emerald-400" id="slider-vr-pct">70%</strong></span>
+                    <span class="text-zinc-400">Alimentacao: <strong class="text-amber-400" id="slider-va-pct">30%</strong></span>
+                  </div>
+                  <input type="range" id="split-slider" min="0" max="100" step="10" value="70" oninput="handleSplitSlider(this.value)" class="w-full accent-accentGold cursor-pointer bg-zinc-800 rounded h-1.5">
+                  
+                  <!-- Presets -->
+                  <div class="flex items-center justify-between gap-1 pt-1">
+                    <button onclick="setSplitPreset(100)" class="px-2 py-1 rounded bg-surfaceElevated border border-borderSubtle text-[10px] font-mono text-zinc-300 hover:border-zinc-500">100% VR</button>
+                    <button onclick="setSplitPreset(70)" class="px-2 py-1 rounded bg-surfaceElevated border border-borderSubtle text-[10px] font-mono text-zinc-300 hover:border-zinc-500">70 / 30</button>
+                    <button onclick="setSplitPreset(50)" class="px-2 py-1 rounded bg-surfaceElevated border border-borderSubtle text-[10px] font-mono text-zinc-300 hover:border-zinc-500">50 / 50</button>
+                    <button onclick="setSplitPreset(30)" class="px-2 py-1 rounded bg-surfaceElevated border border-borderSubtle text-[10px] font-mono text-zinc-300 hover:border-zinc-500">30 / 70</button>
+                    <button onclick="setSplitPreset(0)" class="px-2 py-1 rounded bg-surfaceElevated border border-borderSubtle text-[10px] font-mono text-zinc-300 hover:border-zinc-500">100% VA</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <button onclick="saveBenefitsSplit()" class="w-full px-3 py-2 rounded bg-zinc-100 hover:bg-white text-zinc-950 text-xs font-semibold transition-colors flex items-center justify-center space-x-1.5">
+                  <svg class="w-3.5 h-3.5 text-zinc-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                  <span>Salvar Proporcao para Outubro/26</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Card 3: Saude & Odonto -->
+            <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-4 flex flex-col justify-between">
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-8 h-8 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-accentGold font-mono text-xs">
+                      MED
+                    </div>
+                    <div>
+                      <h4 class="text-sm font-bold text-white">Saude e Odontologico</h4>
+                      <p class="text-[11px] text-zinc-400">ANS RN 438 / Apolice Empresarial</p>
+                    </div>
+                  </div>
+                  <span class="px-2 py-0.5 rounded-full border text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border-emerald-800/40">
+                    Vigente
+                  </span>
+                </div>
+
+                <div class="space-y-2 text-xs">
+                  <!-- Health Plan Details -->
+                  <div class="p-3 rounded bg-surfaceElevated border border-borderSubtle space-y-1">
+                    <div class="flex items-center justify-between">
+                      <span class="font-semibold text-white">Bradesco Saude Top Nacional</span>
+                      <span class="text-[10px] font-mono text-emerald-400">Apartamento</span>
+                    </div>
+                    <div class="text-[11px] text-zinc-400 flex items-center justify-between">
+                      <span>Titular + 1 Dependente</span>
+                      <span class="font-mono text-zinc-300">Copart. 20% em consultas</span>
+                    </div>
+                    <div class="text-[10px] text-zinc-500 font-mono pt-0.5">
+                      Dedutivel integral no calculo de IRRF (Lei 9.250/95)
+                    </div>
+                  </div>
+
+                  <!-- Dental Plan Details & Toggle -->
+                  <div class="p-3 rounded bg-surfaceElevated border border-borderSubtle space-y-2">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <div class="font-semibold text-white">OdontoPrev Premium</div>
+                        <div class="text-[11px] text-zinc-400">R$ 38,90 / mes por pessoa</div>
+                      </div>
+                      <button onclick="toggleDentalPlan()" id="colab-dental-btn" class="px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 text-xs font-mono font-medium">
+                        Ativo
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <p class="text-[11px] text-zinc-400 leading-relaxed">
+                  Para adicao de novos dependentes legais ou alteracao de acomodacao, utilize a Central de Chamados anexando a certidao de casamento ou nascimento.
+                </p>
+              </div>
+
+              <div class="pt-2">
+                <button onclick="openNewTicketModal('BENEFICIOS', 'Solicitacao de Alteracao de Dependentes - Plano de Saude')" class="w-full px-3 py-2 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-200 border border-borderSubtle text-xs font-semibold transition-colors flex items-center justify-center space-x-1.5">
+                  <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  <span>Incluir Dependente / Documento</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- History & Audit Trail Table -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold text-white uppercase font-mono tracking-wider">Historico Bitemporal de Escolhas e Solicitacoes</h4>
+              <span class="text-[11px] text-zinc-500 font-mono">Registro auditavel imutavel</span>
+            </div>
+
+            <div class="rounded-lg border border-borderSubtle bg-surface overflow-hidden shadow-sm">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-surfaceElevated text-zinc-400 border-b border-borderSubtle font-mono text-[10px] uppercase tracking-wider">
+                  <tr>
+                    <th class="px-4 py-2.5">Data / Hora</th>
+                    <th class="px-4 py-2.5">Beneficio</th>
+                    <th class="px-4 py-2.5">Alteracao Solicitada</th>
+                    <th class="px-4 py-2.5">Competencia de Efeito</th>
+                    <th class="px-4 py-2.5 text-center">Status</th>
+                    <th class="px-4 py-2.5 text-right">Canal</th>
+                  </tr>
+                </thead>
+                <tbody id="colab-audit-table-body" class="divide-y divide-borderSubtle font-mono text-zinc-300">
+                  <tr class="hover:bg-surfaceElevated/50 transition-colors">
+                    <td class="px-4 py-2.5 text-zinc-400">16/09/2026 09:40</td>
+                    <td class="px-4 py-2.5 font-sans font-medium text-white">Flex VA / VR</td>
+                    <td class="px-4 py-2.5">Ajuste de split para 70% VR / 30% VA</td>
+                    <td class="px-4 py-2.5 text-accentGold">10/2026</td>
+                    <td class="px-4 py-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded-full border text-[10px] text-emerald-400 bg-emerald-950/40 border-emerald-800/40">Efetivado</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-right text-zinc-500">Autoatendimento</td>
+                  </tr>
+                  <tr class="hover:bg-surfaceElevated/50 transition-colors">
+                    <td class="px-4 py-2.5 text-zinc-400">14/08/2026 14:15</td>
+                    <td class="px-4 py-2.5 font-sans font-medium text-white">Plano de Saude</td>
+                    <td class="px-4 py-2.5">Inclusao de Dependente (Filho - Miguel Silva)</td>
+                    <td class="px-4 py-2.5 text-accentGold">09/2026</td>
+                    <td class="px-4 py-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded-full border text-[10px] text-emerald-400 bg-emerald-950/40 border-emerald-800/40">Efetivado</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-right text-zinc-500">Chamado TCK-0899</td>
+                  </tr>
+                  <tr class="hover:bg-surfaceElevated/50 transition-colors">
+                    <td class="px-4 py-2.5 text-zinc-400">10/05/2026 11:20</td>
+                    <td class="px-4 py-2.5 font-sans font-medium text-white">Plano Odontologico</td>
+                    <td class="px-4 py-2.5">Adesao ao Plano OdontoPrev Premium</td>
+                    <td class="px-4 py-2.5 text-accentGold">06/2026</td>
+                    <td class="px-4 py-2.5 text-center">
+                      <span class="px-2 py-0.5 rounded-full border text-[10px] text-emerald-400 bg-emerald-950/40 border-emerald-800/40">Efetivado</span>
+                    </td>
+                    <td class="px-4 py-2.5 text-right text-zinc-500">Autoatendimento</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SUB-TAB 2: CENTRAL DE CHAMADOS & EVIDENCIAS -->
+        <div id="subview-tickets" class="space-y-6 hidden">
+
+          <!-- Header & Toolbar -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-surface p-4 rounded-lg border border-borderSubtle">
+            <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-accentGold font-mono text-xs">
+                SD
+              </div>
+              <div>
+                <h3 class="text-sm font-bold text-white font-display">Central de Atendimento ao Colaborador</h3>
+                <p class="text-xs text-zinc-400">Registre duvidas sobre folha, anexe atestados/evidencias e acompanhe as respostas das equipes internas.</p>
+              </div>
+            </div>
+
+            <div class="flex items-center space-x-2 shrink-0">
+              <button onclick="openNewTicketModal()" class="px-3.5 py-1.5 rounded-md bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs transition-colors flex items-center space-x-1.5 shadow-sm">
+                <svg class="w-3.5 h-3.5 text-zinc-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                <span>Abrir Novo Chamado</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Tickets List Table -->
+          <div class="rounded-lg border border-borderSubtle bg-surface overflow-hidden shadow-sm">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-surfaceElevated text-zinc-400 border-b border-borderSubtle font-mono text-[10px] uppercase tracking-wider">
+                <tr>
+                  <th class="px-4 py-3">Codigo</th>
+                  <th class="px-4 py-3">Categoria / Setor</th>
+                  <th class="px-4 py-3">Assunto</th>
+                  <th class="px-4 py-3">Urgencia</th>
+                  <th class="px-4 py-3">Data Abertura</th>
+                  <th class="px-4 py-3 text-center">Status</th>
+                  <th class="px-4 py-3 text-center">Acao</th>
+                </tr>
+              </thead>
+              <tbody id="tickets-table-body" class="divide-y divide-borderSubtle">
+                <!-- Rendered dynamically via JS -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+        <!-- SUB-TAB 3: DESEMPENHO & LEADERBOARD -->
+        <div id="subview-leaderboard" class="space-y-6 hidden">
+
+          <!-- Performance Overview Card -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-2">
+              <div class="text-[11px] text-zinc-400 uppercase font-mono">Sua Pontuacao Geral</div>
+              <div class="text-3xl font-bold font-mono text-white tabular-nums">942 <span class="text-sm font-normal text-zinc-500">/ 1.000 pts</span></div>
+              <div class="text-xs text-accentEmerald flex items-center space-x-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                <span>+ 24 pts em relacao ao mes anterior</span>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-2">
+              <div class="text-[11px] text-zinc-400 uppercase font-mono">Pontualidade & Assiduidade</div>
+              <div class="text-3xl font-bold font-mono text-accentEmerald tabular-nums">100,0%</div>
+              <div class="text-xs text-zinc-400">Zero faltas injustificadas ou atrasos criticos</div>
+            </div>
+
+            <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-2">
+              <div class="text-[11px] text-zinc-400 uppercase font-mono">Entregas de Sprints & Metas</div>
+              <div class="text-3xl font-bold font-mono text-accentGold tabular-nums">98,5%</div>
+              <div class="text-xs text-zinc-400">12 de 12 epicos concluidos no prazo</div>
+            </div>
+          </div>
+
+          <!-- Leaderboard Table (Safe: zero financial/salary leak) -->
+          <div class="p-5 rounded-lg bg-surface border border-borderSubtle space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="text-sm font-bold text-white font-display">Leaderboard Geral de Desempenho Operacional</h4>
+                <p class="text-xs text-zinc-400">Ranking corporativo calculado com base em entregas, metas de sprint e avaliacao 360º (Conforme LGPD: estritamente anonimizado de valores salariais).</p>
+              </div>
+              <span class="text-[11px] font-mono px-2.5 py-1 rounded bg-surfaceElevated border border-borderSubtle text-accentGold">Competencia: 09/2026</span>
+            </div>
+
+            <div class="rounded-lg border border-borderSubtle overflow-hidden">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-surfaceElevated text-zinc-400 border-b border-borderSubtle font-mono text-[10px] uppercase tracking-wider">
+                  <tr>
+                    <th class="px-4 py-3 text-center w-16">Posicao</th>
+                    <th class="px-4 py-3">Colaborador</th>
+                    <th class="px-4 py-3">Squad / Area</th>
+                    <th class="px-4 py-3 text-right">Score Geral</th>
+                    <th class="px-4 py-3 text-right">Entregas</th>
+                    <th class="px-4 py-3 text-right">Assiduidade</th>
+                    <th class="px-4 py-3 text-center">Nivel</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-borderSubtle font-mono">
+                  <tr class="hover:bg-surfaceElevated/50 transition-colors">
+                    <td class="px-4 py-3 text-center">
+                      <span class="w-6 h-6 rounded-full bg-accentGold/20 border border-accentGold text-accentGold text-xs font-bold inline-flex items-center justify-center">1</span>
+                    </td>
+                    <td class="px-4 py-3 font-sans font-bold text-white">Mariana Souza Alcantara</td>
+                    <td class="px-4 py-3 text-zinc-400">Core Engine Tech Lead</td>
+                    <td class="px-4 py-3 text-right font-bold text-white">980 pts</td>
+                    <td class="px-4 py-3 text-right text-emerald-400">100%</td>
+                    <td class="px-4 py-3 text-right text-zinc-300">100%</td>
+                    <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-accentGold text-[10px]">Diamante</span></td>
+                  </tr>
+                  <tr class="hover:bg-surfaceElevated/50 transition-colors">
+                    <td class="px-4 py-3 text-center">
+                      <span class="w-6 h-6 rounded-full bg-zinc-700 border border-zinc-500 text-zinc-200 text-xs font-bold inline-flex items-center justify-center">2</span>
+                    </td>
+                    <td class="px-4 py-3 font-sans font-bold text-white">Beatriz Lima Barbosa</td>
+                    <td class="px-4 py-3 text-zinc-400">Data Analytics & ETL</td>
+                    <td class="px-4 py-3 text-right font-bold text-white">965 pts</td>
+                    <td class="px-4 py-3 text-right text-emerald-400">99.2%</td>
+                    <td class="px-4 py-3 text-right text-zinc-300">100%</td>
+                    <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-accentGold text-[10px]">Diamante</span></td>
+                  </tr>
+                  <tr class="bg-surfaceElevated/80 border-l-2 border-accentGold transition-colors">
+                    <td class="px-4 py-3 text-center">
+                      <span class="w-6 h-6 rounded-full bg-amber-950/60 border border-amber-800 text-accentGold text-xs font-bold inline-flex items-center justify-center">3</span>
+                    </td>
+                    <td class="px-4 py-3 font-sans font-bold text-white flex items-center space-x-2">
+                      <span>Carlos Eduardo da Silva</span>
+                      <span class="text-[10px] px-1.5 py-0.2 rounded bg-accentGold text-zinc-950 font-bold font-mono">Voce</span>
+                    </td>
+                    <td class="px-4 py-3 text-zinc-400">Core DAG Engine</td>
+                    <td class="px-4 py-3 text-right font-bold text-accentGold">942 pts</td>
+                    <td class="px-4 py-3 text-right text-emerald-400">98.5%</td>
+                    <td class="px-4 py-3 text-right text-zinc-300">100%</td>
+                    <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-accentGold text-[10px]">Ouro</span></td>
+                  </tr>
+                  <tr class="hover:bg-surfaceElevated/50 transition-colors">
+                    <td class="px-4 py-3 text-center text-zinc-500">4</td>
+                    <td class="px-4 py-3 font-sans font-bold text-zinc-300">Rafael Costa Fagundes</td>
+                    <td class="px-4 py-3 text-zinc-400">DevOps & Cloud Infra</td>
+                    <td class="px-4 py-3 text-right text-zinc-300">918 pts</td>
+                    <td class="px-4 py-3 text-right text-emerald-400">97.0%</td>
+                    <td class="px-4 py-3 text-right text-zinc-300">98.5%</td>
+                    <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-400 text-[10px]">Ouro</span></td>
+                  </tr>
+                  <tr class="hover:bg-surfaceElevated/50 transition-colors">
+                    <td class="px-4 py-3 text-center text-zinc-500">5</td>
+                    <td class="px-4 py-3 font-sans font-bold text-zinc-300">Joao Paulo Santos</td>
+                    <td class="px-4 py-3 text-zinc-400">Product & UX Systems</td>
+                    <td class="px-4 py-3 text-right text-zinc-300">895 pts</td>
+                    <td class="px-4 py-3 text-right text-emerald-400">96.5%</td>
+                    <td class="px-4 py-3 text-right text-zinc-300">100%</td>
+                    <td class="px-4 py-3 text-center"><span class="px-2 py-0.5 rounded bg-zinc-900 border border-zinc-700 text-zinc-400 text-[10px]">Prata</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
       </div>
 
     </main>
@@ -846,6 +1361,175 @@
     </div>
   </div>
 
+  <!-- MODAL: Cancelamento de Vale-Transporte (Termo de Renuncia Legal) -->
+  <div id="modal-vt-cancel" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-lg bg-surface border border-borderSubtle rounded-lg shadow-2xl overflow-hidden text-xs space-y-4 p-6">
+      <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-7 h-7 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-accentGold font-mono text-xs">
+            VT
+          </div>
+          <h3 class="text-sm font-bold text-white font-display">Termo de Renuncia e Cancelamento de Vale-Transporte</h3>
+        </div>
+        <button onclick="closeVTCancelModal()" class="text-zinc-400 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-zinc-300 leading-relaxed text-xs">
+        <p>
+          Em conformidade com a <strong>Lei nº 7.418/1985</strong> e o <strong>Decreto nº 95.247/1987</strong>, o Vale-Transporte destina-se estritamente ao deslocamento residencia-trabalho e vice-versa por meio do sistema de transporte publico coletivo.
+        </p>
+
+        <div class="p-3.5 rounded bg-surfaceElevated border border-borderSubtle space-y-2">
+          <span class="font-mono text-[11px] text-accentGold font-bold">Declaracao Formal do Colaborador:</span>
+          <p class="text-[11px] text-zinc-300">
+            "Declaro sob as penas da lei que, a partir da presente data, opto pela nao utilizacao do beneficio do Vale-Transporte concedido pela empresa Tech Solutions Brasil Ltda, tendo em vista que me desloco por meios proprios (veiculo proprio, a pe ou carona) ou exerco minhas funcoes em regime de teletrabalho integral. Estou ciente de que o desconto legal de ate 6% sobre o salario base sera cessado na competencia subsequente."
+          </p>
+        </div>
+
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-mono text-zinc-400">Motivo principal do cancelamento:</label>
+          <select id="vt-cancel-reason" class="w-full px-3 py-2 rounded bg-background border border-borderSubtle text-xs text-zinc-200 focus:outline-none focus:border-accentGold">
+            <option value="veiculo_proprio">Utilizacao de veiculo automotor proprio / motocicleta</option>
+            <option value="teletrabalho">Atuacao em regime de teletrabalho / home office</option>
+            <option value="proximidade">Residencia proxima ao local de trabalho (deslocamento a pe/bicicleta)</option>
+            <option value="carona">Compartilhamento de carona regular</option>
+          </select>
+        </div>
+
+        <div class="flex items-start space-x-2 pt-1">
+          <input type="checkbox" id="vt-terms-check" class="mt-0.5 accent-accentGold cursor-pointer">
+          <label for="vt-terms-check" class="text-[11px] text-zinc-400 cursor-pointer">
+            Li e concordo com os termos. Declaro que as informacoes prestadas sao a expressao da verdade.
+          </label>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2.5 pt-3 border-t border-borderSubtle">
+        <button onclick="closeVTCancelModal()" class="px-3.5 py-1.5 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-300 border border-borderSubtle text-xs font-medium">Cancelar</button>
+        <button onclick="confirmVTCancel()" class="px-3.5 py-1.5 rounded bg-rose-600 hover:bg-rose-500 text-white font-semibold text-xs transition-colors">Confirmar Cancelamento de VT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Abertura de Novo Chamado (Service Desk) -->
+  <div id="modal-new-ticket" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="w-full max-w-xl bg-surface border border-borderSubtle rounded-lg shadow-2xl overflow-hidden text-xs space-y-4 p-6">
+      <div class="flex items-center justify-between border-b border-borderSubtle pb-3">
+        <div class="flex items-center space-x-2.5">
+          <div class="w-7 h-7 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center text-accentGold font-mono text-xs">
+            +
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-white font-display">Abertura de Chamado Interno</h3>
+            <p class="text-[11px] text-zinc-400">Direcione sua solicitacao aos setores responsaveis</p>
+          </div>
+        </div>
+        <button onclick="closeNewTicketModal()" class="text-zinc-400 hover:text-white">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-[11px] font-mono text-zinc-400 uppercase">Categoria / Setor:</label>
+            <select id="ticket-category-select" class="w-full px-3 py-2 rounded bg-background border border-borderSubtle text-xs text-zinc-200 focus:outline-none focus:border-accentGold">
+              <option value="BENEFICIOS">Beneficios & Convenios (DP/RH)</option>
+              <option value="HOLERITE">Duvidas de Holerite / Folha (DP)</option>
+              <option value="PONTO">Ponto Eletronico & Frequencia (DP)</option>
+              <option value="FERIAS">Ferias & Afastamentos (RH)</option>
+              <option value="TI_ACESSO">TI & Acesso a Sistemas (TI Ops)</option>
+              <option value="APOIO_GERAL">Apoio Geral e Certidoes (DP)</option>
+            </select>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-[11px] font-mono text-zinc-400 uppercase">Nivel de Urgencia:</label>
+            <select id="ticket-urgency-select" class="w-full px-3 py-2 rounded bg-background border border-borderSubtle text-xs text-zinc-200 focus:outline-none focus:border-accentGold">
+              <option value="MEDIA">Media (SLA normal: 24h)</option>
+              <option value="BAIXA">Baixa (SLA: 48h)</option>
+              <option value="ALTA">Alta (SLA prioritario: 8h)</option>
+              <option value="CRITICA">Critica / Emergencial (SLA: 4h)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[11px] font-mono text-zinc-400 uppercase">Assunto Resumido:</label>
+          <input type="text" id="ticket-subject-input" placeholder="Ex: Inclusao de certidao de dependente no plano de saude" class="w-full px-3 py-2 rounded bg-background border border-borderSubtle text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-accentGold">
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-[11px] font-mono text-zinc-400 uppercase">Descricao Detalhada:</label>
+          <textarea id="ticket-desc-input" rows="4" placeholder="Descreva com precisao o que ocorreu, datas, valores ou especificacoes necessarias..." class="w-full px-3 py-2 rounded bg-background border border-borderSubtle text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-accentGold custom-scrollbar"></textarea>
+        </div>
+
+        <!-- Attachment Upload Field -->
+        <div class="space-y-1.5">
+          <label class="text-[11px] font-mono text-zinc-400 uppercase">Anexar Documentos ou Evidencias (PDF, JPG, PNG):</label>
+          <div class="border border-dashed border-borderSubtle hover:border-zinc-500 rounded-lg p-3 text-center cursor-pointer transition-colors bg-surfaceElevated/50" onclick="document.getElementById('ticket-file-input').click()">
+            <input type="file" id="ticket-file-input" class="hidden" multiple onchange="handleTicketFileInput(this)">
+            <div class="space-y-1">
+              <svg class="w-6 h-6 mx-auto text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+              <div class="text-[11px] text-zinc-400">Clique para selecionar arquivos ou comprovantes</div>
+              <div class="text-[10px] text-zinc-500 font-mono">Max: 10MB por arquivo • Criptografia SHA-256</div>
+            </div>
+          </div>
+          <div id="ticket-attachments-list" class="space-y-1 pt-1"></div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-end space-x-2.5 pt-3 border-t border-borderSubtle">
+        <button onclick="closeNewTicketModal()" class="px-3.5 py-1.5 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-300 border border-borderSubtle text-xs font-medium">Cancelar</button>
+        <button onclick="submitNewTicket()" class="px-4 py-1.5 rounded bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs transition-colors">Registrar Chamado</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DRAWER / MODAL: Interacao e Acompanhamento de Chamado -->
+  <div id="drawer-ticket-details" class="fixed inset-y-0 right-0 w-full max-w-xl bg-surface border-l border-borderSubtle shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col text-xs">
+    <div class="px-6 py-4 border-b border-borderSubtle flex items-center justify-between bg-surfaceElevated/50">
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded bg-zinc-800 border border-zinc-700 flex items-center justify-center font-bold text-xs font-mono text-accentGold" id="ticket-modal-code">
+          TCK-00
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h3 class="text-sm font-bold text-white tracking-tight" id="ticket-modal-subject">Assunto</h3>
+            <span class="text-[10px] px-2 py-0.5 rounded-full border font-mono" id="ticket-modal-status">Status</span>
+          </div>
+          <p class="text-[11px] text-zinc-400 mt-0.5" id="ticket-modal-meta">Categoria • Abertura</p>
+        </div>
+      </div>
+      <button onclick="closeTicketDetails()" class="p-1.5 rounded text-zinc-400 hover:text-white hover:bg-surfaceElevated transition-colors">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <!-- Ticket Description & Attachments Area -->
+    <div class="p-6 border-b border-borderSubtle space-y-3 bg-surfaceElevated/30">
+      <div class="text-[11px] font-mono text-zinc-500 uppercase font-semibold">Solicitacao Inicial:</div>
+      <p class="text-zinc-300 leading-relaxed" id="ticket-modal-desc"></p>
+      <div id="ticket-modal-attachments" class="space-y-1 pt-1"></div>
+    </div>
+
+    <!-- Interaction Timeline Stream -->
+    <div class="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar" id="ticket-timeline-stream">
+      <!-- Injected by JS -->
+    </div>
+
+    <!-- Reply Area -->
+    <div class="p-4 border-t border-borderSubtle bg-surfaceElevated/50 space-y-2">
+      <textarea id="ticket-reply-text" rows="2" placeholder="Digite sua resposta, esclarecimento ou anexo de informacoes..." class="w-full px-3 py-2 rounded bg-background border border-borderSubtle text-xs text-zinc-200 placeholder-zinc-500 focus:outline-none focus:border-accentGold custom-scrollbar"></textarea>
+      <div class="flex items-center justify-between">
+        <span class="text-[10px] text-zinc-500 font-mono">SLA em vigor: Resposta esperada em ate 24h</span>
+        <button onclick="sendTicketReply()" class="px-3.5 py-1.5 rounded bg-zinc-100 hover:bg-white text-zinc-950 font-semibold text-xs transition-colors">Enviar Resposta</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Authentic Brazilian Payroll Dataset
     const dataset = [
@@ -1084,15 +1768,34 @@
     }
 
     function switchView(viewId) {
-      ['directory', 'simulator', 'esocial', 'analyst'].forEach(v => {
-        document.getElementById(`view-${v}`).classList.add('hidden');
+      ['directory', 'simulator', 'esocial', 'analyst', 'employee-portal'].forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.add('hidden');
         const navBtn = document.getElementById(`nav-${v}`);
         if (navBtn) {
           navBtn.className = "w-full flex items-center space-x-2.5 px-2.5 py-2 text-xs font-medium rounded-md text-zinc-400 hover:bg-surfaceElevated hover:text-zinc-200 transition-all";
         }
       });
 
-      document.getElementById(`view-${viewId}`).classList.remove('hidden');
+      const dpHeader = document.getElementById('dp-header-section');
+      const headerEmpBtn = document.getElementById('header-employee-btn');
+
+      if (viewId === 'employee-portal') {
+        if (dpHeader) dpHeader.classList.add('hidden');
+        if (headerEmpBtn) {
+          headerEmpBtn.className = "hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-zinc-100 text-zinc-950 font-bold border border-white text-xs transition-colors shadow-sm";
+        }
+        renderTicketsTable();
+      } else {
+        if (dpHeader) dpHeader.classList.remove('hidden');
+        if (headerEmpBtn) {
+          headerEmpBtn.className = "hidden sm:flex items-center space-x-1.5 px-3 py-1.5 rounded-md bg-surfaceElevated border border-borderSubtle hover:border-zinc-500 text-xs text-zinc-200 transition-colors";
+        }
+      }
+
+      const targetView = document.getElementById(`view-${viewId}`);
+      if (targetView) targetView.classList.remove('hidden');
+
       const activeBtn = document.getElementById(`nav-${viewId}`);
       if (activeBtn) {
         activeBtn.className = "w-full flex items-center justify-between px-2.5 py-2 text-xs font-semibold rounded-md bg-surfaceElevated text-white border border-borderSubtle transition-all";
@@ -1321,6 +2024,553 @@
       a.href = url;
       a.download = "REMESSA_202609.REM";
       a.click();
+    }
+
+    // ==========================================
+    // EMPLOYEE SELF-SERVICE PORTAL LOGIC
+    // ==========================================
+
+    let colabVTActive = true;
+    let colabDentalActive = true;
+    let currentVRPct = 70;
+    let currentVAPct = 30;
+    const TOTAL_MEAL_BUDGET = 1200.00;
+
+    let attachedFilesForNewTicket = [];
+    let currentActiveTicketId = null;
+
+    let ticketsDataset = [
+      {
+        id: "TCK-2026-0904",
+        category: "BENEFICIOS",
+        categoryLabel: "Beneficios & Convenios",
+        targetDept: "DP / Beneficios",
+        subject: "Envio de comprovante de vacinacao do dependente para inclusao no plano de saude",
+        urgency: "MEDIA",
+        urgencyColor: "amber",
+        createdAt: "15/09/2026 10:30",
+        status: "EM ATENDIMENTO",
+        statusColor: "amber",
+        description: "Conforme orientado pela analista de beneficios corporativos, estou encaminhando o comprovante de vacinacao e a certidao de nascimento atualizada do meu filho Miguel para conclusao do cadastro junto a Bradesco Saude.",
+        attachments: [
+          { name: "carteira_vacinacao_miguel.pdf", size: "1.4 MB", hash: "a3f890c29d10e..." },
+          { name: "certidao_nascimento_miguel.pdf", size: "2.1 MB", hash: "f7c90b21a887d..." }
+        ],
+        interactions: [
+          {
+            author: "Carlos Eduardo da Silva",
+            role: "Colaborador",
+            time: "15/09/2026 10:30",
+            text: "Ola equipe de DP, estou anexando os documentos solicitados para a inclusao do meu dependente no plano Bradesco Saude Top Nacional. Podem confirmar o recebimento e o prazo de ativacao?"
+          },
+          {
+            author: "Juliana Santos (DP)",
+            role: "Analista de Departamento Pessoal",
+            time: "15/09/2026 14:20",
+            text: "Ola Carlos! Documentos conferidos e validados com sucesso. Ja submetemos o lote de movimentacao cadastral para a corretora da operadora. O prazo de emissao da carteirinha digital e de ate 5 dias uteis."
+          }
+        ]
+      },
+      {
+        id: "TCK-2026-0812",
+        category: "HOLERITE",
+        categoryLabel: "Folha & Holerite",
+        targetDept: "DP / Folha",
+        subject: "Esclarecimento de reflexos de DSR sobre horas extras noturnas de Agosto",
+        urgency: "MEDIA",
+        urgencyColor: "zinc",
+        createdAt: "28/08/2026 11:15",
+        status: "CONCLUIDO",
+        statusColor: "emerald",
+        description: "Gostaria de entender a formula de calculo do DSR da rubrica 1035 referente as 14h noturnas executadas na sprint de fechamento.",
+        attachments: [],
+        interactions: [
+          {
+            author: "Carlos Eduardo da Silva",
+            role: "Colaborador",
+            time: "28/08/2026 11:15",
+            text: "Bom dia, time. Poderiam me detalhar a divisao de dias uteis e domingos/feriados aplicada no calculo do DSR de horas noturnas?"
+          },
+          {
+            author: "Marcio Roberto (DP)",
+            role: "Especialista em Folha de Pagamento",
+            time: "29/08/2026 09:40",
+            text: "Ola Carlos. Conforme a Lei 605/49 e Sumula 172 do TST, o calculo foi: (Total de Adicional Noturno / 25 dias uteis) x 5 domingos e feriados do mes de Agosto. Memoria de calculo conferida centavo a centavo pelo motor ThPay."
+          },
+          {
+            author: "Carlos Eduardo da Silva",
+            role: "Colaborador",
+            time: "29/08/2026 10:05",
+            text: "Perfeito, muito claro. Chamado pode ser encerrado. Obrigado!"
+          }
+        ]
+      },
+      {
+        id: "TCK-2026-0701",
+        category: "BENEFICIOS",
+        categoryLabel: "Beneficios & Convenios",
+        targetDept: "RH / Operacoes",
+        subject: "Segunda via de carteirinha fisica OdontoPrev",
+        urgency: "BAIXA",
+        urgencyColor: "zinc",
+        createdAt: "10/07/2026 16:00",
+        status: "CONCLUIDO",
+        statusColor: "emerald",
+        description: "Perdi a via fisica da carteirinha odontologica e a clinica local solicitou comprovante.",
+        attachments: [],
+        interactions: [
+          {
+            author: "Carlos Eduardo da Silva",
+            role: "Colaborador",
+            time: "10/07/2026 16:00",
+            text: "Solicito segunda via da carteirinha OdontoPrev."
+          },
+          {
+            author: "RH Atendimento",
+            role: "Analista de RH",
+            time: "11/07/2026 10:15",
+            text: "Ola Carlos! Voce tambem pode utilizar a carteirinha digital no app OdontoPrev com seu CPF. De todo modo, solicitamos a emissao de nova via fisica, que chegara na recepcao da empresa em 7 dias."
+          }
+        ]
+      }
+    ];
+
+    function switchPortalTab(tabId) {
+      ['benefits', 'tickets', 'leaderboard'].forEach(t => {
+        const view = document.getElementById(`subview-${t}`);
+        const btn = document.getElementById(`ptab-btn-${t}`);
+        if (view) view.classList.add('hidden');
+        if (btn) {
+          btn.className = "py-2.5 px-4 font-medium text-zinc-400 hover:text-zinc-200 border-b-2 border-transparent transition-colors flex items-center space-x-2";
+          const icon = btn.querySelector('svg');
+          if (icon) icon.className = "w-4 h-4 text-zinc-400";
+        }
+      });
+
+      const activeView = document.getElementById(`subview-${tabId}`);
+      const activeBtn = document.getElementById(`ptab-btn-${tabId}`);
+      if (activeView) activeView.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.className = "py-2.5 px-4 font-semibold border-b-2 border-accentGold text-white transition-colors flex items-center space-x-2";
+        const icon = activeBtn.querySelector('svg');
+        if (icon) icon.className = "w-4 h-4 text-accentGold";
+      }
+
+      if (tabId === 'tickets') {
+        renderTicketsTable();
+      }
+    }
+
+    // --- VA/VR Split Handlers ---
+    function handleSplitSlider(val) {
+      currentVRPct = parseInt(val, 10);
+      currentVAPct = 100 - currentVRPct;
+      updateSplitUI();
+    }
+
+    function setSplitPreset(vrVal) {
+      document.getElementById('split-slider').value = vrVal;
+      handleSplitSlider(vrVal);
+    }
+
+    function updateSplitUI() {
+      const vrAmount = (TOTAL_MEAL_BUDGET * (currentVRPct / 100)).toFixed(2);
+      const vaAmount = (TOTAL_MEAL_BUDGET * (currentVAPct / 100)).toFixed(2);
+
+      document.getElementById('slider-vr-pct').innerText = `${currentVRPct}%`;
+      document.getElementById('slider-va-pct').innerText = `${currentVAPct}%`;
+      document.getElementById('label-vr-amount').innerText = `R$ ${vrAmount.replace('.', ',')} (${currentVRPct}%)`;
+      document.getElementById('label-va-amount').innerText = `R$ ${vaAmount.replace('.', ',')} (${currentVAPct}%)`;
+    }
+
+    function saveBenefitsSplit() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      
+      const tbody = document.getElementById('colab-audit-table-body');
+      const tr = document.createElement('tr');
+      tr.className = "hover:bg-surfaceElevated/50 transition-colors bg-accentGold/5";
+      tr.innerHTML = `
+        <td class="px-4 py-2.5 text-zinc-400 font-mono">${dateStr}</td>
+        <td class="px-4 py-2.5 font-sans font-medium text-white">Flex VA / VR</td>
+        <td class="px-4 py-2.5 font-mono">Ajuste de split para ${currentVRPct}% VR / ${currentVAPct}% VA</td>
+        <td class="px-4 py-2.5 font-mono text-accentGold">10/2026</td>
+        <td class="px-4 py-2.5 text-center">
+          <span class="px-2 py-0.5 rounded-full border text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border-emerald-800/40">Efetivado</span>
+        </td>
+        <td class="px-4 py-2.5 text-right font-mono text-zinc-500">Autoatendimento</td>
+      `;
+      if (tbody.firstChild) {
+        tbody.insertBefore(tr, tbody.firstChild);
+      } else {
+        tbody.appendChild(tr);
+      }
+
+      alert(`Preferencia de Beneficio Salva com Sucesso!\n- Cartao Refeicao (VR): ${currentVRPct}%\n- Cartao Alimentacao (VA): ${currentVAPct}%\nVigencia: Folha de Outubro/2026 (Competencia 10/2026).`);
+    }
+
+    // --- Vale-Transporte Handlers ---
+    function handleVTToggleAction() {
+      if (colabVTActive) {
+        openVTCancelModal();
+      } else {
+        reactivateVT();
+      }
+    }
+
+    function openVTCancelModal() {
+      document.getElementById('modal-vt-cancel').classList.remove('hidden');
+      document.getElementById('vt-terms-check').checked = false;
+    }
+
+    function closeVTCancelModal() {
+      document.getElementById('modal-vt-cancel').classList.add('hidden');
+    }
+
+    function confirmVTCancel() {
+      const checked = document.getElementById('vt-terms-check').checked;
+      if (!checked) {
+        alert("E obrigatorio marcar a caixa confirmando a declaracao formal de termos de renuncia para cancelamento do Vale-Transporte.");
+        return;
+      }
+
+      const reason = document.getElementById('vt-cancel-reason').value;
+      colabVTActive = false;
+
+      // Update UI
+      const badge = document.getElementById('colab-vt-badge');
+      badge.className = "px-2 py-0.5 rounded-full border text-[10px] font-mono text-rose-400 bg-rose-950/40 border-rose-800/40";
+      badge.innerText = "Cancelado (Opt-out)";
+
+      document.getElementById('colab-vt-discount').innerText = "R$ 0,00 (Isento)";
+      document.getElementById('colab-vt-discount').className = "font-mono text-zinc-400";
+
+      const actionBtn = document.getElementById('colab-vt-action-btn');
+      actionBtn.innerHTML = `
+        <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <span>Reativar Beneficio de VT</span>
+      `;
+      actionBtn.className = "w-full px-3 py-2 rounded bg-emerald-950/60 hover:bg-emerald-900/80 text-emerald-300 border border-emerald-700/50 text-xs font-semibold transition-colors flex items-center justify-center space-x-1.5";
+
+      // Add to audit table
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      const tbody = document.getElementById('colab-audit-table-body');
+      const tr = document.createElement('tr');
+      tr.className = "hover:bg-surfaceElevated/50 transition-colors bg-rose-950/10";
+      tr.innerHTML = `
+        <td class="px-4 py-2.5 text-zinc-400 font-mono">${dateStr}</td>
+        <td class="px-4 py-2.5 font-sans font-medium text-white">Vale-Transporte</td>
+        <td class="px-4 py-2.5 font-mono">Cancelamento formal de VT (${reason})</td>
+        <td class="px-4 py-2.5 font-mono text-accentGold">10/2026</td>
+        <td class="px-4 py-2.5 text-center">
+          <span class="px-2 py-0.5 rounded-full border text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border-emerald-800/40">Efetivado</span>
+        </td>
+        <td class="px-4 py-2.5 text-right font-mono text-zinc-500">Autoatendimento</td>
+      `;
+      tbody.insertBefore(tr, tbody.firstChild);
+
+      // Recalculate benefits total metric
+      updateTotalBenefitsMetric();
+
+      closeVTCancelModal();
+      alert("Vale-Transporte cancelado com sucesso.\nO desconto de ate 6% no holerite sera cessado a partir da competencia 10/2026 conforme declaracao formal registrada.");
+    }
+
+    function reactivateVT() {
+      colabVTActive = true;
+
+      const badge = document.getElementById('colab-vt-badge');
+      badge.className = "px-2 py-0.5 rounded-full border text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border-emerald-800/40";
+      badge.innerText = "Ativo";
+
+      document.getElementById('colab-vt-discount').innerText = "- R$ 420,00";
+      document.getElementById('colab-vt-discount').className = "font-mono text-rose-400 font-semibold";
+
+      const actionBtn = document.getElementById('colab-vt-action-btn');
+      actionBtn.innerHTML = `
+        <svg class="w-3.5 h-3.5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        <span>Solicitar Cancelamento de VT</span>
+      `;
+      actionBtn.className = "w-full px-3 py-2 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-200 border border-borderSubtle text-xs font-semibold transition-colors flex items-center justify-center space-x-1.5";
+
+      updateTotalBenefitsMetric();
+      alert("Beneficio de Vale-Transporte reativado para a competencia 10/2026.");
+    }
+
+    function toggleDentalPlan() {
+      colabDentalActive = !colabDentalActive;
+      const btn = document.getElementById('colab-dental-btn');
+      if (colabDentalActive) {
+        btn.className = "px-2.5 py-1 rounded bg-emerald-950/60 border border-emerald-800/40 text-emerald-400 text-xs font-mono font-medium";
+        btn.innerText = "Ativo";
+      } else {
+        btn.className = "px-2.5 py-1 rounded bg-zinc-900 border border-zinc-700 text-zinc-400 text-xs font-mono font-medium";
+        btn.innerText = "Inativo (Opt-out)";
+      }
+      updateTotalBenefitsMetric();
+    }
+
+    function updateTotalBenefitsMetric() {
+      let total = TOTAL_MEAL_BUDGET; // 1200
+      if (colabVTActive) total += 510; // Custo VT
+      total += 280; // Saude
+      if (colabDentalActive) total += 38.90; // Odonto
+
+      const el = document.getElementById('colab-metric-benefits-total');
+      if (el) el.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    // --- Tickets Service Desk Handlers ---
+    function renderTicketsTable() {
+      const tbody = document.getElementById('tickets-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      let openCount = 0;
+
+      ticketsDataset.forEach((ticket) => {
+        if (ticket.status !== 'CONCLUIDO' && ticket.status !== 'CLOSED') {
+          openCount++;
+        }
+
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-surfaceElevated/70 transition-colors border-b border-borderSubtle";
+
+        let statusBadge = `<span class="px-2 py-0.5 rounded-full border text-[10px] font-mono text-accentGold bg-amber-950/40 border-amber-800/40">${ticket.status}</span>`;
+        if (ticket.status === 'CONCLUIDO') {
+          statusBadge = `<span class="px-2 py-0.5 rounded-full border text-[10px] font-mono text-emerald-400 bg-emerald-950/40 border-emerald-800/40">Concluido</span>`;
+        }
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono text-accentGold font-bold">${ticket.id}</td>
+          <td class="px-4 py-3">
+            <div class="font-medium text-white">${ticket.categoryLabel}</div>
+            <div class="text-[10px] text-zinc-500 font-mono">Fila: ${ticket.targetDept}</div>
+          </td>
+          <td class="px-4 py-3">
+            <div class="font-medium text-zinc-200">${ticket.subject}</div>
+            <div class="text-[10px] text-zinc-500 truncate max-w-xs">${ticket.description}</div>
+          </td>
+          <td class="px-4 py-3 font-mono text-zinc-400 text-[11px]">${ticket.urgency}</td>
+          <td class="px-4 py-3 font-mono text-zinc-400 text-[11px]">${ticket.createdAt}</td>
+          <td class="px-4 py-3 text-center">${statusBadge}</td>
+          <td class="px-4 py-3 text-center">
+            <button onclick="openTicketDetails('${ticket.id}')" class="px-2.5 py-1 rounded bg-surfaceElevated hover:bg-zinc-800 text-zinc-300 border border-borderSubtle text-[11px] font-semibold transition-colors">
+              ${ticket.status === 'CONCLUIDO' ? 'Historico' : 'Acompanhar'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const badgeCount = document.getElementById('badge-open-tickets-count');
+      if (badgeCount) badgeCount.innerText = openCount;
+
+      const metricTicketsOpen = document.getElementById('colab-metric-tickets-open');
+      if (metricTicketsOpen) metricTicketsOpen.innerText = `${openCount} em andamento`;
+    }
+
+    function openNewTicketModal(presetCategory, presetSubject) {
+      document.getElementById('modal-new-ticket').classList.remove('hidden');
+      if (presetCategory) {
+        document.getElementById('ticket-category-select').value = presetCategory;
+      }
+      if (presetSubject) {
+        document.getElementById('ticket-subject-input').value = presetSubject;
+      }
+      attachedFilesForNewTicket = [];
+      document.getElementById('ticket-attachments-list').innerHTML = '';
+      document.getElementById('ticket-desc-input').value = '';
+    }
+
+    function closeNewTicketModal() {
+      document.getElementById('modal-new-ticket').classList.add('hidden');
+    }
+
+    function handleTicketFileInput(input) {
+      const listEl = document.getElementById('ticket-attachments-list');
+      listEl.innerHTML = '';
+      attachedFilesForNewTicket = [];
+
+      if (input.files) {
+        for (let i = 0; i < input.files.length; i++) {
+          const f = input.files[i];
+          attachedFilesForNewTicket.push({
+            name: f.name,
+            size: (f.size / 1024).toFixed(1) + " KB",
+            hash: "sha256_" + Math.random().toString(36).substring(2, 10)
+          });
+
+          const div = document.createElement('div');
+          div.className = "flex items-center justify-between px-2.5 py-1 rounded bg-surfaceElevated text-[10px] font-mono text-zinc-300 border border-borderSubtle";
+          div.innerHTML = `
+            <span>${f.name} (${(f.size / 1024).toFixed(1)} KB)</span>
+            <span class="text-accentEmerald">Pronto</span>
+          `;
+          listEl.appendChild(div);
+        }
+      }
+    }
+
+    function submitNewTicket() {
+      const category = document.getElementById('ticket-category-select').value;
+      const urgency = document.getElementById('ticket-urgency-select').value;
+      const subject = document.getElementById('ticket-subject-input').value.trim();
+      const desc = document.getElementById('ticket-desc-input').value.trim();
+
+      if (!subject || !desc) {
+        alert("Por favor, preencha o assunto e a descricao detalhada do chamado.");
+        return;
+      }
+
+      const now = new Date();
+      const codeNumber = String(ticketsDataset.length + 905).padStart(4, '0');
+      const ticketId = `TCK-2026-${codeNumber}`;
+      const dateStr = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+      let catLabel = "Geral";
+      let dept = "DP";
+      if (category === 'BENEFICIOS') { catLabel = "Beneficios & Convenios"; dept = "DP / Beneficios"; }
+      if (category === 'HOLERITE') { catLabel = "Folha & Holerite"; dept = "DP / Folha"; }
+      if (category === 'PONTO') { catLabel = "Ponto Eletronico"; dept = "DP / Ponto"; }
+      if (category === 'FERIAS') { catLabel = "Ferias & Afastamentos"; dept = "RH / Operacoes"; }
+      if (category === 'TI_ACESSO') { catLabel = "TI & Acessos"; dept = "TI Ops"; }
+      if (category === 'APOIO_GERAL') { catLabel = "Apoio Geral e Certidoes"; dept = "DP"; }
+
+      const newTicket = {
+        id: ticketId,
+        category: category,
+        categoryLabel: catLabel,
+        targetDept: dept,
+        subject: subject,
+        urgency: urgency,
+        urgencyColor: "amber",
+        createdAt: dateStr,
+        status: "EM ATENDIMENTO",
+        statusColor: "amber",
+        description: desc,
+        attachments: [...attachedFilesForNewTicket],
+        interactions: [
+          {
+            author: "Carlos Eduardo da Silva",
+            role: "Colaborador",
+            time: dateStr,
+            text: desc
+          },
+          {
+            author: "Sistema ThPay Dispatcher",
+            role: "Roteamento Automatico",
+            time: dateStr,
+            text: `Chamado protocolado e roteado para a fila do setor: ${dept}. O SLA regulamentar para resposta inicial e de 24 horas.`
+          }
+        ]
+      };
+
+      ticketsDataset.unshift(newTicket);
+      renderTicketsTable();
+      closeNewTicketModal();
+      alert(`Chamado registrado com sucesso sob o protocolo ${ticketId}.\nA equipe responsavel foi notificada.`);
+    }
+
+    function openTicketDetails(ticketId) {
+      currentActiveTicketId = ticketId;
+      const ticket = ticketsDataset.find(t => t.id === ticketId);
+      if (!ticket) return;
+
+      document.getElementById('ticket-modal-code').innerText = ticket.id;
+      document.getElementById('ticket-modal-subject').innerText = ticket.subject;
+      document.getElementById('ticket-modal-status').innerText = ticket.status;
+      document.getElementById('ticket-modal-status').className = ticket.status === 'CONCLUIDO' 
+        ? "text-[10px] px-2 py-0.5 rounded-full border font-mono text-emerald-400 bg-emerald-950/40 border-emerald-800/40"
+        : "text-[10px] px-2 py-0.5 rounded-full border font-mono text-accentGold bg-amber-950/40 border-amber-800/40";
+
+      document.getElementById('ticket-modal-meta').innerText = `${ticket.categoryLabel} • Roteado para: ${ticket.targetDept} • Abertura: ${ticket.createdAt}`;
+      document.getElementById('ticket-modal-desc').innerText = ticket.description;
+
+      // Render attachments
+      const attachBox = document.getElementById('ticket-modal-attachments');
+      attachBox.innerHTML = '';
+      if (ticket.attachments && ticket.attachments.length > 0) {
+        attachBox.innerHTML = `<div class="text-[10px] font-mono text-zinc-500 uppercase">Documentos / Evidencias Anexadas:</div>`;
+        ticket.attachments.forEach(att => {
+          const el = document.createElement('div');
+          el.className = "flex items-center justify-between px-2.5 py-1.5 rounded bg-surface border border-borderSubtle text-[11px] font-mono text-zinc-300";
+          el.innerHTML = `
+            <div class="flex items-center space-x-2">
+              <svg class="w-3.5 h-3.5 text-accentGold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"/></svg>
+              <span>${att.name} (${att.size})</span>
+            </div>
+            <span class="text-[10px] text-zinc-500">${att.hash || 'Valido'}</span>
+          `;
+          attachBox.appendChild(el);
+        });
+      }
+
+      renderTicketTimeline(ticket);
+
+      const drawer = document.getElementById('drawer-ticket-details');
+      drawer.classList.remove('translate-x-full');
+      document.getElementById('drawer-overlay').classList.remove('opacity-0', 'pointer-events-none');
+    }
+
+    function renderTicketTimeline(ticket) {
+      const stream = document.getElementById('ticket-timeline-stream');
+      stream.innerHTML = '';
+
+      ticket.interactions.forEach(inter => {
+        const isMe = inter.author.includes('Carlos');
+        const box = document.createElement('div');
+        box.className = `p-3.5 rounded ${isMe ? 'bg-surfaceElevated border border-borderSubtle ml-4' : 'bg-zinc-900 border border-zinc-800 mr-4'} text-xs space-y-1.5`;
+        box.innerHTML = `
+          <div class="flex items-center justify-between text-[11px]">
+            <span class="font-bold ${isMe ? 'text-accentGold' : 'text-sky-400'} font-mono">${inter.author} (${inter.role})</span>
+            <span class="text-zinc-500 font-mono">${inter.time}</span>
+          </div>
+          <div class="text-zinc-300 leading-relaxed">${inter.text}</div>
+        `;
+        stream.appendChild(box);
+      });
+
+      stream.scrollTop = stream.scrollHeight;
+    }
+
+    function closeTicketDetails() {
+      const drawer = document.getElementById('drawer-ticket-details');
+      drawer.classList.add('translate-x-full');
+      document.getElementById('drawer-overlay').classList.add('opacity-0', 'pointer-events-none');
+    }
+
+    function sendTicketReply() {
+      const textInput = document.getElementById('ticket-reply-text');
+      const text = textInput.value.trim();
+      if (!text || !currentActiveTicketId) return;
+
+      const ticket = ticketsDataset.find(t => t.id === currentActiveTicketId);
+      if (!ticket) return;
+
+      const now = new Date();
+      const timeStr = now.toLocaleDateString('pt-BR') + ' ' + now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+      ticket.interactions.push({
+        author: "Carlos Eduardo da Silva",
+        role: "Colaborador",
+        time: timeStr,
+        text: text
+      });
+
+      textInput.value = '';
+      renderTicketTimeline(ticket);
+
+      setTimeout(() => {
+        ticket.interactions.push({
+          author: "Juliana Santos (DP)",
+          role: "Analista de DP",
+          time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          text: "Mensagem recebida. Estamos dando andamento na sua solicitacao."
+        });
+        renderTicketTimeline(ticket);
+      }, 1200);
     }
 
     // Keyboard Shortcuts
