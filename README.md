@@ -127,7 +127,21 @@ Ao acionar a opção de impressão no Raio-X do holerite ou no portal corporativ
 
 ---
 
-### 3.5 Portal do Colaborador & Gestão Autônoma de Benefícios Flexíveis
+### 3.5 Visão de Documento Oficial Chancelado (Após Salvar / PDF Assinado ICP-Brasil)
+
+Ao confirmar a opção **Salvar Documento Oficial** na pré-visualização de impressão (ou através do botão dedicado no Raio-X do colaborador), a plataforma exibe o leitor oficial de documentos corporativos em padrão PDF/A chancelado digitalmente. A visão conta com barra superior de controle arquivístico, faixa superior de fé pública, painel lateral retrátil de auditoria digital e a folha A4 oficial com marca d'água de inviolabilidade, timbre patronal, QR Code de autenticação e canhoto jurídico.
+
+![Documento Oficial PDF Assinado](docs/screenshots/11_documento_oficial_pdf.png)
+
+**Recursos e Garantias de Fé Pública do Documento Oficial:**
+- **Ambiente Leitor PDF/A Corporativo:** Barra superior com metadados do arquivo (`RECIBO_PAGAMENTO_MAT-0001_Carlos_Eduardo_da_Silva_09-2026_ASSINADO.pdf`), conformidade com a norma internacional ISO 19005-1 (PDF/A-1b), paginação ativa, controles de zoom (70% a 150%) e botões de ação para download imediato do arquivo assinado e impressão.
+- **Faixa Superior de Chancelamento e Fé Pública:** Certificação expressa de validade jurídica conforme a Medida Provisória nº 2.200-2/2001 e a Lei 14.063/2020, discriminando autoridade emissora (AC SERPRO RFB v5), carimbo de tempo sincronizado ao Observatório Nacional (ACT) e número do protocolo governamental do eSocial S-1210.
+- **Painel Lateral de Auditoria Digital Criptográfica:** Inspeção técnica dos atributos do certificado digital corporativo (titularidade TECH SOLUTIONS BRASIL LTDA, CNPJ 12.345.678/0001-90, algoritmo de chave pública RSA 2048 com SHA-256 e serial único), status de não revogação e protocolo de aceite da DCTFWeb.
+- **Folha Física A4 Chancelada:** Composta por borda perimetral de microtexto de segurança, marca d'água de autenticidade, quadro patronal completo, dados contratuais do colaborador, grade analítica de rubricas, demonstrativo de bases fiscais e previdenciárias, QR Code de validação pública e canhoto com carimbo de assinatura digital e aceite eletrônico.
+
+---
+
+### 3.6 Portal do Colaborador & Gestão Autônoma de Benefícios Flexíveis
 
 Ambiente individual e centralizado no qual o colaborador acessa suas informações contratuais, holerite digital e exerce autonomia na personalização de seus benefícios corporativos, operando estritamente dentro das regras de negócio e limites orçamentários definidos pela organização.
 
@@ -141,7 +155,7 @@ Ambiente individual e centralizado no qual o colaborador acessa suas informaçõ
 
 ---
 
-### 3.6 Central de Chamados do Colaborador (Service Desk Integrado ao DP)
+### 3.7 Central de Chamados do Colaborador (Service Desk Integrado ao DP)
 
 Canal formal e estruturado para que o colaborador registre dúvidas, solicitações de ajuste cadastral, requerimentos de férias, contestações de ponto ou pedidos de declarações oficiais junto à equipe de Departamento Pessoal.
 
@@ -154,7 +168,7 @@ Canal formal e estruturado para que o colaborador registre dúvidas, solicitaç�
 
 ---
 
-### 3.7 Detalhes do Chamado & Linha do Tempo com Anexos de Evidência
+### 3.8 Detalhes do Chamado & Linha do Tempo com Anexos de Evidência
 
 Ao selecionar um chamado, a plataforma expande uma gaveta com o histórico cronológico de interações, permitindo troca de mensagens bidirecionais entre o colaborador e o analista de DP responsável.
 
@@ -167,7 +181,7 @@ Ao selecionar um chamado, a plataforma expande uma gaveta com o histórico crono
 
 ---
 
-### 3.8 Leaderboard Operacional & Gamificação com Privacidade LGPD
+### 3.9 Leaderboard Operacional & Gamificação com Privacidade LGPD
 
 Módulo de acompanhamento de desempenho individual e de equipes baseado em métricas puramente operacionais, incentivando o engajamento e a pontualidade sem expor informações remuneratórias.
 
@@ -179,7 +193,7 @@ Módulo de acompanhamento de desempenho individual e de equipes baseado em métr
 
 ---
 
-### 3.9 Simulador de Borda em Tempo Real (Rust / Wasm)
+### 3.10 Simulador de Borda em Tempo Real (Rust / Wasm)
 
 Ferramenta interativa de cálculo preditivo executada localmente no navegador do usuário. Permite prever impactos tributários e financeiros antes da efetivação de contratações, demissões ou promoções.
 
@@ -192,7 +206,7 @@ Ferramenta interativa de cálculo preditivo executada localmente no navegador do
 
 ---
 
-### 3.10 Central eSocial & Guias Unificadas Pix (FGTS Digital)
+### 3.11 Central eSocial & Guias Unificadas Pix (FGTS Digital)
 
 Central de transmissão e monitoramento dos lotes de eventos enviados ao ambiente nacional do eSocial, DCTFWeb e emissão das guias rescisórias e mensais do FGTS Digital via Pix.
 
@@ -205,7 +219,7 @@ Central de transmissão e monitoramento dos lotes de eventos enviados ao ambient
 
 ---
 
-### 3.11 Módulo de Admissão em Lote, Onboarding & eSocial (S-2190 / S-2200)
+### 3.12 Módulo de Admissão em Lote, Onboarding & eSocial (S-2190 / S-2200)
 
 Interface de importação e validação de admissões individuais e em lote, com suporte a planilhas XLSX multiabas e CSV, mapeamento semântico de colunas com sinônimos em português, validação linha a linha e correção de erros diretamente no sistema antes da efetivação.
 

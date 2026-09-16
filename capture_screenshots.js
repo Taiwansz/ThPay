@@ -119,7 +119,7 @@ async function capture() {
   await new Promise(r => setTimeout(r, 600));
   await page.screenshot({ path: path.join(OUTPUT_DIR, '09_admissoes_lotes_onboarding.png'), fullPage: false });
 
-  // 10. Impressao do Holerite Oficial (Recibo de Pagamento de Salario CLT)
+  // 10. Impressao do Holerite Oficial (Recibo de Pagamento de Salario CLT - Dialogo de Impressao)
   console.log('Capturando 10_impressao_holerite_oficial.png...');
   await page.evaluate(() => {
     switchView('directory');
@@ -127,10 +127,19 @@ async function capture() {
   });
   await new Promise(r => setTimeout(r, 600));
   await page.screenshot({ path: path.join(OUTPUT_DIR, '10_impressao_holerite_oficial.png'), fullPage: false });
-  await page.evaluate(() => closePrintModal());
+
+  // 11. Visao de Documento Oficial (PDF Assinado Digitalmente com Chancela ICP-Brasil e eSocial)
+  console.log('Capturando 11_documento_oficial_pdf.png...');
+  await page.evaluate(() => {
+    saveOfficialDocument();
+    toggleAuditSidebar();
+  });
+  await new Promise(r => setTimeout(r, 700));
+  await page.screenshot({ path: path.join(OUTPUT_DIR, '11_documento_oficial_pdf.png'), fullPage: false });
+  await page.evaluate(() => closeOfficialDocumentViewer());
 
   await browser.close();
-  console.log('Todas as 11 capturas foram concluidas com sucesso em:', OUTPUT_DIR);
+  console.log('Todas as 12 capturas foram concluidas com sucesso em:', OUTPUT_DIR);
 }
 
 capture().catch(err => {
