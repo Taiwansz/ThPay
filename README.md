@@ -80,16 +80,16 @@ A tela inicial apresentada ao analista de folha logo após a autenticação corp
 ![Dashboard Geral Consolidado do Analista](docs/screenshots/01_dashboard_folha_continua.png)
 
 **Estrutura e Recursos do Dashboard Consolidado:**
-- **Métricas Executivas de Topo:** Custo Total de Pessoal (R$ 384.210,40 com fator real 1.68x sobre o base), Líquido a Pagar da Folha (R$ 254.120,80 pronto para remessa CNAB 240 / Pix), Tributos & Encargos Patronais (R$ 130.089,60 com vencimento em 20/10) e Quadro Total de Colaboradores (48 pessoas, sendo 36 CLT e 12 PJ).
-- **Barra de Prontidão da Folha (Readiness Bar):** Diagnóstico contínuo do fechamento da competência (98,2% validado), alerta visual de pendências a homologar (1 divergência de ponto eletrônico pendente) e ação direta para pré-fechamento.
-- **Gráfico de Evolução Mensal do Custo de Pessoal:** Histórico consolidado dos últimos 6 meses (Abr a Set/2026) com valores discriminados em milhares de reais, taxa de variação (+12,3% vs Abr) e cálculo da média semestral (R$ 365.050,00).
-- **Gráfico de Composição das Despesas de Pessoal:** Barra de segmentação proporcional e cartões analíticos dividindo os custos em Salários Líquidos (66,1%), Tributos & Encargos Patronais (28,3%) e Benefícios & Provisões (5,6%).
-- **Gráficos de Regime Contratual & Alocação por Centros de Custo:** Proporção contratual CLT (75%) vs PJ (25%) com respectivos custos médios, e decomposição orçamentária por departamento (Tecnologia 40%, Operações 25%, Vendas 20%, Administrativo 15%).
-- **Grade de Acesso Rápido às Operações e Itens Recentes:** 6 atalhos diretos para os módulos do sistema:
-  1. *Diretório de Colaboradores (48 Ativos):* Acesso à listagem completa com busca, filtros contratuais, exportação CSV e holerites analíticos.
+- **Métricas Executivas de Topo:** Custo Total de Pessoal (R$ 8.340.456,01 com fator real 1.68x sobre o base), Líquido a Pagar da Folha (R$ 4.841.990,13 pronto para remessa bancária CNAB 240 / Pix), Tributos & Encargos Patronais (R$ 1.463.562,15 com vencimento em 20/10; DARF R$ 1.141.014,03 e GFD FGTS Digital Pix R$ 322.548,12) e Quadro Total de Colaboradores (400 pessoas ativas, sendo 300 CLT e 100 PJ).
+- **Barra de Prontidão da Folha (Readiness Bar):** Diagnóstico contínuo do fechamento da competência (98,2% validado), alerta visual de pendências a homologar (1 divergência de ponto eletrônico pendente) e ação direta para conclusão do fechamento.
+- **Gráfico de Evolução Mensal do Custo de Pessoal:** Histórico consolidado dos últimos 6 meses (Abr 7.450k a Set 8.340k/2026) com valores discriminados em milhares de reais, taxa de variação (+11,9% vs Abr) e cálculo da média semestral (R$ 7.921.600,00).
+- **Gráfico de Composição das Despesas de Pessoal:** Barra de segmentação proporcional e cartões analíticos dividindo os custos em Salários Líquidos (58,1% - R$ 4.841.990,13), Tributos & Encargos Patronais (17,5% - R$ 1.463.562,15) e Benefícios & Provisões (24,4% - R$ 2.034.903,73).
+- **Gráficos de Regime Contratual & Alocação por Centros de Custo:** Proporção contratual CLT (75% - 300 pessoas, custo médio R$ 22.450/mês) vs PJ (25% - 100 pessoas, custo médio R$ 18.250/mês), e decomposição orçamentária realista por departamento alinhada a empresas SaaS/Tech (Tecnologia & Engenharia 41,4% - R$ 3.456.187,01; Produto & Design 13,7% - R$ 1.146.079,60; Comercial & Vendas 11,3% - R$ 944.012,94; Operações & Atendimento 9,9% - R$ 828.827,01; Outros 23,7% - R$ 1.965.349,45).
+- **Grade de Acesso Rápido às Operações e Itens Recentes:** 6 atalhos diretos para os módulos operacionais:
+  1. *Diretório de Colaboradores (400 Ativos):* Acesso à listagem completa com paginação dinâmica (25, 50, 100 ou Todos), busca instantânea por nome, cargo, CPF e setor, filtros contratuais CLT/PJ, exportação CSV e gaveta lateral de Raio-X.
   2. *Admissões & Onboarding em Massa:* Gestão do último lote processado com 50 pessoas, validação OCR de documentos e geração de eventos S-2200.
   3. *eSocial & Guias Pix (DARF / FGTS):* Transmissão de eventos periódicos e emissão do QR Code Pix da guia GFD.
-  4. *Central de Chamados do Service Desk:* Acompanhamento das 3 solicitações pendentes de colaboradores.
+  4. *Central de Chamados do Service Desk:* Acompanhamento das solicitações de colaboradores com SLA e timeline.
   5. *Simulador de Custos & Dissídio:* Modelagem preditiva de reajustes sindicais e contratações em Rust/Wasm.
   6. *Assistente IA de Auditoria:* Diagnóstico de conformidade e conferência automatizada de rubricas.
 
@@ -241,7 +241,8 @@ ThPay/
 │       ├── 08_esocial_guias_pix.png
 │       └── 09_admissoes_lotes_onboarding.png
 ├── ui/                            # Prototipo SPA interativo de alta fidelidade
-│   └── index.html                 # Interface completa com Dashboard, Admissoes, Portal, Chamados e Guias Pix
+│   ├── index.html                 # Interface completa com Dashboard, Admissoes, Portal, Chamados e Guias Pix
+│   └── dataset_400.js             # Base oficial de 400 colaboradores reais e rubricas de mercado Robert Half
 ├── thpay/                         # Motor de calculo funcional e aplicacao em Python
 │   ├── db/                        # Banco relacional, schema DDL, conexao e migracoes versionadas
 │   ├── api/                       # API REST, autenticacao salted SHA-256, RBAC e auditoria
