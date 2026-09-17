@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThPay — Launch Video (/brag Composition)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --thp-ink: #101A44;
+      --thp-cobalt: #2F66F3;
+      --thp-solar: #FFC83D;
+      --thp-mint: #8FE1CF;
+      --thp-blush: #F7A7B8;
+      --thp-coral: #FF7D72;
+      --thp-ivory: #FFF9F1;
+      --thp-paper: #F6F2EC;
+      --thp-line: #E5DED5;
+      --thp-muted: #64708A;
+      --thp-success: #188A64;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: #0c1126;
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    /* Container de Controle e Cabeçalho */
+    .viewport-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      max-width: 1280px;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 8px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      font-size: 13px;
+    }
+
+    .top-bar .title-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .top-bar .pill {
+      background: var(--thp-cobalt);
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* O Player de Vídeo em 16:9 */
+    .video-stage-wrapper {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: var(--thp-ivory);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    /* Canvas / Viewport Real da Composição (1920x1080 virtual) */
+    .canvas-viewport {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--thp-ivory);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Cenas */
+    .scene {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1), transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.98);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 4% 6%;
+    }
+
+    .scene.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+    }
+
+    /* Grid de Fundo Sutil */
+    .bg-grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(to right, rgba(16, 26, 68, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(16, 26, 68, 0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* Componentes Compartilhados de Cena */
+    .brand-header-mini {
+      position: absolute;
+      top: 5%;
+      left: 6%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    .brand-logo-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--thp-cobalt);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      box-shadow: 0 4px 12px rgba(47, 102, 243, 0.3);
+    }
+
+    .brand-title-text {
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--thp-ink);
+      letter-spacing: -0.02em;
+    }
+
+    .brand-subtitle-tag {
+      font-size: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--thp-muted);
+      background: rgba(16, 26, 68, 0.06);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* Cena 1: Hook */
+    .scene-1-content {
+      text-align: center;
+      max-width: 920px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .kicker-tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--thp-cobalt);
+      background: rgba(47, 102, 243, 0.1);
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .hero-heading {
+      font-size: clamp(32px, 5.2vw, 56px);
+      font-weight: 800;
+      color: var(--thp-ink);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+    }
+
+    .hero-heading .strike {
+      color: #94a3b8;
+      text-decoration: line-through;
+      text-decoration-thickness: 3px;
+      text-decoration-color: var(--thp-coral);
+    }
+
+    .hero-heading .highlight {
+      color: var(--thp-cobalt);
+      background: linear-gradient(120deg, rgba(47, 102, 243, 0.12) 0%, rgba(47, 102, 243, 0.02) 100%);
+      padding: 0 10px;
+      border-radius: 8px;
+    }
+
+    .hero-lead {
+      font-size: clamp(16px, 2.2vw, 22px);
+      color: var(--thp-muted);
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .feature-pills-row {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+
+    .badge-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      border: 1px solid var(--thp-line);
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--thp-ink);
+      box-shadow: 0 4px 14px rgba(16, 26, 68, 0.05);
+    }
+
+    .dot-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--thp-mint);
+    }
+
+    /* Cenas de Showcase de Interface (Cenas 2, 3, 4, 5) */
+    .showcase-layout {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding-top: 40px;
+    }
+
+    .showcase-left {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 2;
+    }
+
+    .showcase-right {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .section-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--thp-cobalt);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .section-title {
+      font-size: clamp(26px, 3.4vw, 38px);
+      font-weight: 800;
+      color: var(--thp-ink);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .section-description {
+      font-size: clamp(14px, 1.6vw, 17px);
+      color: var(--thp-muted);
+      line-height: 1.55;
+    }
+
+    /* Cards de Métricas em Destaque */
+    .metric-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .metric-card {
+      background: #fff;
+      border: 1px solid var(--thp-line);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 12px rgba(16, 26, 68, 0.04);
+    }
+
+    .metric-card-label {
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--thp-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .metric-card-value {
+      font-size: 20px;
+      font-weight: 800;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--thp-ink);
+    }
+
+    .metric-card-delta {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--thp-success);
+      margin-top: 2px;
+    }
+
+    /* Mockup de Janela com Screenshot */
+    .window-mockup {
+      width: 100%;
+      max-height: 84%;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 20px 45px -10px rgba(16, 26, 68, 0.22), 0 0 0 1px rgba(16, 26, 68, 0.08);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.4s ease;
+    }
+
+    .window-mockup-header {
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .window-dots {
+      display: flex;
+      gap: 5px;
+    }
+
+    .window-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+    }
+
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #f59e0b; }
+    .dot-green { background: #10b981; }
+
+    .window-url-bar {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 2px 10px;
+      font-size: 10px;
+      font-family: 'JetBrains Mono', monospace;
+      color: #64748b;
+      flex-grow: 1;
+      max-width: 320px;
+    }
+
+    .window-mockup-body {
+      width: 100%;
+      overflow: hidden;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .window-mockup-body img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Cena 5: Holerite Oficial & Logo Finale */
+    .scene-5-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      padding-top: 40px;
+    }
+
+    .hash-badge-panel {
+      background: #fff;
+      border: 1px solid var(--thp-line);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 10px 25px rgba(16, 26, 68, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hash-key-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .hash-string {
+      color: var(--thp-cobalt);
+      font-weight: 700;
+      word-break: break-all;
+    }
+
+    .outro-cta-card {
+      text-align: left;
+    }
+
+    .outro-cta-card h2 {
+      font-size: clamp(32px, 4.5vw, 48px);
+      font-weight: 800;
+      color: var(--thp-ink);
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .outro-tagline {
+      font-size: 18px;
+      color: var(--thp-cobalt);
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    .tech-stack-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .tech-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(16, 26, 68, 0.06);
+      color: var(--thp-ink);
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid rgba(16, 26, 68, 0.1);
+    }
+
+    /* Barra de Controles Inferior */
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding: 12px 18px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+    }
+
+    .btn-play {
+      background: var(--thp-cobalt);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.2s;
+    }
+
+    .btn-play:hover {
+      background: #1d4ed8;
+    }
+
+    .btn-audio {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-audio.active {
+      background: var(--thp-mint);
+      color: #0c1126;
+      border-color: var(--thp-mint);
+    }
+
+    .timeline-scrubber-wrapper {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      gap: 12px;
+    }
+
+    .scrubber-slider {
+      flex-grow: 1;
+      -webkit-appearance: none;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 3px;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .scrubber-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--thp-solar);
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(255, 200, 61, 0.8);
+    }
+
+    .timecode-display {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #cbd5e1;
+      min-width: 90px;
+    }
+
+    /* Abas de Navegação de Cena */
+    .scene-tabs-bar {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .scene-tab-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #94a3b8;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .scene-tab-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+
+    .scene-tab-btn.active {
+      background: rgba(47, 102, 243, 0.25);
+      border-color: var(--thp-cobalt);
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="viewport-container">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <div class="title-badge">
+        <span>ThPay</span>
+        <span class="pill">/brag 20s Launch Video</span>
+      </div>
+      <div style="font-family: 'JetBrains Mono', monospace; color: #94a3b8; font-size: 11px;">
+        1920x1080 • 30 FPS • Hyperframes Contract
+      </div>
+    </div>
+
+    <!-- Video Stage -->
+    <div class="video-stage-wrapper">
+      <div class="canvas-viewport" id="viewport">
+        <div class="bg-grid"></div>
+
+        <div class="brand-header-mini">
+          <div class="brand-logo-badge">Th</div>
+          <span class="brand-title-text">ThPay</span>
+          <span class="brand-subtitle-tag">Continuous Payroll</span>
+        </div>
+
+        <!-- CENA 1: 0.0s - 3.5s (Hook) -->
+        <div class="scene active" id="scene-1" data-start="0" data-end="3.5">
+          <div class="scene-1-content">
+            <span class="kicker-tag">Mudança de Paradigma</span>
+            <h1 class="hero-heading">
+              O fechamento mensal de folha <span class="strike">acabou</span>.<br>
+              Conheça o <span class="highlight">Continuous Payroll</span>.
+            </h1>
+            <p class="hero-lead">
+              A folha que recalcula cada centavo em tempo real. Sem surpresas no dia 5. Sem atrasos com o eSocial.
+            </p>
+            <div class="feature-pills-row">
+              <div class="badge-feature"><span class="dot-indicator"></span> 400 Colaboradores Ativos</div>
+              <div class="badge-feature"><span class="dot-indicator"></span> Latência Wasm &lt; 1ms</div>
+              <div class="badge-feature"><span class="dot-indicator"></span> eSocial v1.3 Nativo</div>
+              <div class="badge-feature"><span class="dot-indicator"></span> FGTS via Pix</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENA 2: 3.5s - 7.5s (Dashboard Executivo) -->
+        <div class="scene" id="scene-2" data-start="3.5" data-end="7.5">
+          <div class="showcase-layout">
+            <div class="showcase-left">
+              <span class="section-eyebrow">Painel Executivo Consolidado</span>
+              <h2 class="section-title">Controle Financeiro da Folha em Tempo Real</h2>
+              <p class="section-description">
+                Diagnóstico contínuo sem expor dados nominais desnecessários. Readiness Bar auditada a cada lançamento.
+              </p>
+              <div class="metric-cards-grid">
+                <div class="metric-card">
+                  <div class="metric-card-label">Custo Total de Pessoal</div>
+                  <div class="metric-card-value">R$ 8.340.456,01</div>
+                  <div class="metric-card-delta">Fator Real 1.68x sobre base</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-card-label">Líquido a Pagar (Remessa)</div>
+                  <div class="metric-card-value">R$ 4.841.990,13</div>
+                  <div class="metric-card-delta">300 CLT • 100 PJ</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-card-label">Readiness Fechamento</div>
+                  <div class="metric-card-value" style="color: var(--thp-cobalt);">98,2%</div>
+                  <div class="metric-card-delta">1 pendência a homologar</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-card-label">Tributos Patronais</div>
+                  <div class="metric-card-value">R$ 1.463.562,15</div>
+                  <div class="metric-card-delta">DARF + FGTS Digital</div>
+                </div>
+              </div>
+            </div>
+            <div class="showcase-right">
+              <div class="window-mockup">
+                <div class="window-mockup-header">
+                  <div class="window-dots">
+                    <div class="window-dot dot-red"></div>
+                    <div class="window-dot dot-yellow"></div>
+                    <div class="window-dot dot-green"></div>
+                  </div>
+                  <div class="window-url-bar">thpay.corp/dashboard/executive</div>
+                </div>
+                <div class="window-mockup-body">
+                  <img src="../../docs/screenshots/01_dashboard_folha_continua.png" alt="Dashboard Executivo ThPay">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENA 3: 7.5s - 11.5s (Raio-X Holerite Drawer) -->
+        <div class="scene" id="scene-3" data-start="7.5" data-end="11.5">
+          <div class="showcase-layout">
+            <div class="showcase-left">
+              <span class="section-eyebrow">Raio-X Centavo a Centavo</span>
+              <h2 class="section-title">Gaveta de Inspeção Sem Perda de Contexto</h2>
+              <p class="section-description">
+                Clique em qualquer colaborador para inspecionar a memória de cálculo completa: INSS progressivo (EC 103/2019), IRRF legal/simplificado e reflexos patronais.
+              </p>
+              <div class="badge-feature" style="border-left: 4px solid var(--thp-cobalt);">
+                <div>
+                  <div style="font-weight: 700; color: var(--thp-ink);">Determinismo Financeiro Estrito</div>
+                  <div style="font-size: 12px; color: var(--thp-muted); font-family: 'JetBrains Mono';">Java 21 LTS BigDecimal • Zero erros de arredondamento</div>
+                </div>
+              </div>
+            </div>
+            <div class="showcase-right">
+              <div class="window-mockup" style="transform: rotate(-1deg);">
+                <div class="window-mockup-header">
+                  <div class="window-dots">
+                    <div class="window-dot dot-red"></div>
+                    <div class="window-dot dot-yellow"></div>
+                    <div class="window-dot dot-green"></div>
+                  </div>
+                  <div class="window-url-bar">thpay.corp/directory/inspector/drawer</div>
+                </div>
+                <div class="window-mockup-body">
+                  <img src="../../docs/screenshots/02_raio_x_holerite_drawer.png" alt="Raio-X do Holerite na Gaveta">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENA 4: 11.5s - 15.5s (Admissões em Massa & eSocial Pix) -->
+        <div class="scene" id="scene-4" data-start="11.5" data-end="15.5">
+          <div class="showcase-layout">
+            <div class="showcase-left">
+              <span class="section-eyebrow">Conformidade e Automação</span>
+              <h2 class="section-title">Admissões em Lote & Guia FGTS via Pix</h2>
+              <p class="section-description">
+                Importe planilhas com 50+ colaboradores simultâneos com validação semântica em linha e quite tributos trabalhistas via Pix em segundos.
+              </p>
+              <div class="metric-cards-grid">
+                <div class="metric-card">
+                  <div class="metric-card-label">Admissão em Lote</div>
+                  <div class="metric-card-value">50 Vidas</div>
+                  <div class="metric-card-delta">Eventos S-2190 & S-2200</div>
+                </div>
+                <div class="metric-card">
+                  <div class="metric-card-label">FGTS Digital</div>
+                  <div class="metric-card-value">QR Code Pix</div>
+                  <div class="metric-card-delta">Baixa instantânea</div>
+                </div>
+              </div>
+            </div>
+            <div class="showcase-right">
+              <div class="window-mockup" style="transform: rotate(1deg);">
+                <div class="window-mockup-header">
+                  <div class="window-dots">
+                    <div class="window-dot dot-red"></div>
+                    <div class="window-dot dot-yellow"></div>
+                    <div class="window-dot dot-green"></div>
+                  </div>
+                  <div class="window-url-bar">thpay.corp/esocial/pix-digital</div>
+                </div>
+                <div class="window-mockup-body">
+                  <img src="../../docs/screenshots/08_esocial_guias_pix.png" alt="eSocial e Guias Pix FGTS">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CENA 5: 15.5s - 20.0s (Holerite Oficial & Logo Finale) -->
+        <div class="scene" id="scene-5" data-start="15.5" data-end="20.0">
+          <div class="scene-5-grid">
+            <div class="hash-badge-panel">
+              <div>
+                <span class="section-eyebrow">Integridade Criptográfica</span>
+                <h3 style="font-size: 20px; font-weight: 800; color: var(--thp-ink); margin-top: 4px;">Holerite Oficial Auditado</h3>
+              </div>
+              <div class="hash-key-row">
+                <span>HASH SHA-256</span>
+                <span class="hash-string">e3b0c44298fc1c149afbf4c8...</span>
+              </div>
+              <p style="font-size: 13px; color: var(--thp-muted); line-height: 1.4;">
+                Cada holerite emitido acompanha canhoto oficial destacável e assinatura de autenticidade imutável para defesa trabalhista e fiscal.
+              </p>
+              <div class="window-mockup" style="max-height: 200px;">
+                <img src="../../docs/screenshots/10_impressao_holerite_oficial.png" alt="Impressão Oficial de Holerite">
+              </div>
+            </div>
+
+            <div class="outro-cta-card">
+              <span class="kicker-tag" style="background: rgba(255, 200, 61, 0.2); color: #9a6500;">Disponível Agora</span>
+              <h2>ThPay</h2>
+              <div class="outro-tagline">Tecnologia que cuida do processo e das pessoas.</div>
+              <p style="font-size: 15px; color: var(--thp-muted); line-height: 1.5;">
+                O novo padrão corporativo para processamento contínuo de folha, eSocial e autoatendimento.
+              </p>
+              <div class="tech-stack-row">
+                <span class="tech-pill">Java 21 LTS (Loom)</span>
+                <span class="tech-pill">Rust / WebAssembly</span>
+                <span class="tech-pill">Next.js 15</span>
+                <span class="tech-pill">Tailwind CSS</span>
+                <span class="tech-pill">Python / Polars</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Controles de Vídeo -->
+    <div class="controls-bar">
+      <button class="btn-play" id="btn-toggle-play">
+        <span id="play-icon">▶</span>
+        <span id="play-text">Iniciar Vídeo</span>
+      </button>
+
+      <button class="btn-audio" id="btn-toggle-audio">
+        <span>Áudio Sintetizado (WebAudio)</span>
+      </button>
+
+      <div class="timeline-scrubber-wrapper">
+        <input type="range" class="scrubber-slider" id="timeline-scrubber" min="0" max="20" step="0.033" value="0">
+        <div class="timecode-display" id="timecode-display">00:00 / 00:20</div>
+      </div>
+    </div>
+
+    <!-- Abas de Cena -->
+    <div class="scene-tabs-bar">
+      <button class="scene-tab-btn active" data-target="0">01. O Paradigma (0s)</button>
+      <button class="scene-tab-btn" data-target="3.5">02. Dashboard Executivo (3.5s)</button>
+      <button class="scene-tab-btn" data-target="7.5">03. Raio-X Centavo a Centavo (7.5s)</button>
+      <button class="scene-tab-btn" data-target="11.5">04. Lotes & Pix (11.5s)</button>
+      <button class="scene-tab-btn" data-target="15.5">05. Criptografia & Encerramento (15.5s)</button>
+    </div>
+  </div>
+
+  <script>
+    // Configurações Globais da Linha do Tempo
+    const TOTAL_DURATION = 20.0;
+    let currentTime = 0;
+    let isPlaying = false;
+    let lastFrameTimestamp = null;
+    let audioEnabled = false;
+    let audioCtx = null;
+
+    const scenes = [
+      { id: 'scene-1', start: 0.0, end: 3.5 },
+      { id: 'scene-2', start: 3.5, end: 7.5 },
+      { id: 'scene-3', start: 7.5, end: 11.5 },
+      { id: 'scene-4', start: 11.5, end: 15.5 },
+      { id: 'scene-5', start: 15.5, end: 20.0 }
+    ];
+
+    // Elementos da UI
+    const scrubber = document.getElementById('timeline-scrubber');
+    const timecode = document.getElementById('timecode-display');
+    const btnPlay = document.getElementById('btn-toggle-play');
+    const playIcon = document.getElementById('play-icon');
+    const playText = document.getElementById('play-text');
+    const btnAudio = document.getElementById('btn-toggle-audio');
+    const tabButtons = document.querySelectorAll('.scene-tab-btn');
+
+    // Inicialização do Web Audio para trilha ambiente elegante sem dependências externas
+    function initAudio() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playToneCue(freq, duration, type = 'sine', gainVal = 0.08) {
+      if (!audioEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    let lastTriggeredScene = -1;
+
+    // Atualização de Cenas com Base no Tempo Atual
+    function updatePlayback(time) {
+      currentTime = Math.max(0, Math.min(TOTAL_DURATION, time));
+      scrubber.value = currentTime;
+
+      const seconds = Math.floor(currentTime);
+      const centis = Math.floor((currentTime % 1) * 100);
+      timecode.textContent = `${String(seconds).padStart(2, '0')}:${String(centis).padStart(2, '0')} / 00:20`;
+
+      let activeIndex = 0;
+      scenes.forEach((scene, index) => {
+        const el = document.getElementById(scene.id);
+        const isActive = (currentTime >= scene.start && (currentTime < scene.end || index === scenes.length - 1));
+        if (isActive) {
+          activeIndex = index;
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
+        }
+      });
+
+      // Tocar sons sutis de transição ao mudar de cena
+      if (activeIndex !== lastTriggeredScene) {
+        if (lastTriggeredScene !== -1) {
+          playToneCue(330 + activeIndex * 60, 0.25, 'triangle', 0.05);
+        }
+        lastTriggeredScene = activeIndex;
+      }
+
+      // Atualizar abas
+      tabButtons.forEach((btn, idx) => {
+        if (idx === activeIndex) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    // Loop de Animação
+    function tick(timestamp) {
+      if (!isPlaying) return;
+
+      if (!lastFrameTimestamp) lastFrameTimestamp = timestamp;
+      const delta = (timestamp - lastFrameTimestamp) / 1000;
+      lastFrameTimestamp = timestamp;
+
+      currentTime += delta;
+      if (currentTime >= TOTAL_DURATION) {
+        currentTime = TOTAL_DURATION;
+        pauseVideo();
+      }
+
+      updatePlayback(currentTime);
+
+      if (isPlaying) {
+        requestAnimationFrame(tick);
+      }
+    }
+
+    function playVideo() {
+      if (currentTime >= TOTAL_DURATION) currentTime = 0;
+      isPlaying = true;
+      lastFrameTimestamp = null;
+      playIcon.textContent = '❚❚';
+      playText.textContent = 'Pausar';
+      if (audioEnabled) initAudio();
+      requestAnimationFrame(tick);
+    }
+
+    function pauseVideo() {
+      isPlaying = false;
+      playIcon.textContent = '▶';
+      playText.textContent = 'Continuar';
+    }
+
+    // Eventos
+    btnPlay.addEventListener('click', () => {
+      if (isPlaying) {
+        pauseVideo();
+      } else {
+        playVideo();
+      }
+    });
+
+    btnAudio.addEventListener('click', () => {
+      audioEnabled = !audioEnabled;
+      btnAudio.classList.toggle('active', audioEnabled);
+      if (audioEnabled) {
+        initAudio();
+        btnAudio.textContent = 'Áudio: Ativo (Beds & SFX)';
+        playToneCue(440, 0.3, 'sine', 0.08);
+      } else {
+        btnAudio.textContent = 'Áudio: Mudo';
+      }
+    });
+
+    scrubber.addEventListener('input', (e) => {
+      const targetTime = parseFloat(e.target.value);
+      updatePlayback(targetTime);
+    });
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = parseFloat(btn.dataset.target);
+        updatePlayback(target);
+      });
+    });
+
+    // Tecla Espaço para Play/Pause
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        if (isPlaying) pauseVideo(); else playVideo();
+      }
+    });
+
+    // Estado Inicial
+    updatePlayback(0);
+  </script>
+</body>
+</html>

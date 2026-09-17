@@ -59,6 +59,17 @@ O ecossistema atende tanto à equipe de Departamento Pessoal (DP) e Recursos Hum
 
 Abaixo estao detalhados os modulos operacionais do ThPay com registros visuais de alta resolucao capturados diretamente da interface operacional da plataforma.
 
+### 3.0 Vídeo Oficial de Lançamento (/brag Launch Video)
+
+O ThPay possui uma composição de vídeo de lançamento de alta fidelidade em 1080p (20 segundos) gerada via especificação `/brag` (Hyperframes), cobrindo o novo paradigma de Continuous Payroll, o Dashboard Executivo com 400 vidas ativas (R$ 8.34M), a gaveta lateral de Raio-X do holerite centavo a centavo, eSocial v1.3 com guias FGTS via Pix e comprovante oficial auditado por SHA-256:
+
+- **Player e Composição Interativa Web:** [`brag-output/composition/index.html`](brag-output/composition/index.html)
+- **Plano Estratégico & Storyboard:** [`brag-output/brag-plan.md`](brag-output/brag-plan.md)
+- **Briefing Técnico Hyperframes:** [`brag-output/composition-brief.md`](brag-output/composition-brief.md)
+- **Copy de Divulgação Social:** [`brag-output/share-copy.md`](brag-output/share-copy.md)
+
+---
+
 ### 3.1 Tela de Autenticação Corporativa & Seleção de Perfil (Login RBAC)
 
 Acesso seguro corporativo com validação de credenciais via hash salted SHA-256 e sessões persistentes com tokens de 256 bits no banco relacional. O sistema utiliza RBAC (*Role-Based Access Control*) com 12 perfis e realiza o direcionamento automático: analistas de DP e operadores acessam diretamente o Dashboard Geral da Folha, enquanto colaboradores acessam exclusivamente o Portal Self-Service.
