@@ -61,8 +61,11 @@ Abaixo estao detalhados os modulos operacionais do ThPay com registros visuais d
 
 ### 3.0 Vídeo Oficial de Lançamento (/brag Launch Video)
 
-O ThPay possui uma composição de vídeo de lançamento de alta fidelidade em 1080p (20 segundos) gerada via especificação `/brag` (Hyperframes), cobrindo o novo paradigma de Continuous Payroll, o Dashboard Executivo com 400 vidas ativas (R$ 8.34M), a gaveta lateral de Raio-X do holerite centavo a centavo, eSocial v1.3 com guias FGTS via Pix e comprovante oficial auditado por SHA-256:
+O ThPay possui um vídeo de lançamento oficial em alta definição 1080p (20 segundos) renderizado 100% localmente via especificação `/brag`, cobrindo o novo paradigma de Continuous Payroll, o Dashboard Executivo com 400 vidas ativas (R$ 8.34M), a gaveta lateral de Raio-X do holerite centavo a centavo, eSocial v1.3 com guias FGTS via Pix e comprovante oficial auditado por SHA-256:
 
+![Poster do Vídeo de Lançamento](brag-output/brag_poster.jpg)
+
+- **Arquivo de Vídeo Renderizado (MP4 1080p 30fps):** [`brag-output/brag.mp4`](brag-output/brag.mp4)
 - **Player e Composição Interativa Web:** [`brag-output/composition/index.html`](brag-output/composition/index.html)
 - **Plano Estratégico & Storyboard:** [`brag-output/brag-plan.md`](brag-output/brag-plan.md)
 - **Briefing Técnico Hyperframes:** [`brag-output/composition-brief.md`](brag-output/composition-brief.md)
