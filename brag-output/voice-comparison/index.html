@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThPay — Benchmark de Vozes Gratuitas (TTS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0C1126;
+      --card-bg: #141B38;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --accent: #2F66F3;
+      --solar: #FFC83D;
+      --mint: #8FE1CF;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 900px;
+      width: 100%;
+    }
+
+    .header {
+      margin-bottom: 32px;
+    }
+
+    .header .kicker {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--solar);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .quote-box {
+      background: rgba(47, 102, 243, 0.08);
+      border-left: 4px solid var(--accent);
+      padding: 16px 20px;
+      border-radius: 0 12px 12px 0;
+      margin-bottom: 32px;
+      font-size: 14px;
+      color: #cbd5e1;
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    .voices-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .voice-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .voice-card:hover {
+      border-color: rgba(47, 102, 243, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .voice-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .voice-info h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .voice-info p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .badges-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .badge-winner {
+      background: rgba(47, 102, 243, 0.25);
+      color: #73B7FF;
+      border: 1px solid var(--accent);
+    }
+
+    .badge-offline {
+      background: rgba(143, 225, 207, 0.15);
+      color: var(--mint);
+      border: 1px solid var(--mint);
+    }
+
+    .badge-cloud {
+      background: rgba(255, 200, 61, 0.15);
+      color: var(--solar);
+      border: 1px solid var(--solar);
+    }
+
+    audio {
+      width: 100%;
+      height: 40px;
+      border-radius: 8px;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <div class="kicker">Benchmark de Text-to-Speech Gratuito</div>
+      <h1>Comparador de Narração ThPay</h1>
+      <p>
+        Ouça o mesmo roteiro oficial sintetizado em 5 motores gratuitos e abertos para escolher a melhor voz para os seus vídeos e trailers.
+      </p>
+    </div>
+
+    <div class="quote-box">
+      "O fechamento mensal de folha como você conhece acabou. Conheça o ThPay: a infraestrutura de Continuous Payroll em tempo real. Quatrocentas vidas processadas centavo a centavo, eSocial nativo e guias pagas via Pix. Tecnologia que cuida do processo e das pessoas."
+    </div>
+
+    <div class="voices-list">
+
+      <!-- 1. Antonio Neural -->
+      <div class="voice-card">
+        <div class="voice-top">
+          <div class="voice-info">
+            <h3>
+              <span>01. Microsoft Antonio Neural</span>
+            </h3>
+            <p>pt-BR-AntonioNeural • Tom masculino grave, autoritativo e maduro. Ideal para B2B e Keynotes.</p>
+          </div>
+          <div class="badges-row">
+            <span class="badge badge-winner">Recomendado B2B</span>
+            <span class="badge badge-cloud">Cloud Grátis</span>
+          </div>
+        </div>
+        <audio controls src="01_edge_antonio_neural.mp3"></audio>
+      </div>
+
+      <!-- 2. Francisca Neural -->
+      <div class="voice-card">
+        <div class="voice-top">
+          <div class="voice-info">
+            <h3>
+              <span>02. Microsoft Francisca Neural</span>
+            </h3>
+            <p>pt-BR-FranciscaNeural • Tom feminino formal, claro, acolhedor e institucional.</p>
+          </div>
+          <div class="badges-row">
+            <span class="badge badge-winner">Recomendado Geral</span>
+            <span class="badge badge-cloud">Cloud Grátis</span>
+          </div>
+        </div>
+        <audio controls src="02_edge_francisca_neural.mp3"></audio>
+      </div>
+
+      <!-- 3. Thalita Neural -->
+      <div class="voice-card">
+        <div class="voice-top">
+          <div class="voice-info">
+            <h3>
+              <span>03. Microsoft Thalita Multilingual</span>
+            </h3>
+            <p>pt-BR-ThalitaMultilingualNeural • Tom feminino jovem, rápido e moderno. Ideal para vídeos dinâmicos e mídias sociais.</p>
+          </div>
+          <div class="badges-row">
+            <span class="badge badge-cloud">Cloud Grátis</span>
+          </div>
+        </div>
+        <audio controls src="03_edge_thalita_neural.mp3"></audio>
+      </div>
+
+      <!-- 4. Google gTTS -->
+      <div class="voice-card">
+        <div class="voice-top">
+          <div class="voice-info">
+            <h3>
+              <span>04. Google Translate (gTTS)</span>
+            </h3>
+            <p>Motor tradicional do Google Tradutor • Cadência linear e inflexão ligeiramente mecânica.</p>
+          </div>
+          <div class="badges-row">
+            <span class="badge badge-cloud">Cloud Aberta</span>
+          </div>
+        </div>
+        <audio controls src="04_google_gtts.mp3"></audio>
+      </div>
+
+      <!-- 5. Piper Local Offline -->
+      <div class="voice-card">
+        <div class="voice-top">
+          <div class="voice-info">
+            <h3>
+              <span>05. Piper TTS (Faber Medium ONNX)</span>
+            </h3>
+            <p>pt_BR-faber-medium • Modelo neural open-source rodando 100% offline em CPU local. Ideal para embarcados e privacidade total.</p>
+          </div>
+          <div class="badges-row">
+            <span class="badge badge-offline">100% Offline Local</span>
+          </div>
+        </div>
+        <audio controls src="05_piper_local_offline.mp3"></audio>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
