@@ -69,18 +69,27 @@ for k in img_keys:
         im = Image.new("RGBA", (1920, 1080), C_PAPER)
         screenshots[k] = im
 
+# Load Official Brand Assets
+LOGO_APP_ICON = Image.open("brag-output/brand_app_icon.png").convert("RGBA")
+LOGO_LOCKUP_DARK = Image.open("brag-output/logo_lockup_dark.png").convert("RGBA")
+LOGO_MARK = Image.open("brag-output/logo_mark.png").convert("RGBA")
+
+# Pre-scaled logo for top bar
+top_logo_h = 38
+top_logo_w = int(LOGO_LOCKUP_DARK.width * top_logo_h / LOGO_LOCKUP_DARK.height)
+top_logo_img = LOGO_LOCKUP_DARK.resize((top_logo_w, top_logo_h), Image.Resampling.LANCZOS)
+
 def draw_rounded_rect(draw, bbox, radius, fill=None, outline=None, width=1):
     draw.rounded_rectangle(bbox, radius=radius, fill=fill, outline=outline, width=width)
 
-def draw_top_bar(draw, frame_idx):
-    # Top Left Brand
-    draw_rounded_rect(draw, (80, 50, 124, 94), 10, fill=C_COBALT)
-    draw.text((91, 58), "Th", font=ImageFont.truetype(FONT_SANS_BOLD, 24), fill=C_WHITE)
-    draw.text((138, 56), "ThPay", font=ImageFont.truetype(FONT_SANS_BOLD, 24), fill=C_INK)
+def draw_top_bar(im, draw, frame_idx):
+    # Top Left Official Brand Lockup
+    im.paste(top_logo_img, (80, 52), top_logo_img)
     
-    # Pill
-    draw_rounded_rect(draw, (230, 60, 420, 88), 6, fill=(16, 26, 68, 15))
-    draw.text((242, 65), "CONTINUOUS PAYROLL", font=f_kicker_sm, fill=C_COBALT)
+    # Official Pill next to logo
+    pill_x = 80 + top_logo_w + 20
+    draw_rounded_rect(draw, (pill_x, 56, pill_x + 190, 86), 6, fill=(16, 26, 68, 15))
+    draw.text((pill_x + 14, 63), "CONTINUOUS PAYROLL", font=f_kicker_sm, fill=C_COBALT)
 
     # Top Right Timecode / Tag
     tc_sec = frame_idx // 30
@@ -131,6 +140,12 @@ def render_scene_1(progress):
     # Center animation
     fade = min(1.0, progress * 3.0)
     y_offset = int((1.0 - fade) * 40)
+
+    # Official Logo Mark floating above kicker
+    mark_w = 210
+    mark_h = int(LOGO_MARK.height * mark_w / LOGO_MARK.width)
+    scaled_mark = LOGO_MARK.resize((mark_w, mark_h), Image.Resampling.LANCZOS)
+    im.paste(scaled_mark, ((WIDTH - mark_w) // 2, 150 - y_offset), scaled_mark)
 
     # Kicker
     kicker_box = (820, 260 - y_offset, 1100, 298 - y_offset)
@@ -306,13 +321,19 @@ def render_scene_5(progress):
         fade = min(1.0, (progress - 0.55) * 4.0)
         draw_rounded_rect(draw, (100, 160, WIDTH - 100, HEIGHT - 120), 24, fill=C_WHITE, outline=C_LINE, width=2)
 
-        # Big Badge
-        draw_rounded_rect(draw, (910, 240, 1010, 340), 24, fill=C_COBALT)
-        draw.text((932, 258), "Th", font=ImageFont.truetype(FONT_SANS_BOLD, 60), fill=C_WHITE)
+        # Official App Icon
+        icon_size = 120
+        scaled_icon = LOGO_APP_ICON.resize((icon_size, icon_size), Image.Resampling.LANCZOS)
+        im.paste(scaled_icon, ((WIDTH - icon_size) // 2, 215), scaled_icon)
 
-        draw.text((960, 400), "ThPay", font=f_brand_lg, fill=C_INK, anchor="mm")
-        draw.text((960, 460), "Tecnologia que cuida do processo e das pessoas.", font=f_brand_tag, fill=C_COBALT, anchor="mm")
-        draw.text((960, 520), "Continuous Payroll • eSocial v1.3 Desacoplado • Determinismo Centavo a Centavo", font=f_subtitle, fill=C_MUTED, anchor="mm")
+        # Official Dark Lockup Logo
+        lockup_w = 560
+        lockup_h = int(LOGO_LOCKUP_DARK.height * lockup_w / LOGO_LOCKUP_DARK.width)
+        scaled_lockup = LOGO_LOCKUP_DARK.resize((lockup_w, lockup_h), Image.Resampling.LANCZOS)
+        im.paste(scaled_lockup, ((WIDTH - lockup_w) // 2, 360), scaled_lockup)
+
+        draw.text((960, 505), "Tecnologia que cuida do processo e das pessoas.", font=f_brand_tag, fill=C_COBALT, anchor="mm")
+        draw.text((960, 545), "Continuous Payroll • eSocial v1.3 Desacoplado • Determinismo Centavo a Centavo", font=f_subtitle, fill=C_MUTED, anchor="mm")
 
         # Tech Stack Badges
         techs = ["Java 21 LTS (Loom)", "Rust / WebAssembly", "Next.js 15", "Tailwind CSS", "Python / Polars", "Pix FGTS Digital"]
@@ -322,8 +343,8 @@ def render_scene_5(progress):
         st_x = (WIDTH - tot_tw) // 2
         for t_idx, tech in enumerate(techs):
             tx = st_x + t_idx * (tw + tgap)
-            draw_rounded_rect(draw, (tx, 580, tx + tw, 624), 8, fill=C_PAPER, outline=C_LINE, width=1)
-            draw.text((tx + tw // 2, 602), tech, font=f_kicker_sm, fill=C_INK, anchor="mm")
+            draw_rounded_rect(draw, (tx, 595, tx + tw, 639), 8, fill=C_PAPER, outline=C_LINE, width=1)
+            draw.text((tx + tw // 2, 617), tech, font=f_kicker_sm, fill=C_INK, anchor="mm")
 
         draw_rounded_rect(draw, (840, 680, 1080, 734), 27, fill=C_SOLAR)
         draw.text((960, 707), "github.com/Taiwansz/ThPay", font=ImageFont.truetype(FONT_SANS_BOLD, 16), fill=C_INK, anchor="mm")
@@ -355,7 +376,7 @@ def generate_frame(frame_idx):
         im = render_scene_5(p)
 
     draw = ImageDraw.Draw(im)
-    draw_top_bar(draw, frame_idx)
+    draw_top_bar(im, draw, frame_idx)
 
     # Master Fade Out on last 0.5s
     if t > 19.5:
@@ -365,11 +386,88 @@ def generate_frame(frame_idx):
 
     return im
 
+def ensure_soundtrack(audio_wav):
+    if os.path.exists(audio_wav):
+        return
+    import struct, wave
+    sample_rate = 44100
+    total_samples = int(sample_rate * DURATION)
+    chords = [
+        (0.0, 3.5, [130.81, 155.56, 196.00, 233.08, 293.66], 65.41),
+        (3.5, 7.5, [103.83, 130.81, 155.56, 196.00], 51.91),
+        (7.5, 11.5, [155.56, 196.00, 233.08, 311.13], 77.78),
+        (11.5, 15.5, [87.31, 130.81, 155.56, 207.65], 43.65),
+        (15.5, 20.0, [130.81, 196.00, 293.66, 311.13], 65.41),
+    ]
+    out_bytes = bytearray()
+    for i in range(total_samples):
+        t = i / sample_rate
+        sample_l = 0.0
+        sample_r = 0.0
+        master_env = 1.0
+        if t < 0.5:
+            master_env = t / 0.5
+        elif t > 18.5:
+            master_env = max(0.0, (20.0 - t) / 1.5)
+
+        for start_t, end_t, freqs, bass_freq in chords:
+            if start_t <= t < end_t:
+                dt = t - start_t
+                dur = end_t - start_t
+                env = 1.0
+                if dt < 0.3:
+                    env = dt / 0.3
+                elif dt > dur - 0.3:
+                    env = (dur - dt) / 0.3
+
+                for f in freqs:
+                    phase_l = 2.0 * math.pi * f * t
+                    phase_r = 2.0 * math.pi * (f * 1.003) * t
+                    amp = (0.08 / len(freqs)) * env
+                    sample_l += math.sin(phase_l) * amp
+                    sample_r += math.sin(phase_r) * amp
+
+                bass_phase = 2.0 * math.pi * bass_freq * t
+                bass_amp = 0.12 * env
+                sample_l += math.sin(bass_phase) * bass_amp
+                sample_r += math.sin(bass_phase) * bass_amp
+                break
+
+        beat_t = (t * 2.0) % 1.0
+        if beat_t < 0.04:
+            click_env = (0.04 - beat_t) / 0.04
+            click_val = math.sin(2.0 * math.pi * 880.0 * t) * 0.03 * click_env
+            sample_l += click_val
+            sample_r += click_val
+
+        for sweep_t in [3.5, 7.5, 11.5, 15.5]:
+            if abs(t - sweep_t) < 0.25:
+                dt = t - (sweep_t - 0.25)
+                sweep_freq = 200.0 + (dt / 0.5) * 800.0
+                sweep_env = math.sin((dt / 0.5) * math.pi) * 0.06
+                sample_l += math.sin(2.0 * math.pi * sweep_freq * t) * sweep_env
+                sample_r += math.cos(2.0 * math.pi * sweep_freq * t) * sweep_env
+
+        sample_l *= master_env
+        sample_r *= master_env
+        val_l = int(max(-1.0, min(1.0, sample_l)) * 32767)
+        val_r = int(max(-1.0, min(1.0, sample_r)) * 32767)
+        out_bytes.extend(struct.pack('<hh', val_l, val_r))
+
+    with wave.open(audio_wav, 'wb') as wf:
+        wf.setnchannels(2)
+        wf.setsampwidth(2)
+        wf.setframerate(sample_rate)
+        wf.writeframes(out_bytes)
+    print(f"Generated soundtrack: {audio_wav}")
+
 def main():
     output_mp4 = "brag-output/brag.mp4"
     audio_wav = "brag-output/soundtrack.wav"
 
-    print(f"Starting broadcast rendering pipeline: {WIDTH}x{HEIGHT} @ {FPS}fps ({TOTAL_FRAMES} frames)")
+    ensure_soundtrack(audio_wav)
+
+    print(f"Starting broadcast rendering pipeline with official logos: {WIDTH}x{HEIGHT} @ {FPS}fps ({TOTAL_FRAMES} frames)")
 
     ffmpeg_cmd = [
         "ffmpeg",
